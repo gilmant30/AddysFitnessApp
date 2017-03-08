@@ -12,6 +12,11 @@ import AWSMobileHubHelper
 
 class SignInViewController: UIViewController {
 
+    //MARK: - Properties
+    @IBOutlet weak var customEmailField: UITextField!
+    @IBOutlet weak var customPasswordField: UITextField!
+    
+    
     // MARK: - View lifecycle
     
     override func viewDidLoad() {

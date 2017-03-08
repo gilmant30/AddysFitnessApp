@@ -9,7 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 
-class MainViewController: UIViewController {
+class InitialViewController: UIViewController {
     
     var signInObserver: AnyObject!
     var signOutObserver: AnyObject!
@@ -22,7 +22,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        print("MainViewController viewDidLoad start")
+        print("InitialViewController viewDidLoad start")
         presentSignInViewController()
     }
 
@@ -36,10 +36,9 @@ class MainViewController: UIViewController {
     func presentSignInViewController() {
         print("start - PresentSingInViewController()")
         if !AWSIdentityManager.default().isLoggedIn {
-            print("User not signed in yet.")
             let storyboard = UIStoryboard(name: "SignIn", bundle: nil)
-            let viewControoler = storyboard.instantiateViewController(withIdentifier: "SignIn")
-            self.present(viewControoler, animated: true, completion: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "SignIn")
+            self.present(viewController, animated: true, completion: nil)
         }
     }
 
