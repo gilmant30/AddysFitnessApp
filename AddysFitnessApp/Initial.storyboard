@@ -1,46 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="0YE-qY-zqn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="OqL-qe-of7">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Initial View Controller-->
-        <scene sceneID="4n9-Gv-JYb">
+        <!--Addys Fitness App-->
+        <scene sceneID="s7R-ln-bYV">
             <objects>
-                <viewController id="0YE-qY-zqn" customClass="InitialViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="VSs-53-g8b"/>
-                        <viewControllerLayoutGuide type="bottom" id="hM3-1o-YJd"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="qOb-m5-2wj">
+                <tableViewController id="1AV-MW-ZGr" customClass="InitialViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YbU-Rv-ess">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Initial Page" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u4Y-kF-5z8">
-                                <rect key="frame" x="66" y="120" width="243" height="347"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="u4Y-kF-5z8" secondAttribute="trailing" constant="50" id="2Sl-jY-sfT"/>
-                            <constraint firstItem="u4Y-kF-5z8" firstAttribute="leading" secondItem="qOb-m5-2wj" secondAttribute="leadingMargin" constant="50" id="TiD-Gv-PQJ"/>
-                            <constraint firstItem="hM3-1o-YJd" firstAttribute="top" secondItem="u4Y-kF-5z8" secondAttribute="bottom" constant="200" id="lBT-mZ-yDO"/>
-                            <constraint firstItem="u4Y-kF-5z8" firstAttribute="top" secondItem="VSs-53-g8b" secondAttribute="bottom" constant="100" id="moQ-J0-JZN"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="c2v-hH-5Nl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MainViewCell" id="Vuf-MV-y2x">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vuf-MV-y2x" id="hvK-h6-jUj">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="1AV-MW-ZGr" id="6Gx-GX-jad"/>
+                            <outlet property="delegate" destination="1AV-MW-ZGr" id="hHI-3L-Vpd"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Addys Fitness App" id="nnR-gZ-mGg"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l0O-cL-IUW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="74" y="99"/>
+            <point key="canvasLocation" x="-434" y="214"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Dpl-1W-p0D">
+            <objects>
+                <navigationController id="OqL-qe-of7" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="v5M-ow-83M">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="1AV-MW-ZGr" kind="relationship" relationship="rootViewController" id="3Dv-FN-ikw"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LvH-cW-BE8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1386" y="214"/>
         </scene>
     </scenes>
 </document>
