@@ -27,6 +27,14 @@ class UserPoolsSignUpViewController: UIViewController {
         super.viewDidLoad()
         self.pool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let signUpConfirmationViewController = segue.destination as? UserPoolSignUpConfirmationViewController {
+            signUpConfirmationViewController.sentTo = self.sentTo
+            signUpConfirmationViewController.user = self.pool?.getUser(self.username.text!)
+        }
+
+    }
 
     @IBAction func onSignUp(_ sender: Any) {
         guard let userNameValue = self.username.text, !userNameValue.isEmpty,
