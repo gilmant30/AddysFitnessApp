@@ -25,10 +25,69 @@ class UserPoolSignUpConfirmationViewController: UIViewController {
     }
     
     @IBAction func onConfirm(_ sender: Any) {
+        guard let confirmationCodeValue = self.confirmationCode.text, !confirmationCodeValue.isEmpty else {
+            let alertController = UIAlertController(title: "Confirmation code missing.",
+                    message: "Please enter a valid confirmation code.", preferredStyle: UIAlertControllerStyle.alert)
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default)
+            {
+                (result : UIAlertAction) -> Void in
+                print("You pressed OK")
+            }
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+        self.user?.confirmSignUp(self.confirmationCode.text!, forceAliasCreation: true).continueWith(block: {[weak self] (task: AWSTask) -> AnyObject? in
+            guard let strongSelf = self else { return nil }
+            DispatchQueue.main.async(execute: {
+                if let error = task.error as? NSError {
+                    let alertController = UIAlertController(title: error.userInfo["__type"] as? String,
+                        message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)
+                    {
+                        (result : UIAlertAction) -> Void in
+                        print("You pressed OK")
+                    }
+                    alertController.addAction(okAction)
+                    self?.present(alertController, animated: true, completion: nil)
+                } else {
+                    let alertController = UIAlertController(title: "Registration Complete",
+                        message: "Registration was successful.", preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default)
+                    {
+                        (result : UIAlertAction) -> Void in
+                        print("You pressed OK")
+                    }
+                    alertController.addAction(okAction)
+                    self?.present(alertController, animated: true, completion: nil)
+                    strongSelf.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+                }
+            })
+            return nil
+        })
+
     }
     
     
     @IBAction func onResendConfirmationCode(_ sender: Any) {
+        self.user?.resendConfirmationCode().continueWith(block: {[weak self] (task: AWSTask<AWSCognitoIdentityUserResendConfirmationCodeResponse>) -> AnyObject? in
+            guard let _ = self else { return nil }
+            DispatchQueue.main.async(execute: {
+                if let error = task.error as? NSError {
+                    UIAlertView(title: error.userInfo["__type"] as? String,
+                                message: error.userInfo["message"] as? String,
+                                delegate: nil,
+                                cancelButtonTitle: "Ok").show()
+                } else if let result = task.result as AWSCognitoIdentityUserResendConfirmationCodeResponse! {
+                    UIAlertView(title: "Code Resent",
+                                message: "Code resent to \(result.codeDeliveryDetails?.destination!)",
+                        delegate: nil,
+                        cancelButtonTitle: "Ok").show()
+                }
+            })
+            return nil
+        })
+
     }
 
     

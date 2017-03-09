@@ -43,7 +43,7 @@ class SignInViewController: UIViewController {
         })
         
         // Custom UI Setup
-        customSignInButton.addTarget(self, action: #selector(self.handleUserPoolSignUp), for: .touchUpInside)
+        customSignInButton.addTarget(self, action: #selector(self.handleCustomSignIn), for: .touchUpInside)
         customCreateAccountButton.addTarget(self, action: #selector(self.handleUserPoolSignUp), for: .touchUpInside)
         customForgotPasswordButton.addTarget(self, action: #selector(self.handleUserPoolForgotPassword), for: .touchUpInside)
         customSignInImage.image = signInImage

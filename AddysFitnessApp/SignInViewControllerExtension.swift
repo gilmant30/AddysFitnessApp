@@ -61,10 +61,16 @@ extension SignInViewController: AWSCognitoIdentityPasswordAuthentication {
     func didCompleteStepWithError(_ error: Error?) {
         if let error = error as? NSError {
             DispatchQueue.main.async(execute: {
-                UIAlertView(title: error.userInfo["__type"] as? String,
-                            message: error.userInfo["message"] as? String,
-                            delegate: nil,
-                            cancelButtonTitle: "Ok").show()
+                let alertController = UIAlertController(title: error.userInfo["__type"] as? String,
+                    message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.alert)
+                let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)
+                {
+                    (result : UIAlertAction) -> Void in
+                    print("You pressed OK")
+                }
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+
             })
         }
     }
@@ -77,10 +83,15 @@ extension SignInViewController: AWSCognitoUserPoolsSignInHandler {
         guard let username = self.customEmailField.text, !username.isEmpty,
             let password = self.customPasswordField.text, !password.isEmpty else {
                 DispatchQueue.main.async(execute: {
-                    UIAlertView(title: "Missing UserName / Password",
-                                message: "Please enter a valid user name / password.",
-                                delegate: nil,
-                                cancelButtonTitle: "Ok").show()
+                    let alertController = UIAlertController(title: "Missing UserName / Password",
+                            message: "Please enter a valid user name / password.", preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)
+                    {
+                        (result : UIAlertAction) -> Void in
+                        print("You pressed OK")
+                    }
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
                 })
                 return
         }

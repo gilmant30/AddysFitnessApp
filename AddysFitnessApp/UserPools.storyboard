@@ -14,7 +14,7 @@
         <scene sceneID="Gbe-P1-fcO">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G1K-oG-MJn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="rkt-Ao-pyB" customClass="UserPoolsSignUpViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignUp" id="rkt-Ao-pyB" customClass="UserPoolsSignUpViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jjf-H8-fqA"/>
                         <viewControllerLayoutGuide type="bottom" id="x7X-UN-HzC"/>
@@ -29,7 +29,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4AQ-J2-Oqo">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4AQ-J2-Oqo">
                                 <rect key="frame" x="16" y="64" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -41,7 +41,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k2U-2k-Qbw">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k2U-2k-Qbw">
                                 <rect key="frame" x="16" y="145" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -53,7 +53,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="obi-6u-dpq">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone with country code i.e. +155555555" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="obi-6u-dpq">
                                 <rect key="frame" x="16" y="226" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -65,7 +65,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AXU-wb-m8D">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AXU-wb-m8D">
                                 <rect key="frame" x="16" y="307" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -73,6 +73,7 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dj3-bN-9Gc">
                                 <rect key="frame" x="16" y="367" width="343" height="30"/>
+                                <color key="backgroundColor" red="0.39520621299743652" green="1" blue="0.73761826753616333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Sign Up"/>
                                 <connections>
                                     <action selector="onSignUp:" destination="rkt-Ao-pyB" eventType="touchUpInside" id="9ib-RC-z72"/>
@@ -128,7 +129,7 @@
         <!--User Pool Sign Up Confirmation View Controller-->
         <scene sceneID="5F0-Xc-sk4">
             <objects>
-                <viewController id="eg3-D5-uAJ" customClass="UserPoolSignUpConfirmationViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignUpConfirmation" id="eg3-D5-uAJ" customClass="UserPoolSignUpConfirmationViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9lM-50-2Zw"/>
                         <viewControllerLayoutGuide type="bottom" id="hYA-QE-H6i"/>
