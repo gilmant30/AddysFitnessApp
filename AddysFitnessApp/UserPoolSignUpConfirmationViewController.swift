@@ -74,15 +74,25 @@ class UserPoolSignUpConfirmationViewController: UIViewController {
             guard let _ = self else { return nil }
             DispatchQueue.main.async(execute: {
                 if let error = task.error as? NSError {
-                    UIAlertView(title: error.userInfo["__type"] as? String,
-                                message: error.userInfo["message"] as? String,
-                                delegate: nil,
-                                cancelButtonTitle: "Ok").show()
+                    let alertController = UIAlertController(title: error.userInfo["__type"] as? String,
+                            message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)
+                    {
+                        (result : UIAlertAction) -> Void in
+                        print("You pressed OK")
+                    }
+                    alertController.addAction(okAction)
+                    self?.present(alertController, animated: true, completion: nil)
                 } else if let result = task.result as AWSCognitoIdentityUserResendConfirmationCodeResponse! {
-                    UIAlertView(title: "Code Resent",
-                                message: "Code resent to \(result.codeDeliveryDetails?.destination!)",
-                        delegate: nil,
-                        cancelButtonTitle: "Ok").show()
+                    let alertController = UIAlertController(title: "Code Resent",
+                            message: "RCode resent to \(result.codeDeliveryDetails?.destination!)", preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default)
+                    {
+                        (result : UIAlertAction) -> Void in
+                        print("You pressed OK")
+                    }
+                    alertController.addAction(okAction)
+                    self?.present(alertController, animated: true, completion: nil)
                 }
             })
             return nil

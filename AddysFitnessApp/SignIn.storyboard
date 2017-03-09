@@ -32,9 +32,9 @@
                                 <rect key="frame" x="16" y="408" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5s7-Gy-rnb">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SignIn" translatesAutoresizingMaskIntoConstraints="NO" id="5s7-Gy-rnb">
                                 <rect key="frame" x="66" y="80" width="243" height="210"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lz6-mQ-mza">
@@ -93,4 +93,7 @@
             <point key="canvasLocation" x="173.59999999999999" y="152.47376311844079"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="SignIn" width="73" height="126"/>
+    </resources>
 </document>

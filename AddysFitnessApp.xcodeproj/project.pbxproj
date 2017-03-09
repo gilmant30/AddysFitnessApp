@@ -10,6 +10,8 @@
 		B94330F01E70C579008EF137 /* UserPools.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B94330EF1E70C579008EF137 /* UserPools.storyboard */; };
 		B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */; };
 		B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */; };
+		B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F51E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift */; };
+		B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */; };
 		B96816841E6FA5290010FE0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */; };
 		B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */; };
 		B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE201E6E455100943A08 /* AppDelegate.swift */; };
@@ -87,6 +89,8 @@
 		B94330EF1E70C579008EF137 /* UserPools.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = UserPools.storyboard; path = AddysFitnessApp/UserPools.storyboard; sourceTree = SOURCE_ROOT; };
 		B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolsSignUpViewController.swift; sourceTree = "<group>"; };
 		B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolSignUpConfirmationViewController.swift; sourceTree = "<group>"; };
+		B94330F51E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AddysFitnessApp/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignInViewControllerExtension.swift; path = AddysFitnessApp/SignInViewControllerExtension.swift; sourceTree = SOURCE_ROOT; };
 		B9E3AE1D1E6E455100943A08 /* AddysFitnessApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AddysFitnessApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,6 +170,8 @@
 				B94330EF1E70C579008EF137 /* UserPools.storyboard */,
 				B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */,
 				B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */,
+				B94330F51E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift */,
+				B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */,
 			);
 			name = UserPools;
 			sourceTree = "<group>";
@@ -466,8 +472,10 @@
 				B9FB4FBE1E6E5F71006095DF /* AWSConfiguration.swift in Sources */,
 				B9FB4FC21E6E5F71006095DF /* UserAccess.swift in Sources */,
 				B9FB4FBF1E6E5F71006095DF /* AWSMobileClient.swift in Sources */,
+				B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */,
 				B9FB4FCD1E6E613E006095DF /* SignInViewController.swift in Sources */,
 				B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */,
+				B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */,
 				B9FB4FC11E6E5F71006095DF /* Consumable.swift in Sources */,
 				B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */,
 				B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */,
