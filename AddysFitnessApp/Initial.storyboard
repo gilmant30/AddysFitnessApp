@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="OqL-qe-of7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pik-71-w6W">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,49 +10,50 @@
     </dependencies>
     <scenes>
         <!--Addys Fitness App-->
-        <scene sceneID="s7R-ln-bYV">
+        <scene sceneID="rm2-CB-TW1">
             <objects>
-                <tableViewController id="1AV-MW-ZGr" customClass="InitialViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YbU-Rv-ess">
+                <viewController id="nmX-Mf-axP" customClass="InitialViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eXA-Gw-w5Y"/>
+                        <viewControllerLayoutGuide type="bottom" id="g6X-d7-rVh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gid-7Q-b4G">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TEST" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87y-xB-OhI">
+                                <rect key="frame" x="166" y="323" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MainViewCell" id="Vuf-MV-y2x">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vuf-MV-y2x" id="hvK-h6-jUj">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="1AV-MW-ZGr" id="6Gx-GX-jad"/>
-                            <outlet property="delegate" destination="1AV-MW-ZGr" id="hHI-3L-Vpd"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Addys Fitness App" id="nnR-gZ-mGg"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="l0O-cL-IUW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Addys Fitness App" id="u7N-mQ-zGC"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5G8-2A-loc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-434" y="214"/>
+            <point key="canvasLocation" x="60" y="-467.3163418290855"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="Dpl-1W-p0D">
+        <scene sceneID="UdZ-IM-Lef">
             <objects>
-                <navigationController id="OqL-qe-of7" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="v5M-ow-83M">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pik-71-w6W" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Qus-yK-b6K">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="1AV-MW-ZGr" kind="relationship" relationship="rootViewController" id="3Dv-FN-ikw"/>
+                        <segue destination="nmX-Mf-axP" kind="relationship" relationship="rootViewController" id="PAN-65-Yqb"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LvH-cW-BE8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mxh-ZG-ekr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1386" y="214"/>
+            <point key="canvasLocation" x="-879.20000000000005" y="-467.3163418290855"/>
         </scene>
     </scenes>
 </document>

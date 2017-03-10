@@ -9,7 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 
-class InitialViewController: UITableViewController {
+class InitialViewController: UIViewController {
     
     var workouts: [Workouts] = []
     var signInObserver: AnyObject!

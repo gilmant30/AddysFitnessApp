@@ -13,7 +13,6 @@
         <!--User Pools Sign Up View Controller-->
         <scene sceneID="Gbe-P1-fcO">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="G1K-oG-MJn" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="SignUp" id="rkt-Ao-pyB" customClass="UserPoolsSignUpViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jjf-H8-fqA"/>
@@ -74,7 +73,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dj3-bN-9Gc">
                                 <rect key="frame" x="16" y="367" width="343" height="30"/>
                                 <color key="backgroundColor" red="0.39520621299743652" green="1" blue="0.73761826753616333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Sign Up"/>
+                                <state key="normal" title="Sign Up">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
                                 <connections>
                                     <action selector="onSignUp:" destination="rkt-Ao-pyB" eventType="touchUpInside" id="9ib-RC-z72"/>
                                 </connections>
@@ -123,6 +124,7 @@
                         <segue destination="eg3-D5-uAJ" kind="show" identifier="SignUpConfirmSegue" id="8VB-uK-f84"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G1K-oG-MJn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-970.39999999999998" y="-7.6461769115442282"/>
         </scene>
@@ -223,6 +225,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jM6-cN-sno">
                                 <rect key="frame" x="16" y="145" width="343" height="30"/>
                                 <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycb-UH-YFl">
@@ -378,6 +381,7 @@
                     </view>
                     <connections>
                         <outlet property="confirmationCode" destination="Aob-ub-Ax4" id="Uu1-34-qu4"/>
+                        <outlet property="sendTo" destination="brs-7N-jXo" id="BDl-xz-mbk"/>
                         <outlet property="username" destination="77N-YM-0C0" id="hTm-rW-FPL"/>
                     </connections>
                 </viewController>

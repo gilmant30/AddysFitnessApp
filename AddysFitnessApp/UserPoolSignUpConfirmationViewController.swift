@@ -19,9 +19,11 @@ class UserPoolSignUpConfirmationViewController: UIViewController {
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var confirmationCode: UITextField!
     
+    @IBOutlet weak var sendTo: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.username.text = self.user!.username;
+        self.username.text = self.user!.username
+        self.sendTo.text = "\(self.sendTo)"
     }
     
     @IBAction func onConfirm(_ sender: Any) {
