@@ -6,10 +6,11 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Addys Fitness App-->
+        <!--Addyson's Fitness App-->
         <scene sceneID="rm2-CB-TW1">
             <objects>
                 <viewController id="nmX-Mf-axP" customClass="InitialViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
@@ -21,17 +22,52 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TEST" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87y-xB-OhI">
-                                <rect key="frame" x="166" y="323" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Food" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87y-xB-OhI">
+                                <rect key="frame" x="91" y="114" width="39" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Apple" translatesAutoresizingMaskIntoConstraints="NO" id="9cx-Dd-sbm">
+                                <rect key="frame" x="48" y="160" width="126" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="8lW-l5-u0k"/>
+                                    <constraint firstAttribute="width" constant="126" id="Wdx-jc-ViE"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workouts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aI0-8Y-bla">
+                                <rect key="frame" x="236" y="114" width="73" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dumbell" translatesAutoresizingMaskIntoConstraints="NO" id="2kv-8Q-Hkf">
+                                <rect key="frame" x="209" y="160" width="126" height="100"/>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="126" id="9dX-gy-Epc"/>
+                                    <constraint firstAttribute="height" constant="100" id="Tq0-s1-GZU"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="aI0-8Y-bla" firstAttribute="centerX" secondItem="2kv-8Q-Hkf" secondAttribute="centerX" id="MLg-EO-xDG"/>
+                            <constraint firstItem="aI0-8Y-bla" firstAttribute="top" secondItem="eXA-Gw-w5Y" secondAttribute="bottom" constant="50" id="N5Y-ei-hUz"/>
+                            <constraint firstItem="87y-xB-OhI" firstAttribute="leading" secondItem="gid-7Q-b4G" secondAttribute="leadingMargin" constant="75" id="S8F-c6-7mT"/>
+                            <constraint firstItem="9cx-Dd-sbm" firstAttribute="centerX" secondItem="87y-xB-OhI" secondAttribute="centerX" id="Wqc-y5-jtQ"/>
+                            <constraint firstItem="87y-xB-OhI" firstAttribute="top" secondItem="eXA-Gw-w5Y" secondAttribute="bottom" constant="50" id="aiW-IY-Gpg"/>
+                            <constraint firstItem="9cx-Dd-sbm" firstAttribute="top" secondItem="87y-xB-OhI" secondAttribute="bottom" constant="25" id="kd0-U8-7nP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="aI0-8Y-bla" secondAttribute="trailing" constant="50" id="n6H-q2-YHZ"/>
+                            <constraint firstItem="2kv-8Q-Hkf" firstAttribute="top" secondItem="aI0-8Y-bla" secondAttribute="bottom" constant="25" id="veO-cN-jL3"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Addys Fitness App" id="u7N-mQ-zGC"/>
+                    <navigationItem key="navigationItem" title="Addyson's Fitness App" id="u7N-mQ-zGC"/>
+                    <connections>
+                        <outlet property="foodIcon" destination="9cx-Dd-sbm" id="rzd-Lw-DtC"/>
+                        <outlet property="workoutIcon" destination="2kv-8Q-Hkf" id="6HJ-kd-XZA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5G8-2A-loc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -56,4 +92,8 @@
             <point key="canvasLocation" x="-879.20000000000005" y="-467.3163418290855"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Apple" width="112" height="112"/>
+        <image name="dumbell" width="112" height="112"/>
+    </resources>
 </document>

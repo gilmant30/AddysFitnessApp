@@ -14,6 +14,8 @@
 		B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */; };
 		B96816841E6FA5290010FE0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */; };
 		B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */; };
+		B97CA1431E75DAC600B47AAE /* Workouts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B97CA1421E75DAC600B47AAE /* Workouts.storyboard */; };
+		B97CA1451E75DAD800B47AAE /* WorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97CA1441E75DAD800B47AAE /* WorkoutsViewController.swift */; };
 		B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE201E6E455100943A08 /* AppDelegate.swift */; };
 		B9E3AE231E6E455100943A08 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE221E6E455100943A08 /* InitialViewController.swift */; };
 		B9E3AE281E6E455100943A08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9E3AE271E6E455100943A08 /* Assets.xcassets */; };
@@ -93,6 +95,8 @@
 		B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AddysFitnessApp/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignInViewControllerExtension.swift; path = AddysFitnessApp/SignInViewControllerExtension.swift; sourceTree = SOURCE_ROOT; };
+		B97CA1421E75DAC600B47AAE /* Workouts.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Workouts.storyboard; path = AddysFitnessApp/Workouts.storyboard; sourceTree = SOURCE_ROOT; };
+		B97CA1441E75DAD800B47AAE /* WorkoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutsViewController.swift; path = AddysFitnessApp/WorkoutsViewController.swift; sourceTree = SOURCE_ROOT; };
 		B9E3AE1D1E6E455100943A08 /* AddysFitnessApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AddysFitnessApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E3AE201E6E455100943A08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9E3AE221E6E455100943A08 /* InitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialViewController.swift; path = AddysFitnessApp/InitialViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -176,6 +180,15 @@
 			name = UserPools;
 			sourceTree = "<group>";
 		};
+		B97CA1411E75DA9800B47AAE /* Workouts */ = {
+			isa = PBXGroup;
+			children = (
+				B97CA1421E75DAC600B47AAE /* Workouts.storyboard */,
+				B97CA1441E75DAD800B47AAE /* WorkoutsViewController.swift */,
+			);
+			name = Workouts;
+			sourceTree = "<group>";
+		};
 		B9E3AE141E6E455000943A08 = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +219,7 @@
 				B9E3AE221E6E455100943A08 /* InitialViewController.swift */,
 				B9FB4FCE1E6F9BB1006095DF /* Initial.storyboard */,
 				B9FB4FC91E6E60A1006095DF /* SignIn */,
+				B97CA1411E75DA9800B47AAE /* Workouts */,
 				B9E3AE271E6E455100943A08 /* Assets.xcassets */,
 				B9E3AE2C1E6E455100943A08 /* Info.plist */,
 				B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */,
@@ -427,6 +441,7 @@
 				B9FB4FCB1E6E60D1006095DF /* SignIn.storyboard in Resources */,
 				B9FB4FA51E6E5F2F006095DF /* Amazon_Software_License.txt in Resources */,
 				B94330F01E70C579008EF137 /* UserPools.storyboard in Resources */,
+				B97CA1431E75DAC600B47AAE /* Workouts.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +490,7 @@
 				B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */,
 				B9FB4FCD1E6E613E006095DF /* SignInViewController.swift in Sources */,
 				B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */,
+				B97CA1451E75DAD800B47AAE /* WorkoutsViewController.swift in Sources */,
 				B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */,
 				B9FB4FC11E6E5F71006095DF /* Consumable.swift in Sources */,
 				B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */,

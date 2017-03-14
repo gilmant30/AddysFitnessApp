@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Workouts View Controller-->
+        <scene sceneID="Hac-i3-8QO">
+            <objects>
+                <tableViewController storyboardIdentifier="Workouts" id="RD0-nj-RWC" customClass="WorkoutsViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="MVP-gI-4r9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="5BB-XS-yrn">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tzo-UM-hSV">
+                                    <rect key="frame" x="25" y="15" width="42" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="tzo-UM-hSV" firstAttribute="leading" secondItem="5BB-XS-yrn" secondAttribute="leading" constant="25" id="fpS-Wp-Zrf"/>
+                                <constraint firstItem="tzo-UM-hSV" firstAttribute="top" secondItem="5BB-XS-yrn" secondAttribute="top" constant="15" id="mi3-sN-557"/>
+                            </constraints>
+                        </view>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WorkoutsViewCell" rowHeight="80" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
+                                <rect key="frame" x="0.0" y="72" width="375" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vhh-iN-m73" id="Uq3-Ls-nuu">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PRU-nR-J78">
+                                            <rect key="frame" x="8" y="8" width="80" height="63"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="80" id="U0D-SI-SOS"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbb-Hf-5H6">
+                                            <rect key="frame" x="96" y="8" width="34" height="21"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y0P-Bi-gFy">
+                                            <rect key="frame" x="96" y="37" width="65" height="15"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="y0P-Bi-gFy" firstAttribute="top" secondItem="kbb-Hf-5H6" secondAttribute="bottom" constant="8" id="5K9-Do-Uxc"/>
+                                        <constraint firstItem="PRU-nR-J78" firstAttribute="bottom" secondItem="Uq3-Ls-nuu" secondAttribute="bottomMargin" id="5kr-BN-UfM"/>
+                                        <constraint firstItem="kbb-Hf-5H6" firstAttribute="top" secondItem="Uq3-Ls-nuu" secondAttribute="topMargin" id="Bvi-Nf-ayg"/>
+                                        <constraint firstItem="y0P-Bi-gFy" firstAttribute="leading" secondItem="PRU-nR-J78" secondAttribute="trailing" constant="8" id="K7e-e6-V4O"/>
+                                        <constraint firstItem="PRU-nR-J78" firstAttribute="leading" secondItem="Uq3-Ls-nuu" secondAttribute="leadingMargin" id="NEh-ut-Yyf"/>
+                                        <constraint firstItem="PRU-nR-J78" firstAttribute="top" secondItem="Uq3-Ls-nuu" secondAttribute="topMargin" id="uGV-ZJ-1bk"/>
+                                        <constraint firstItem="kbb-Hf-5H6" firstAttribute="leading" secondItem="PRU-nR-J78" secondAttribute="trailing" constant="8" id="wWx-ii-ceM"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="workoutDescription" destination="y0P-Bi-gFy" id="Mv8-Nc-fCM"/>
+                                    <outlet property="workoutTitle" destination="kbb-Hf-5H6" id="HZT-8I-tyV"/>
+                                    <outlet property="workoutVideoImage" destination="PRU-nR-J78" id="k5b-S0-hTE"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="RD0-nj-RWC" id="g6F-GU-S2g"/>
+                            <outlet property="delegate" destination="RD0-nj-RWC" id="oVx-qO-wej"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="pathLabel" destination="tzo-UM-hSV" id="uUB-SW-lOv"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rNy-pp-7V0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="100" y="136.28185907046478"/>
+        </scene>
+    </scenes>
+</document>
