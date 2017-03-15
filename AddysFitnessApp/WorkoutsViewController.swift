@@ -76,11 +76,6 @@ class WorkoutsViewController: UITableViewController {
             self.showImagePicker()
         })
         alertController.addAction(uploadObjectAction)
-        
-        let createFolderAction = UIAlertAction(title: "New Folder", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-            self.askForDirectoryName()
-        })
-        alertController.addAction(createFolderAction)
         let refreshAction = UIAlertAction(title: "Refresh", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
             self.refreshContents()
         })
@@ -89,10 +84,6 @@ class WorkoutsViewController: UITableViewController {
             self.downloadObjectsToFillCache()
         })
         alertController.addAction(downloadObjectsAction)
-        let changeLimitAction = UIAlertAction(title: "Set Cache Size", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-            self.showDiskLimitOptions()
-        })
-        alertController.addAction(changeLimitAction)
         let removeAllObjectsAction = UIAlertAction(title: "Clear Cache", style: .destructive, handler: {[unowned self](action: UIAlertAction) -> Void in
             self.manager.clearCache()
             //self.updateUserInterface()
@@ -117,7 +108,6 @@ class WorkoutsViewController: UITableViewController {
             [weak self] (contents: [AWSContent]?, nextMarker: String?, error: Error?) in
             guard let strongSelf = self else { return }
             if let error = error {
-                strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to load the list of contents.", cancelButtonTitle: "OK")
                 print("Failed to load the list of contents. \(error)")
             }
             if let contents = contents, contents.count > 0 {
@@ -131,20 +121,6 @@ class WorkoutsViewController: UITableViewController {
             }
             strongSelf.updateUserInterface()
         }
-    }
-    
-    fileprivate func showDiskLimitOptions() {
-        let alertController = UIAlertController(title: "Disk Cache Size", message: nil, preferredStyle: .actionSheet)
-        for number: Int in [1, 5, 20, 50, 100] {
-            let byteLimitOptionAction = UIAlertAction(title: "\(number) MB", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-                self.manager.maxCacheSize = UInt(number) * 1024 * 1024
-                // self.updateUserInterface()
-            })
-            alertController.addAction(byteLimitOptionAction)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
     }
     
     fileprivate func downloadObjectsToFillCache() {
@@ -205,19 +181,19 @@ class WorkoutsViewController: UITableViewController {
             if content.isPinned {
                 let unpinAction = UIAlertAction(title: "Unpin", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
                     content.unPin()
-                    // self.updateUserInterface()
+                    self.updateUserInterface()
                 })
                 alertController.addAction(unpinAction)
             } else {
                 let pinAction = UIAlertAction(title: "Pin", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
                     content.pin()
-                    // self.updateUserInterface()
+                    self.updateUserInterface()
                 })
                 alertController.addAction(pinAction)
             }
             let removeAction = UIAlertAction(title: "Delete Local Copy", style: .destructive, handler: {[unowned self](action: UIAlertAction) -> Void in
                 content.removeLocal()
-                // self.updateUserInterface()
+                self.updateUserInterface()
             })
             alertController.addAction(removeAction)
         }
@@ -248,7 +224,6 @@ class WorkoutsViewController: UITableViewController {
                 print("Failed to download a content from a server. \(error)")
                 strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to download a content from a server.", cancelButtonTitle: "OK")
             }
-            // strongSelf.updateUserInterface()
         }
     }
     
@@ -265,16 +240,8 @@ class WorkoutsViewController: UITableViewController {
             controller.moviePlayer.prepareToPlay()
             controller.moviePlayer.play()
             presentMoviePlayerViewControllerAnimated(controller)
-        } else if content.isImage() { // Image files
-            /* Image files
-            let storyboard = UIStoryboard(name: "UserFiles", bundle: nil)
-            let imageViewController = storyboard.instantiateViewController(withIdentifier: "UserFilesImageViewController") as! UserFilesImageViewController
-            imageViewController.image = UIImage(data: content.cachedData)
-            imageViewController.title = content.key
-            navigationController?.pushViewController(imageViewController, animated: true)
-            */
         } else {
-            showSimpleAlertWithTitle("Sorry!", message: "We can only open image, video, and sound files.", cancelButtonTitle: "OK")
+            showSimpleAlertWithTitle("Sorry!", message: "We can only open video files.", cancelButtonTitle: "OK")
         }
     }
     
@@ -291,14 +258,6 @@ class WorkoutsViewController: UITableViewController {
                 controller.moviePlayer.prepareToPlay()
                 controller.moviePlayer.play()
                 strongSelf.presentMoviePlayerViewControllerAnimated(controller)
-            } else { // Open other file types like PDF in web browser.
-                /* UIApplication.sharedApplication().openURL(url)
-                let storyboard: UIStoryboard = UIStoryboard(name: "UserFiles", bundle: nil)
-                let webViewController: UserFilesWebViewController = storyboard.instantiateViewController(withIdentifier: "UserFilesWebViewController") as! UserFilesWebViewController
-                webViewController.url = url
-                webViewController.title = content.key
-                strongSelf.navigationController?.pushViewController(webViewController, animated: true)
-                */
             }
         }
     }
@@ -358,25 +317,6 @@ class WorkoutsViewController: UITableViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    fileprivate func askForDirectoryName() {
-        let alertController: UIAlertController = UIAlertController(title: "Directory Name", message: "Please specify the directory name.", preferredStyle: .alert)
-        alertController.addTextField(configurationHandler: nil)
-        let doneAction = UIAlertAction(title: "Done", style: .default) {[unowned self] (action: UIAlertAction) in
-            let specifiedKey = alertController.textFields!.first!.text!
-            guard specifiedKey.characters.count != 0 else {
-                self.showSimpleAlertWithTitle("Error", message: "The directory name cannot be empty.", cancelButtonTitle: "OK")
-                return
-            }
-            
-            let key = "\(self.prefix!)\(specifiedKey)/"
-            self.createFolderForKey(key)
-        }
-        alertController.addAction(doneAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
-    
     fileprivate func uploadLocalContent(_ localContent: AWSLocalContent) {
         localContent.uploadWithPin(onCompletion: false, progressBlock: {[weak self] (content: AWSLocalContent, progress: Progress) in
             guard let strongSelf = self else { return }
@@ -425,14 +365,7 @@ class WorkoutsViewController: UITableViewController {
 
     // MARK: - Table view data source
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return manager.uploadingContents.count
-        }
         if let contents = self.contents {
             return contents.count
         }
@@ -440,14 +373,6 @@ class WorkoutsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        /* if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UserFilesUploadCell", for: indexPath) as! UserFilesUploadCell
-            let localContent: AWSLocalContent = manager.uploadingContents[indexPath.row]
-            cell.prefix = prefix
-            cell.localContent = localContent
-            return cell
-        }*/
-        
         let cell: WorkoutVideoCell = tableView.dequeueReusableCell(withIdentifier: "WorkoutsViewCell", for: indexPath) as! WorkoutVideoCell
         
         let content: AWSContent = contents![indexPath.row]
@@ -466,19 +391,22 @@ class WorkoutsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        // Process only if it is a listed file. Ignore actions for files that are uploading.
-        if(indexPath.section != 0) {
-            let content = contents![indexPath.row]
-            if content.isDirectory {
-                let storyboard: UIStoryboard = UIStoryboard(name: "Workouts", bundle: nil)
-                let viewController: WorkoutsViewController = storyboard.instantiateViewController(withIdentifier: "Workouts") as! WorkoutsViewController
-                viewController.prefix = content.key
-                navigationController?.pushViewController(viewController, animated: true)
-            } else {
-                let rowRect = tableView.rectForRow(at: indexPath);
-                showActionOptionsForContent(rowRect, content: content)
-            }
+        // Process only if it is a listed file. Ignore actions for files that are uploading
+        let content = contents![indexPath.row]
+        if content.isDirectory {
+            let storyboard: UIStoryboard = UIStoryboard(name: "Workouts", bundle: nil)
+            let viewController: WorkoutsViewController = storyboard.instantiateViewController(withIdentifier: "Workouts") as! WorkoutsViewController
+            viewController.prefix = content.key
+            navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            let rowRect = tableView.rectForRow(at: indexPath);
+            showActionOptionsForContent(rowRect, content: content)
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 125.0;//Choose your custom row height
     }
 }
 
@@ -490,11 +418,7 @@ extension WorkoutsViewController: UIImagePickerControllerDelegate, UINavigationC
         dismiss(animated: true, completion: nil)
         
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
-        // Handle image uploads
-        if mediaType.isEqual(to: kUTTypeImage as String) {
-            let image: UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-            askForFilename(UIImagePNGRepresentation(image)!)
-        }
+
         // Handle Video Uploads
         if mediaType.isEqual(to: kUTTypeMovie as String) {
             let videoURL: URL = info[UIImagePickerControllerMediaURL] as! URL
@@ -549,14 +473,6 @@ class WorkoutVideoCell: UITableViewCell {
             } else {
                 workoutDescription.textColor = UIColor.black
             }
-            
-            /*
-            if content.status == .running {
-                progressView.progress = Float(content.progress.fractionCompleted)
-                progressView.isHidden = false
-            } else {
-                progressView.isHidden = true
-            } */
         }
     }
     
@@ -564,7 +480,7 @@ class WorkoutVideoCell: UITableViewCell {
     func videoPreviewUiimage(vidImage: UIImageView) {
         content.getRemoteFileURL {
             [weak self] (url: URL?, error: Error?) in
-            guard let strongSelf = self else { return }
+            guard self != nil else { return }
             guard let url = url else {
                 print("Error getting URL for file. \(error)")
                 return
@@ -577,6 +493,7 @@ class WorkoutVideoCell: UITableViewCell {
         
             do {
                 let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+                
                 vidImage.image = UIImage(cgImage: imageRef)
             }
             catch let error as NSError
