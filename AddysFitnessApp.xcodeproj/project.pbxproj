@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B903FF021E82150E002FA684 /* UserFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903FF011E82150E002FA684 /* UserFilesViewController.swift */; };
+		B91ADF891E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */; };
 		B94330F01E70C579008EF137 /* UserPools.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B94330EF1E70C579008EF137 /* UserPools.storyboard */; };
 		B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */; };
 		B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */; };
@@ -88,6 +90,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B903FF011E82150E002FA684 /* UserFilesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFilesViewController.swift; path = AddysFitnessApp/UserFilesViewController.swift; sourceTree = SOURCE_ROOT; };
+		B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadWorkoutsViewController.swift; path = AddysFitnessApp/UploadWorkoutsViewController.swift; sourceTree = SOURCE_ROOT; };
 		B94330EF1E70C579008EF137 /* UserPools.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = UserPools.storyboard; path = AddysFitnessApp/UserPools.storyboard; sourceTree = SOURCE_ROOT; };
 		B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolsSignUpViewController.swift; sourceTree = "<group>"; };
 		B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolSignUpConfirmationViewController.swift; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 			children = (
 				B97CA1421E75DAC600B47AAE /* Workouts.storyboard */,
 				B97CA1441E75DAD800B47AAE /* WorkoutsViewController.swift */,
+				B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */,
+				B903FF011E82150E002FA684 /* UserFilesViewController.swift */,
 			);
 			name = Workouts;
 			sourceTree = "<group>";
@@ -490,6 +496,8 @@
 				B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */,
 				B9FB4FCD1E6E613E006095DF /* SignInViewController.swift in Sources */,
 				B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */,
+				B91ADF891E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift in Sources */,
+				B903FF021E82150E002FA684 /* UserFilesViewController.swift in Sources */,
 				B97CA1451E75DAD800B47AAE /* WorkoutsViewController.swift in Sources */,
 				B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */,
 				B9FB4FC11E6E5F71006095DF /* Consumable.swift in Sources */,
