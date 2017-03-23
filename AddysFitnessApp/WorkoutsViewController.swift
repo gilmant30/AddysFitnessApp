@@ -57,7 +57,7 @@ class WorkoutsViewController: UITableViewController {
         if let prefix = prefix {
             print("Prefix already initialized to \(prefix)")
         } else {
-            self.prefix = "\(UserFilesPublicDirectoryName)/"
+            self.prefix = ""
         }
         
         //refreshContents()

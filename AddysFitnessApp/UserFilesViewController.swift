@@ -19,16 +19,15 @@ import AWSMobileHubHelper
 
 import ObjectiveC
 
-let UserFilesPublicDirectoryName = "public"
+let WorkoutVideosDirectoryName = "public/workoutVideos"
 let UserFilesPrivateDirectoryName = "private"
 private var cellAssociationKey: UInt8 = 0
 
 class UserFilesViewController: UITableViewController {
-    @IBOutlet weak var pathLabel: UILabel!
-    
     var prefix: String!
     
     fileprivate var manager: AWSUserFileManager!
+    fileprivate var identityManager: AWSIdentityManager!
     fileprivate var contents: [AWSContent]?
     fileprivate var dateFormatter: DateFormatter!
     fileprivate var marker: String?
@@ -40,9 +39,11 @@ class UserFilesViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.delegate = self
         manager = AWSUserFileManager.defaultUserFileManager()
+        identityManager = AWSIdentityManager.default()
         
         // Sets up the UIs.
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(UserFilesViewController.showContentManagerActionOptions(_:)))
+        navigationItem.title = "MVPFit"
         
         // Sets up the date formatter.
         dateFormatter = DateFormatter()
@@ -50,14 +51,14 @@ class UserFilesViewController: UITableViewController {
         dateFormatter.timeStyle = .short
         dateFormatter.locale = Locale.current
         
-        tableView.estimatedRowHeight = tableView.rowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.estimatedRowHeight = tableView.rowHeight
+        //tableView.rowHeight = UITableViewAutomaticDimension
         didLoadAllContents = false
         
         if let prefix = prefix {
             print("Prefix already initialized to \(prefix)")
         } else {
-            self.prefix = "\(UserFilesPublicDirectoryName)/"
+            self.prefix = "\(WorkoutVideosDirectoryName)/"
         }
         refreshContents()
         updateUserInterface()
@@ -68,16 +69,10 @@ class UserFilesViewController: UITableViewController {
     fileprivate func updateUserInterface() {
         DispatchQueue.main.async {
             if let prefix = self.prefix {
-                if (prefix.hasPrefix(UserFilesPublicDirectoryName)) {
-                    self.pathLabel.text = "\(prefix.substring(from: UserFilesPublicDirectoryName.endIndex))"
-                }
                 if (prefix.hasPrefix(UserFilesPrivateDirectoryName)) {
                     let userId = AWSIdentityManager.default().identityId!
                     let subStringRange: Range<String.Index> = prefix.characters.index(prefix.startIndex, offsetBy: UserFilesPrivateDirectoryName.characters.count + userId.characters.count + 1)..<prefix.characters.index(prefix.endIndex, offsetBy: -1)
-                    self.pathLabel.text = "\(prefix.substring(with: subStringRange))"
                 }
-            } else {
-                self.pathLabel.text = "/"
             }
             self.tableView.reloadData()
         }
@@ -89,7 +84,7 @@ class UserFilesViewController: UITableViewController {
         switch(sender.selectedSegmentIndex) {
         case 0: //Public Directory
             manager = AWSUserFileManager.defaultUserFileManager()
-            prefix = "\(UserFilesPublicDirectoryName)/"
+            prefix = "\(WorkoutVideosDirectoryName)/"
             break
         case 1: //Private Directory
             if (AWSIdentityManager.default().isLoggedIn) {
@@ -126,10 +121,6 @@ class UserFilesViewController: UITableViewController {
         })
         alertController.addAction(uploadObjectAction)
         
-        let createFolderAction = UIAlertAction(title: "New Folder", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-            self.askForDirectoryName()
-        })
-        alertController.addAction(createFolderAction)
         let refreshAction = UIAlertAction(title: "Refresh", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
             self.refreshContents()
         })
@@ -138,10 +129,7 @@ class UserFilesViewController: UITableViewController {
             self.downloadObjectsToFillCache()
         })
         alertController.addAction(downloadObjectsAction)
-        let changeLimitAction = UIAlertAction(title: "Set Cache Size", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-            self.showDiskLimitOptions()
-        })
-        alertController.addAction(changeLimitAction)
+        
         let removeAllObjectsAction = UIAlertAction(title: "Clear Cache", style: .destructive, handler: {[unowned self](action: UIAlertAction) -> Void in
             self.manager.clearCache()
             self.updateUserInterface()
@@ -177,20 +165,6 @@ class UserFilesViewController: UITableViewController {
             }
             strongSelf.updateUserInterface()
         }
-    }
-    
-    fileprivate func showDiskLimitOptions() {
-        let alertController = UIAlertController(title: "Disk Cache Size", message: nil, preferredStyle: .actionSheet)
-        for number: Int in [1, 5, 20, 50, 100] {
-            let byteLimitOptionAction = UIAlertAction(title: "\(number) MB", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-                self.manager.maxCacheSize = UInt(number) * 1024 * 1024
-                self.updateUserInterface()
-            })
-            alertController.addAction(byteLimitOptionAction)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
     }
     
     fileprivate func downloadObjectsToFillCache() {
@@ -377,7 +351,7 @@ class UserFilesViewController: UITableViewController {
     
     fileprivate func showImagePicker() {
         let imagePickerController: UIImagePickerController = UIImagePickerController()
-        imagePickerController.mediaTypes =  [kUTTypeImage as String, kUTTypeMovie as String]
+        imagePickerController.mediaTypes =  [kUTTypeMovie as String]
         imagePickerController.delegate = self
         present(imagePickerController, animated: true, completion: nil)
     }
@@ -391,28 +365,9 @@ class UserFilesViewController: UITableViewController {
                 self.showSimpleAlertWithTitle("Error", message: "The file name cannot be empty.", cancelButtonTitle: "OK")
                 return
             } else {
-                let key: String = "\(self.prefix!)\(specifiedKey)"
+                let key: String = "\(self.prefix!)\(specifiedKey).mp4"
                 self.uploadWithData(data, forKey: key)
             }
-        }
-        alertController.addAction(doneAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    fileprivate func askForDirectoryName() {
-        let alertController: UIAlertController = UIAlertController(title: "Directory Name", message: "Please specify the directory name.", preferredStyle: .alert)
-        alertController.addTextField(configurationHandler: nil)
-        let doneAction = UIAlertAction(title: "Done", style: .default) {[unowned self] (action: UIAlertAction) in
-            let specifiedKey = alertController.textFields!.first!.text!
-            guard specifiedKey.characters.count != 0 else {
-                self.showSimpleAlertWithTitle("Error", message: "The directory name cannot be empty.", cancelButtonTitle: "OK")
-                return
-            }
-            
-            let key = "\(self.prefix!)\(specifiedKey)/"
-            self.createFolderForKey(key)
         }
         alertController.addAction(doneAction)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -513,7 +468,7 @@ class UserFilesViewController: UITableViewController {
         if(indexPath.section != 0) {
             let content = contents![indexPath.row]
             if content.isDirectory {
-                let storyboard: UIStoryboard = UIStoryboard(name: "UserFiles", bundle: nil)
+                let storyboard: UIStoryboard = UIStoryboard(name: "Workouts", bundle: nil)
                 let viewController: UserFilesViewController = storyboard.instantiateViewController(withIdentifier: "UserFiles") as! UserFilesViewController
                 viewController.prefix = content.key
                 navigationController?.pushViewController(viewController, animated: true)
@@ -533,11 +488,6 @@ extension UserFilesViewController: UIImagePickerControllerDelegate, UINavigation
         dismiss(animated: true, completion: nil)
         
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
-        // Handle image uploads
-        if mediaType.isEqual(to: kUTTypeImage as String) {
-            let image: UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-            askForFilename(UIImagePNGRepresentation(image)!)
-        }
         // Handle Video Uploads
         if mediaType.isEqual(to: kUTTypeMovie as String) {
             let videoURL: URL = info[UIImagePickerControllerMediaURL] as! URL
@@ -550,7 +500,6 @@ class UserFilesCell: UITableViewCell {
     
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
-    @IBOutlet weak var progressView: UIProgressView!
     
     
     //@IBOutlet weak var keepImageView: UIImageView!
@@ -574,11 +523,13 @@ class UserFilesCell: UITableViewCell {
                 contentByteCount = content.knownRemoteByteCount
             }
             
+            detailLabel.numberOfLines = 0
+            
             if content.isDirectory {
                 detailLabel.text = "This is a folder"
                 accessoryType = .disclosureIndicator
             } else {
-                detailLabel.text = contentByteCount.aws_stringFromByteCount()
+                detailLabel.text = "This is the description"
                 accessoryType = .none
             }
             
@@ -587,13 +538,6 @@ class UserFilesCell: UITableViewCell {
                 detailLabel.textColor = UIColor.blue
             } else {
                 detailLabel.textColor = UIColor.black
-            }
-            
-            if content.status == .running {
-                progressView.progress = Float(content.progress.fractionCompleted)
-                progressView.isHidden = false
-            } else {
-                progressView.isHidden = true
             }
         }
     }

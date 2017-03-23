@@ -53,7 +53,7 @@ class UploadWorkoutsViewController: UIViewController {
         progressBar.isHidden = true
         uploadingLabel.isHidden = true
         
-        self.prefix = "\(UserFilesPublicDirectoryName)/"
+        self.prefix = ""
     }
     
     // MARK: Content uploads
