@@ -13,7 +13,7 @@
         <!--Workouts View-->
         <scene sceneID="Hac-i3-8QO">
             <objects>
-                <tableViewController storyboardIdentifier="WorkoutsView" title="Workouts View" id="RD0-nj-RWC" customClass="UserFilesViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="WorkoutsView" title="Workouts View" id="RD0-nj-RWC" customClass="WorkoutsViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="MVP-gI-4r9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -37,6 +37,11 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="10"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🍑" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpQ-U5-R3f">
                                             <rect key="frame" x="94" y="0.0" width="93.5" height="36"/>
@@ -44,6 +49,11 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="10"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🏃🏼‍♀️" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7P-Xj-USl">
                                             <rect key="frame" x="187.5" y="0.0" width="94" height="36"/>
@@ -51,6 +61,11 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="10"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👙" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAw-a3-WxB">
                                             <rect key="frame" x="281.5" y="0.0" width="93.5" height="36"/>
@@ -58,6 +73,11 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="10"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                 </stackView>
@@ -74,27 +94,27 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserFilesCell" rowHeight="100" id="Vhh-iN-m73" customClass="UserFilesCell" customModule="AddysFitnessApp">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserFilesCell" rowHeight="100" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
                                 <rect key="frame" x="0.0" y="88" width="375" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vhh-iN-m73" id="Uq3-Ls-nuu">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PRU-nR-J78">
-                                            <rect key="frame" x="8" y="8" width="80" height="83"/>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PRU-nR-J78">
+                                            <rect key="frame" x="8" y="8" width="130" height="83"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="80" id="paE-Bc-6Ao"/>
+                                                <constraint firstAttribute="width" constant="130" id="paE-Bc-6Ao"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="kbb-Hf-5H6">
-                                            <rect key="frame" x="96" y="8" width="34" height="21"/>
+                                            <rect key="frame" x="146" y="8" width="34" height="21"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="y0P-Bi-gFy">
-                                            <rect key="frame" x="96" y="54" width="65" height="15"/>
+                                            <rect key="frame" x="146" y="54" width="65" height="15"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -124,8 +144,10 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="abWorkoutsLabel" destination="oAw-a3-WxB" id="Ivg-c2-9Q0"/>
                         <outlet property="armWorkoutsLabel" destination="5N9-f7-VWX" id="4ot-W5-y4B"/>
-                        <segue destination="rAq-iI-eng" kind="show" identifier="" id="82U-Od-oM7"/>
+                        <outlet property="cardioWorkoutsLabel" destination="J7P-Xj-USl" id="oZK-k0-BlZ"/>
+                        <outlet property="legWorkoutsLabel" destination="fpQ-U5-R3f" id="GyC-L3-W44"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rNy-pp-7V0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -145,37 +167,37 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ID0-3G-Kdw">
-                                <rect key="frame" x="16" y="342" width="343" height="134"/>
+                                <rect key="frame" x="16" y="433.5" width="343" height="72"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Workout Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="541-vX-HPF">
-                                <rect key="frame" x="16" y="256" width="343" height="30"/>
+                                <rect key="frame" x="16" y="255.5" width="343" height="46.5"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workout Title: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Woq-7I-4Kp">
-                                <rect key="frame" x="16" y="220" width="112" height="21"/>
+                                <rect key="frame" x="16" y="220" width="144" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nvm-RA-0Ua">
-                                <rect key="frame" x="16" y="306" width="112" height="21"/>
+                                <rect key="frame" x="16" y="398" width="144" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Length:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VAm-kk-GT1">
-                                <rect key="frame" x="16" y="496" width="112" height="21"/>
+                                <rect key="frame" x="16" y="525.5" width="144" height="31.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VoF-4q-pO5">
-                                <rect key="frame" x="148" y="496" width="36" height="21"/>
+                                <rect key="frame" x="180" y="525.5" width="36" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -199,26 +221,67 @@
                                 </constraints>
                             </imageView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="t4f-Ou-0BL">
-                                <rect key="frame" x="114" y="596" width="150" height="2"/>
+                                <rect key="frame" x="114" y="616" width="150" height="2"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EpI-FN-Qef">
-                                <rect key="frame" x="16" y="587" width="92.5" height="21"/>
+                                <rect key="frame" x="16" y="607" width="92.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workout Category:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBt-Nr-yi1">
+                                <rect key="frame" x="16" y="322" width="144" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="7ap-vn-E8X">
+                                <rect key="frame" x="16" y="357.5" width="343" height="20.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="💪" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e0C-Av-rwy">
+                                        <rect key="frame" x="0.0" y="0.0" width="86" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🍑" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Het-EM-EUL">
+                                        <rect key="frame" x="86" y="0.0" width="85.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🏃🏼‍♀️" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C2s-Dp-vRk">
+                                        <rect key="frame" x="171.5" y="0.0" width="86" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👙" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WbO-lW-U77">
+                                        <rect key="frame" x="257.5" y="0.0" width="85.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="VAm-kk-GT1" firstAttribute="top" secondItem="ID0-3G-Kdw" secondAttribute="bottom" constant="20" id="1DJ-3B-eWz"/>
                             <constraint firstItem="Nvm-RA-0Ua" firstAttribute="leading" secondItem="Woq-7I-4Kp" secondAttribute="leading" id="1gs-jK-T8t"/>
-                            <constraint firstItem="scd-5b-6r6" firstAttribute="top" secondItem="VAm-kk-GT1" secondAttribute="bottom" constant="150" id="2aj-z0-bsV"/>
+                            <constraint firstItem="scd-5b-6r6" firstAttribute="top" secondItem="VAm-kk-GT1" secondAttribute="bottom" constant="110" id="2aj-z0-bsV"/>
+                            <constraint firstItem="Nvm-RA-0Ua" firstAttribute="top" secondItem="7ap-vn-E8X" secondAttribute="bottom" constant="20" id="3F2-sa-8oX"/>
                             <constraint firstItem="DCd-ji-fIB" firstAttribute="leading" secondItem="eau-t0-LVh" secondAttribute="leadingMargin" constant="50" id="AwA-Jj-NPM"/>
+                            <constraint firstItem="pBt-Nr-yi1" firstAttribute="trailing" secondItem="Woq-7I-4Kp" secondAttribute="trailing" id="C4h-R6-Jxk"/>
+                            <constraint firstItem="7ap-vn-E8X" firstAttribute="top" secondItem="pBt-Nr-yi1" secondAttribute="bottom" constant="15" id="CWt-mz-OUx"/>
+                            <constraint firstItem="pBt-Nr-yi1" firstAttribute="leading" secondItem="Woq-7I-4Kp" secondAttribute="leading" id="E3U-KK-emJ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="541-vX-HPF" secondAttribute="trailing" id="Fd2-1l-X7Z"/>
                             <constraint firstItem="VoF-4q-pO5" firstAttribute="top" secondItem="VAm-kk-GT1" secondAttribute="top" id="IKx-JM-Gyp"/>
+                            <constraint firstItem="pBt-Nr-yi1" firstAttribute="top" secondItem="541-vX-HPF" secondAttribute="bottom" constant="20" id="IjR-KE-ZwE"/>
                             <constraint firstItem="t4f-Ou-0BL" firstAttribute="centerY" secondItem="EpI-FN-Qef" secondAttribute="centerY" id="Iqz-py-TYM"/>
                             <constraint firstItem="Nvm-RA-0Ua" firstAttribute="trailing" secondItem="Woq-7I-4Kp" secondAttribute="trailing" id="Kum-Au-7iz"/>
                             <constraint firstItem="t4f-Ou-0BL" firstAttribute="leading" secondItem="eau-t0-LVh" secondAttribute="leadingMargin" constant="98" id="LWf-PC-e0Y"/>
+                            <constraint firstAttribute="bottom" secondItem="7ap-vn-E8X" secondAttribute="bottom" constant="289" id="OU2-f9-6XV"/>
                             <constraint firstItem="EpI-FN-Qef" firstAttribute="leading" secondItem="eau-t0-LVh" secondAttribute="leadingMargin" id="QUW-kF-dWW"/>
                             <constraint firstItem="VAm-kk-GT1" firstAttribute="leading" secondItem="ID0-3G-Kdw" secondAttribute="leading" id="REb-NU-zAo"/>
                             <constraint firstItem="ID0-3G-Kdw" firstAttribute="leading" secondItem="Nvm-RA-0Ua" secondAttribute="leading" id="RfG-RL-kXY"/>
@@ -227,20 +290,25 @@
                             <constraint firstItem="scd-5b-6r6" firstAttribute="top" secondItem="M1g-Jt-5Wl" secondAttribute="bottom" constant="10" id="WJG-vh-tqe"/>
                             <constraint firstItem="Woq-7I-4Kp" firstAttribute="top" secondItem="DCd-ji-fIB" secondAttribute="bottom" constant="40" id="Whs-Zq-AfK"/>
                             <constraint firstItem="VoF-4q-pO5" firstAttribute="leading" secondItem="VAm-kk-GT1" secondAttribute="trailing" constant="20" id="Wja-jt-XFp"/>
-                            <constraint firstItem="EpI-FN-Qef" firstAttribute="top" secondItem="VAm-kk-GT1" secondAttribute="bottom" constant="70" id="XoE-8P-wUN"/>
+                            <constraint firstItem="EpI-FN-Qef" firstAttribute="top" secondItem="VAm-kk-GT1" secondAttribute="bottom" constant="50" id="XoE-8P-wUN"/>
                             <constraint firstItem="M1g-Jt-5Wl" firstAttribute="centerX" secondItem="eau-t0-LVh" secondAttribute="centerX" id="Y9E-Rt-xAN"/>
-                            <constraint firstItem="Nvm-RA-0Ua" firstAttribute="top" secondItem="541-vX-HPF" secondAttribute="bottom" constant="20" id="bDr-pg-cPg"/>
+                            <constraint firstItem="7ap-vn-E8X" firstAttribute="leading" secondItem="eau-t0-LVh" secondAttribute="leadingMargin" id="YWw-rn-eUa"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="7ap-vn-E8X" secondAttribute="trailing" id="csH-it-D2S"/>
                             <constraint firstItem="541-vX-HPF" firstAttribute="top" secondItem="Woq-7I-4Kp" secondAttribute="bottom" constant="15" id="eXP-YK-Vub"/>
                             <constraint firstItem="541-vX-HPF" firstAttribute="leading" secondItem="Woq-7I-4Kp" secondAttribute="leading" id="gHP-Ls-ZgE"/>
                             <constraint firstItem="ID0-3G-Kdw" firstAttribute="top" secondItem="Nvm-RA-0Ua" secondAttribute="bottom" constant="15" id="gwB-EY-pPQ"/>
                             <constraint firstItem="Woq-7I-4Kp" firstAttribute="leading" secondItem="eau-t0-LVh" secondAttribute="leadingMargin" id="gwa-So-JbJ"/>
-                            <constraint firstItem="t4f-Ou-0BL" firstAttribute="top" secondItem="VoF-4q-pO5" secondAttribute="bottom" constant="79" id="iHq-vu-EZV"/>
+                            <constraint firstItem="t4f-Ou-0BL" firstAttribute="top" secondItem="VoF-4q-pO5" secondAttribute="bottom" constant="70" id="iHq-vu-EZV"/>
                             <constraint firstItem="DCd-ji-fIB" firstAttribute="top" secondItem="wGC-wG-s8J" secondAttribute="bottom" constant="10" id="n7n-pj-8dT"/>
                             <constraint firstItem="VAm-kk-GT1" firstAttribute="trailing" secondItem="Woq-7I-4Kp" secondAttribute="trailing" id="taF-5O-QW0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="DCd-ji-fIB" secondAttribute="trailing" constant="50" id="zTY-Zg-3F5"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="abVideo" destination="WbO-lW-U77" id="sRq-Ur-jvp"/>
+                        <outlet property="armVideo" destination="e0C-Av-rwy" id="w8h-CR-QzX"/>
+                        <outlet property="cardioVideo" destination="C2s-Dp-vRk" id="Dfv-NI-ps2"/>
+                        <outlet property="legVideo" destination="Het-EM-EUL" id="7J1-VX-Uca"/>
                         <outlet property="previewImage" destination="DCd-ji-fIB" id="flW-zr-wos"/>
                         <outlet property="progressView" destination="t4f-Ou-0BL" id="aaX-En-5qu"/>
                         <outlet property="uploadingLabel" destination="EpI-FN-Qef" id="8As-sr-xsF"/>

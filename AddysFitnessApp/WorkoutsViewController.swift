@@ -26,7 +26,7 @@ let WorkoutImagesDirectoryName = "public/workoutImages/"
 let UserFilesPrivateDirectoryName = "private"
 private var cellAssociationKey: UInt8 = 0
 
-class UserFilesViewController: UITableViewController {
+class WorkoutsViewController: UITableViewController {
     var prefix: String!
     
     fileprivate var manager: AWSUserFileManager!
@@ -37,10 +37,9 @@ class UserFilesViewController: UITableViewController {
     fileprivate var didLoadAllContents: Bool!
     
     @IBOutlet weak var armWorkoutsLabel: UILabel!
-    
-    //@IBOutlet weak var legWorkoutsLabel: UILabel!
-    //@IBOutlet weak var cardioWorkoutsLabel: UILabel!
-    //@IBOutlet weak var absWorkoutLabel: UILabel!
+    @IBOutlet weak var legWorkoutsLabel: UILabel!
+    @IBOutlet weak var cardioWorkoutsLabel: UILabel!
+    @IBOutlet weak var abWorkoutsLabel: UILabel!
     
     // MARK:- View lifecycle
     
@@ -50,23 +49,11 @@ class UserFilesViewController: UITableViewController {
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
         
-        // create tapGestureRecognizer for images
-        //let tapArmWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleArmWorkouts))
-        //let tapLegWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleLegWorkouts))
-        
-        // Optionally set the number of required taps, e.g., 2 for a double click
-        //tapArmWorkoutsGestureRecognizer.numberOfTapsRequired = 1
-        //tapLegWorkoutsGestureRecognizer.numberOfTapsRequired = 1
-        
-        // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
-        //armWorkoutsLabel.isUserInteractionEnabled = true
-        //armWorkoutsLabel.addGestureRecognizer(tapArmWorkoutsGestureRecognizer)
-        //legWorkoutsLabel.isUserInteractionEnabled = true
-        //legWorkoutsLabel.addGestureRecognizer(tapLegWorkoutsGestureRecognizer)
+        setIcons()
         armWorkoutsLabel.backgroundColor = UIColor.gray
         
         // Sets up the UIs.
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(UserFilesViewController.showContentManagerActionOptions(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
         navigationItem.title = "MVPFit"
         
         // Sets up the date formatter.
@@ -82,7 +69,7 @@ class UserFilesViewController: UITableViewController {
         if let prefix = prefix {
             print("Prefix already initialized to \(prefix)")
         } else {
-            self.prefix = "\(WorkoutVideosDirectoryName)"
+            self.prefix = "\(WorkoutVideosDirectoryName)armVideos/"
         }
         refreshContents()
         updateUserInterface()
@@ -448,31 +435,66 @@ class UserFilesViewController: UITableViewController {
         }
     }
     
-    /*func setIcons() {
+    func setIcons() {
         // create tapGestureRecognizer for images
         let tapArmWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleArmWorkouts))
         let tapLegWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleLegWorkouts))
+        let tapCardioBodyWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleCardioWorkouts))
+        let tapAbsWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleAbsWorkouts))
         
         // Optionally set the number of required taps, e.g., 2 for a double click
         tapArmWorkoutsGestureRecognizer.numberOfTapsRequired = 1
         tapLegWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        tapCardioBodyWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        tapAbsWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        
         
         // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
         armWorkoutsLabel.isUserInteractionEnabled = true
         armWorkoutsLabel.addGestureRecognizer(tapArmWorkoutsGestureRecognizer)
         legWorkoutsLabel.isUserInteractionEnabled = true
         legWorkoutsLabel.addGestureRecognizer(tapLegWorkoutsGestureRecognizer)
+        cardioWorkoutsLabel.isUserInteractionEnabled = true
+        cardioWorkoutsLabel.addGestureRecognizer(tapCardioBodyWorkoutsGestureRecognizer)
+        abWorkoutsLabel.isUserInteractionEnabled = true
+        abWorkoutsLabel.addGestureRecognizer(tapAbsWorkoutsGestureRecognizer)
     }
     
     func handleArmWorkouts() {
-        armWorkoutsLabel.backgroundColor = UIColor.gray
+        armWorkoutsLabel.backgroundColor = UIColor.lightGray
         legWorkoutsLabel.backgroundColor = UIColor.white
+        cardioWorkoutsLabel.backgroundColor = UIColor.white
+        abWorkoutsLabel.backgroundColor = UIColor.white
+        self.prefix = "\(WorkoutVideosDirectoryName)armVideos/"
+        refreshContents()
     }
     
     func handleLegWorkouts() {
         armWorkoutsLabel.backgroundColor = UIColor.white
-        legWorkoutsLabel.backgroundColor = UIColor.gray
-    }*/
+        legWorkoutsLabel.backgroundColor = UIColor.lightGray
+        cardioWorkoutsLabel.backgroundColor = UIColor.white
+        abWorkoutsLabel.backgroundColor = UIColor.white
+        self.prefix = "\(WorkoutVideosDirectoryName)legVideos/"
+        refreshContents()
+    }
+    
+    func handleAbsWorkouts() {
+        armWorkoutsLabel.backgroundColor = UIColor.white
+        legWorkoutsLabel.backgroundColor = UIColor.white
+        cardioWorkoutsLabel.backgroundColor = UIColor.white
+        abWorkoutsLabel.backgroundColor = UIColor.lightGray
+        self.prefix = "\(WorkoutVideosDirectoryName)abVideos/"
+        refreshContents()
+    }
+    
+    func handleCardioWorkouts() {
+        armWorkoutsLabel.backgroundColor = UIColor.white
+        legWorkoutsLabel.backgroundColor = UIColor.white
+        cardioWorkoutsLabel.backgroundColor = UIColor.lightGray
+        abWorkoutsLabel.backgroundColor = UIColor.white
+        self.prefix = "\(WorkoutVideosDirectoryName)cardioVideos/"
+        refreshContents()
+    }
     
     // MARK: - Table view data source
     
@@ -499,7 +521,7 @@ class UserFilesViewController: UITableViewController {
             return cell
         }
         
-        let cell: UserFilesCell = tableView.dequeueReusableCell(withIdentifier: "UserFilesCell", for: indexPath) as! UserFilesCell
+        let cell: WorkoutVideoCell = tableView.dequeueReusableCell(withIdentifier: "WorkoutVideoCell", for: indexPath) as! WorkoutVideoCell
         
         let content: AWSContent = contents![indexPath.row]
         cell.prefix = prefix
@@ -527,7 +549,7 @@ class UserFilesViewController: UITableViewController {
             let content = contents![indexPath.row]
             if content.isDirectory {
                 let storyboard: UIStoryboard = UIStoryboard(name: "Workouts", bundle: nil)
-                let viewController: UserFilesViewController = storyboard.instantiateViewController(withIdentifier: "UserFiles") as! UserFilesViewController
+                let viewController: WorkoutsViewController = storyboard.instantiateViewController(withIdentifier: "UserFiles") as! WorkoutsViewController
                 viewController.prefix = content.key
                 navigationController?.pushViewController(viewController, animated: true)
             } else {
@@ -540,7 +562,7 @@ class UserFilesViewController: UITableViewController {
 
 // MARK:- UIImagePickerControllerDelegate
 
-extension UserFilesViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension WorkoutsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
         dismiss(animated: true, completion: nil)
@@ -565,7 +587,7 @@ extension UserFilesViewController: UIImagePickerControllerDelegate, UINavigation
     
 }
 
-class UserFilesCell: UITableViewCell {
+class WorkoutVideoCell: UITableViewCell {
     
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
@@ -658,7 +680,7 @@ class UserFilesUploadCell: UITableViewCell {
 
 // MARK: - Utility
 
-extension UserFilesViewController {
+extension WorkoutsViewController {
     fileprivate func showSimpleAlertWithTitle(_ title: String, message: String, cancelButtonTitle cancelTitle: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)

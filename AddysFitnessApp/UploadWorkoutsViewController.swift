@@ -23,6 +23,7 @@ class UploadWorkoutsViewController: UIViewController {
     var data:Data!
     var manager:AWSUserFileManager!
     var url:URL!
+    var selectedCategory:String?
     fileprivate var dateFormatter: DateFormatter!
     
     @IBOutlet weak var workoutTitle: UITextField!
@@ -30,6 +31,12 @@ class UploadWorkoutsViewController: UIViewController {
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var uploadingLabel: UILabel!
     @IBOutlet weak var previewImage: UIImageView!
+    @IBOutlet weak var armVideo: UILabel!
+    @IBOutlet weak var legVideo: UILabel!
+    @IBOutlet weak var cardioVideo: UILabel!
+    @IBOutlet weak var abVideo: UILabel!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +45,7 @@ class UploadWorkoutsViewController: UIViewController {
         navigationItem.title = "MVPFit"
         self.progressView.isHidden = true
         self.uploadingLabel.isHidden = true
+        setIcons()
     }
     
     fileprivate func uploadLocalContent(_ localContent: AWSLocalContent) {
@@ -75,15 +83,19 @@ class UploadWorkoutsViewController: UIViewController {
     
     
     @IBAction func uploadWorkout(_ sender: Any) {
-        if(workoutTitle.hasText) {
-            if let title: String = workoutTitle.text {
-                let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
-                let localContent = manager.localContent(with: data, key: key)
-                uploadLocalContent(localContent)
-                //self.uploadWithData(data, forKey: key)
+        if let prefix = selectedCategory {
+            if(workoutTitle.hasText) {
+                if let title: String = workoutTitle.text {
+                    let key: String = "\(WorkoutVideosDirectoryName)\(prefix)\(title).mp4"
+                    let localContent = manager.localContent(with: data, key: key)
+                    uploadLocalContent(localContent)
+                    //self.uploadWithData(data, forKey: key)
+                }
+            } else {
+                self.showSimpleAlertWithTitle("Error", message: "The title name cannot be empty.", cancelButtonTitle: "OK")
             }
         } else {
-            self.showSimpleAlertWithTitle("Error", message: "The title name cannot be empty.", cancelButtonTitle: "OK")
+            self.showSimpleAlertWithTitle("Error", message: "You must specify a workout category.", cancelButtonTitle: "OK")
         }
     }
     
@@ -109,6 +121,63 @@ class UploadWorkoutsViewController: UIViewController {
                 print("Image generation failed with error \(error)")
                 return
             }
+    }
+    
+    func setIcons() {
+        // create tapGestureRecognizer for images
+        let tapArmWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleArmWorkouts))
+        let tapLegWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleLegWorkouts))
+        let tapCardioBodyWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleCardioWorkouts))
+        let tapAbsWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleAbsWorkouts))
+        
+        // Optionally set the number of required taps, e.g., 2 for a double click
+        tapArmWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        tapLegWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        tapCardioBodyWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        tapAbsWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        
+        
+        // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
+        armVideo.isUserInteractionEnabled = true
+        armVideo.addGestureRecognizer(tapArmWorkoutsGestureRecognizer)
+        legVideo.isUserInteractionEnabled = true
+        legVideo.addGestureRecognizer(tapLegWorkoutsGestureRecognizer)
+        cardioVideo.isUserInteractionEnabled = true
+        cardioVideo.addGestureRecognizer(tapCardioBodyWorkoutsGestureRecognizer)
+        abVideo.isUserInteractionEnabled = true
+        abVideo.addGestureRecognizer(tapAbsWorkoutsGestureRecognizer)
+    }
+    
+    func handleArmWorkouts() {
+        armVideo.backgroundColor = UIColor.lightGray
+        legVideo.backgroundColor = UIColor.white
+        cardioVideo.backgroundColor = UIColor.white
+        abVideo.backgroundColor = UIColor.white
+        selectedCategory = "armVideos/"
+    }
+    
+    func handleLegWorkouts() {
+        armVideo.backgroundColor = UIColor.white
+        legVideo.backgroundColor = UIColor.lightGray
+        cardioVideo.backgroundColor = UIColor.white
+        abVideo.backgroundColor = UIColor.white
+        selectedCategory = "legVideos"
+    }
+    
+    func handleAbsWorkouts() {
+        armVideo.backgroundColor = UIColor.white
+        legVideo.backgroundColor = UIColor.white
+        cardioVideo.backgroundColor = UIColor.white
+        abVideo.backgroundColor = UIColor.lightGray
+        selectedCategory = "abVideos"
+    }
+    
+    func handleCardioWorkouts() {
+        armVideo.backgroundColor = UIColor.white
+        legVideo.backgroundColor = UIColor.white
+        cardioVideo.backgroundColor = UIColor.lightGray
+        abVideo.backgroundColor = UIColor.white
+        selectedCategory = "cardioVideos"
     }
     
 }
