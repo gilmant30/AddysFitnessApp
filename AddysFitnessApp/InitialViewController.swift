@@ -68,7 +68,7 @@ class InitialViewController: UIViewController {
     func handleWorkoutIconTapped() {
         print("Sending to workouts storyboard")
         let storyboard = UIStoryboard(name: "Workouts", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "UserFiles")
+        let viewController = storyboard.instantiateViewController(withIdentifier: "WorkoutsView")
         self.navigationController!.pushViewController(viewController, animated: true)
     }
     

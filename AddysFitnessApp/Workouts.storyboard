@@ -10,41 +10,79 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Workouts View Controller-->
+        <!--Workouts View-->
         <scene sceneID="Hac-i3-8QO">
             <objects>
-                <tableViewController storyboardIdentifier="Workouts" id="RD0-nj-RWC" customClass="WorkoutsViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="WorkoutsView" title="Workouts View" id="RD0-nj-RWC" customClass="UserFilesViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="MVP-gI-4r9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="5BB-XS-yrn">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tzo-UM-hSV">
-                                    <rect key="frame" x="25" y="15" width="42" height="21"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workout Categories" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tzo-UM-hSV">
+                                    <rect key="frame" x="0.0" y="5" width="375" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bnP-9b-13h">
+                                    <rect key="frame" x="0.0" y="24" width="375" height="36"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="💪" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5N9-f7-VWX">
+                                            <rect key="frame" x="0.0" y="0.0" width="94" height="36"/>
+                                            <gestureRecognizers/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🍑" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpQ-U5-R3f">
+                                            <rect key="frame" x="94" y="0.0" width="93.5" height="36"/>
+                                            <gestureRecognizers/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🏃🏼‍♀️" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7P-Xj-USl">
+                                            <rect key="frame" x="187.5" y="0.0" width="94" height="36"/>
+                                            <gestureRecognizers/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👙" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAw-a3-WxB">
+                                            <rect key="frame" x="281.5" y="0.0" width="93.5" height="36"/>
+                                            <gestureRecognizers/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstItem="tzo-UM-hSV" firstAttribute="leading" secondItem="5BB-XS-yrn" secondAttribute="leading" constant="25" id="fpS-Wp-Zrf"/>
-                                <constraint firstItem="tzo-UM-hSV" firstAttribute="top" secondItem="5BB-XS-yrn" secondAttribute="top" constant="15" id="mi3-sN-557"/>
+                                <constraint firstItem="tzo-UM-hSV" firstAttribute="top" secondItem="5BB-XS-yrn" secondAttribute="top" constant="5" id="41j-fX-E8g"/>
+                                <constraint firstAttribute="trailing" secondItem="bnP-9b-13h" secondAttribute="trailing" id="5lf-uT-Uxn"/>
+                                <constraint firstAttribute="trailing" secondItem="tzo-UM-hSV" secondAttribute="trailing" id="FLz-SU-xsF"/>
+                                <constraint firstItem="bnP-9b-13h" firstAttribute="top" secondItem="5BB-XS-yrn" secondAttribute="top" constant="24" id="HhW-ED-lQX"/>
+                                <constraint firstAttribute="bottom" secondItem="bnP-9b-13h" secondAttribute="bottom" id="VHj-6M-fC8"/>
+                                <constraint firstItem="tzo-UM-hSV" firstAttribute="leading" secondItem="5BB-XS-yrn" secondAttribute="leading" id="mUy-D7-yyO"/>
+                                <constraint firstItem="bnP-9b-13h" firstAttribute="leading" secondItem="5BB-XS-yrn" secondAttribute="leading" id="wjs-cS-ErC"/>
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WorkoutsViewCell" rowHeight="100" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
-                                <rect key="frame" x="0.0" y="72" width="375" height="100"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserFilesCell" rowHeight="100" id="Vhh-iN-m73" customClass="UserFilesCell" customModule="AddysFitnessApp">
+                                <rect key="frame" x="0.0" y="88" width="375" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vhh-iN-m73" id="Uq3-Ls-nuu">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PRU-nR-J78">
-                                            <rect key="frame" x="8" y="8" width="80" height="84"/>
+                                            <rect key="frame" x="8" y="8" width="80" height="83"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="80" id="paE-Bc-6Ao"/>
                                             </constraints>
@@ -74,9 +112,9 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="workoutDescription" destination="y0P-Bi-gFy" id="Mv8-Nc-fCM"/>
-                                    <outlet property="workoutTitle" destination="kbb-Hf-5H6" id="HZT-8I-tyV"/>
-                                    <outlet property="workoutVideoImage" destination="PRU-nR-J78" id="k5b-S0-hTE"/>
+                                    <outlet property="detailLabel" destination="y0P-Bi-gFy" id="bjq-nH-TZb"/>
+                                    <outlet property="fileNameLabel" destination="kbb-Hf-5H6" id="YlZ-y7-AHb"/>
+                                    <outlet property="previewImage" destination="PRU-nR-J78" id="tYC-Xw-XR0"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -86,106 +124,13 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="pathLabel" destination="tzo-UM-hSV" id="uUB-SW-lOv"/>
-                        <segue destination="rAq-iI-eng" kind="show" identifier="ShowUploadWorkouts" id="82U-Od-oM7"/>
+                        <outlet property="armWorkoutsLabel" destination="5N9-f7-VWX" id="4ot-W5-y4B"/>
+                        <segue destination="rAq-iI-eng" kind="show" identifier="" id="82U-Od-oM7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rNy-pp-7V0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="100" y="136.28185907046478"/>
-        </scene>
-        <!--User Files View Controller-->
-        <scene sceneID="cki-W5-JPJ">
-            <objects>
-                <tableViewController storyboardIdentifier="UserFiles" id="IQL-EG-3Z5" customClass="UserFilesViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="110" sectionHeaderHeight="28" sectionFooterHeight="28" id="a2Z-PH-MIB">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserFilesCell" rowHeight="110" id="V3D-Ui-5sf" customClass="UserFilesCell" customModule="AddysFitnessApp">
-                                <rect key="frame" x="0.0" y="28" width="375" height="110"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="V3D-Ui-5sf" id="ez0-Nh-KTc">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="109"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="downloadVideoImage" translatesAutoresizingMaskIntoConstraints="NO" id="j2y-A0-oOK">
-                                            <rect key="frame" x="8" y="8" width="113" height="93"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="113" id="J5Q-Ch-HFU"/>
-                                            </constraints>
-                                        </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HNu-5s-Yza">
-                                            <rect key="frame" x="131" y="8" width="226" height="21"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Fn-5c-9wZ">
-                                            <rect key="frame" x="131" y="39" width="226" height="14.5"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="HNu-5s-Yza" firstAttribute="leading" secondItem="j2y-A0-oOK" secondAttribute="trailing" constant="10" id="8Uq-ok-lvS"/>
-                                        <constraint firstItem="6Fn-5c-9wZ" firstAttribute="leading" secondItem="HNu-5s-Yza" secondAttribute="leading" id="DVh-3B-AXz"/>
-                                        <constraint firstItem="j2y-A0-oOK" firstAttribute="leading" secondItem="ez0-Nh-KTc" secondAttribute="leadingMargin" id="LMM-ME-ovB"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="6Fn-5c-9wZ" secondAttribute="trailing" constant="10" id="Nnh-F0-ccV"/>
-                                        <constraint firstItem="j2y-A0-oOK" firstAttribute="centerY" secondItem="ez0-Nh-KTc" secondAttribute="centerY" id="Q70-Kf-33Z"/>
-                                        <constraint firstItem="HNu-5s-Yza" firstAttribute="top" secondItem="ez0-Nh-KTc" secondAttribute="topMargin" id="RQR-gm-iXI"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="HNu-5s-Yza" secondAttribute="trailing" constant="10" id="ciJ-3L-MnV"/>
-                                        <constraint firstItem="6Fn-5c-9wZ" firstAttribute="top" secondItem="HNu-5s-Yza" secondAttribute="bottom" constant="10" id="dj5-7y-JOv"/>
-                                        <constraint firstItem="j2y-A0-oOK" firstAttribute="top" secondItem="ez0-Nh-KTc" secondAttribute="topMargin" id="xeV-lp-J9u"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="detailLabel" destination="6Fn-5c-9wZ" id="jx8-gd-Unv"/>
-                                    <outlet property="fileNameLabel" destination="HNu-5s-Yza" id="bct-md-hxD"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserFilesUploadCell" rowHeight="80" id="szY-Wf-K5l" customClass="UserFilesUploadCell" customModule="AddysFitnessApp">
-                                <rect key="frame" x="0.0" y="138" width="375" height="80"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="szY-Wf-K5l" id="JN1-Ul-as2">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="zg1-wA-lGw">
-                                            <rect key="frame" x="188" y="38" width="159" height="2"/>
-                                        </progressView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXu-Jr-Mp6">
-                                            <rect key="frame" x="18" y="28" width="149" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="hXu-Jr-Mp6" firstAttribute="leading" secondItem="JN1-Ul-as2" secondAttribute="leadingMargin" constant="10" id="69I-8n-tPT"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="hXu-Jr-Mp6" secondAttribute="trailing" constant="200" id="6Gx-83-eBl"/>
-                                        <constraint firstItem="zg1-wA-lGw" firstAttribute="leading" secondItem="JN1-Ul-as2" secondAttribute="leadingMargin" constant="180" id="IJ1-jH-iUK"/>
-                                        <constraint firstItem="zg1-wA-lGw" firstAttribute="top" secondItem="JN1-Ul-as2" secondAttribute="topMargin" constant="30" id="jAX-u4-kca"/>
-                                        <constraint firstItem="hXu-Jr-Mp6" firstAttribute="top" secondItem="JN1-Ul-as2" secondAttribute="topMargin" constant="20" id="vMF-ho-fO4"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="zg1-wA-lGw" secondAttribute="trailing" constant="20" id="xbB-v6-qhH"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="fileNameLabel" destination="hXu-Jr-Mp6" id="rus-kn-McM"/>
-                                    <outlet property="progressView" destination="zg1-wA-lGw" id="iZk-1f-6YE"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="IQL-EG-3Z5" id="uwF-p1-T3x"/>
-                            <outlet property="delegate" destination="IQL-EG-3Z5" id="rSa-V3-MeP"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NRT-cz-Veh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-56.799999999999997" y="902.69865067466276"/>
         </scene>
         <!--Upload Workouts View Controller-->
         <scene sceneID="ZSU-kF-BQn">
@@ -244,7 +189,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="uploadVideo:" destination="rAq-iI-eng" eventType="touchUpInside" id="04L-cY-f02"/>
+                                    <action selector="uploadWorkout:" destination="rAq-iI-eng" eventType="touchUpInside" id="La2-Zx-JGk"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="downloadVideoImage" translatesAutoresizingMaskIntoConstraints="NO" id="DCd-ji-fIB">
@@ -296,12 +241,11 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="progressBar" destination="t4f-Ou-0BL" id="zHp-q9-6pW"/>
-                        <outlet property="uploadingLabel" destination="EpI-FN-Qef" id="njo-Fj-k73"/>
-                        <outlet property="videoLength" destination="VoF-4q-pO5" id="UR1-KM-Eau"/>
-                        <outlet property="videoToUpload" destination="DCd-ji-fIB" id="ZQB-lO-y3c"/>
-                        <outlet property="workoutDescription" destination="ID0-3G-Kdw" id="qI6-Ba-ZDt"/>
-                        <outlet property="workoutTitle" destination="541-vX-HPF" id="rc7-Sl-Ws2"/>
+                        <outlet property="previewImage" destination="DCd-ji-fIB" id="flW-zr-wos"/>
+                        <outlet property="progressView" destination="t4f-Ou-0BL" id="aaX-En-5qu"/>
+                        <outlet property="uploadingLabel" destination="EpI-FN-Qef" id="8As-sr-xsF"/>
+                        <outlet property="workoutDescription" destination="ID0-3G-Kdw" id="PUD-dv-P50"/>
+                        <outlet property="workoutTitle" destination="541-vX-HPF" id="zfQ-21-4gc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0e5-AW-avS" userLabel="First Responder" sceneMemberID="firstResponder"/>

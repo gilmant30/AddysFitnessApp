@@ -13,13 +13,16 @@
 
 import UIKit
 import WebKit
+import AVKit
+import AVFoundation
 import MediaPlayer
 import MobileCoreServices
 import AWSMobileHubHelper
 
 import ObjectiveC
 
-let WorkoutVideosDirectoryName = "public/workoutVideos"
+let WorkoutVideosDirectoryName = "public/workoutVideos/"
+let WorkoutImagesDirectoryName = "public/workoutImages/"
 let UserFilesPrivateDirectoryName = "private"
 private var cellAssociationKey: UInt8 = 0
 
@@ -33,6 +36,12 @@ class UserFilesViewController: UITableViewController {
     fileprivate var marker: String?
     fileprivate var didLoadAllContents: Bool!
     
+    @IBOutlet weak var armWorkoutsLabel: UILabel!
+    
+    //@IBOutlet weak var legWorkoutsLabel: UILabel!
+    //@IBOutlet weak var cardioWorkoutsLabel: UILabel!
+    //@IBOutlet weak var absWorkoutLabel: UILabel!
+    
     // MARK:- View lifecycle
     
     override func viewDidLoad() {
@@ -40,6 +49,21 @@ class UserFilesViewController: UITableViewController {
         self.tableView.delegate = self
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
+        
+        // create tapGestureRecognizer for images
+        //let tapArmWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleArmWorkouts))
+        //let tapLegWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleLegWorkouts))
+        
+        // Optionally set the number of required taps, e.g., 2 for a double click
+        //tapArmWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        //tapLegWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        
+        // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
+        //armWorkoutsLabel.isUserInteractionEnabled = true
+        //armWorkoutsLabel.addGestureRecognizer(tapArmWorkoutsGestureRecognizer)
+        //legWorkoutsLabel.isUserInteractionEnabled = true
+        //legWorkoutsLabel.addGestureRecognizer(tapLegWorkoutsGestureRecognizer)
+        armWorkoutsLabel.backgroundColor = UIColor.gray
         
         // Sets up the UIs.
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(UserFilesViewController.showContentManagerActionOptions(_:)))
@@ -58,12 +82,17 @@ class UserFilesViewController: UITableViewController {
         if let prefix = prefix {
             print("Prefix already initialized to \(prefix)")
         } else {
-            self.prefix = "\(WorkoutVideosDirectoryName)/"
+            self.prefix = "\(WorkoutVideosDirectoryName)"
         }
         refreshContents()
         updateUserInterface()
         loadMoreContents()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        refreshContents()
+        updateUserInterface()
+        loadMoreContents()
     }
     
     fileprivate func updateUserInterface() {
@@ -281,19 +310,14 @@ class UserFilesViewController: UITableViewController {
             
             try? content.cachedData.write(to: movieURL, options: [.atomic])
             
-            let controller: MPMoviePlayerViewController = MPMoviePlayerViewController(contentURL: movieURL)
-            controller.moviePlayer.prepareToPlay()
-            controller.moviePlayer.play()
-            presentMoviePlayerViewControllerAnimated(controller)
-        } else if content.isImage() { // Image files
-            // Image files
-            let storyboard = UIStoryboard(name: "UserFiles", bundle: nil)
-            let imageViewController = storyboard.instantiateViewController(withIdentifier: "UserFilesImageViewController") as! UserFilesImageViewController
-            imageViewController.image = UIImage(data: content.cachedData)
-            imageViewController.title = content.key
-            navigationController?.pushViewController(imageViewController, animated: true)
+            let player = AVPlayer(url: movieURL)
+            let playerViewController = AVPlayerViewController()
+            playerViewController.player = player
+            self.present(playerViewController, animated: true) {
+                playerViewController.player!.play()
+            }
         } else {
-            showSimpleAlertWithTitle("Sorry!", message: "We can only open image, video, and sound files.", cancelButtonTitle: "OK")
+            showSimpleAlertWithTitle("Sorry!", message: "We can only open video, and sound files.", cancelButtonTitle: "OK")
         }
     }
     
@@ -305,17 +329,20 @@ class UserFilesViewController: UITableViewController {
                 return
             }
             if content.isAudioVideo() { // Open Audio and Video files natively in app.
+                let player = AVPlayer(url: url)
+                let playerViewController = AVPlayerViewController()
+                playerViewController.player = player
+                strongSelf.present(playerViewController, animated: true) {
+                    playerViewController.player!.play()
+                }
+                /*
                 let controller: MPMoviePlayerViewController = MPMoviePlayerViewController(contentURL: url)
                 controller.moviePlayer.prepareToPlay()
                 controller.moviePlayer.play()
                 strongSelf.presentMoviePlayerViewControllerAnimated(controller)
+                 */
             } else { // Open other file types like PDF in web browser.
-                //UIApplication.sharedApplication().openURL(url)
-                let storyboard: UIStoryboard = UIStoryboard(name: "UserFiles", bundle: nil)
-                let webViewController: UserFilesWebViewController = storyboard.instantiateViewController(withIdentifier: "UserFilesWebViewController") as! UserFilesWebViewController
-                webViewController.url = url
-                webViewController.title = content.key
-                strongSelf.navigationController?.pushViewController(webViewController, animated: true)
+                
             }
         }
     }
@@ -365,7 +392,7 @@ class UserFilesViewController: UITableViewController {
                 self.showSimpleAlertWithTitle("Error", message: "The file name cannot be empty.", cancelButtonTitle: "OK")
                 return
             } else {
-                let key: String = "\(self.prefix!)\(specifiedKey).mp4"
+                let key: String = "\(WorkoutVideosDirectoryName)\(specifiedKey).mp4"
                 self.uploadWithData(data, forKey: key)
             }
         }
@@ -421,6 +448,32 @@ class UserFilesViewController: UITableViewController {
         }
     }
     
+    /*func setIcons() {
+        // create tapGestureRecognizer for images
+        let tapArmWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleArmWorkouts))
+        let tapLegWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleLegWorkouts))
+        
+        // Optionally set the number of required taps, e.g., 2 for a double click
+        tapArmWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        tapLegWorkoutsGestureRecognizer.numberOfTapsRequired = 1
+        
+        // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
+        armWorkoutsLabel.isUserInteractionEnabled = true
+        armWorkoutsLabel.addGestureRecognizer(tapArmWorkoutsGestureRecognizer)
+        legWorkoutsLabel.isUserInteractionEnabled = true
+        legWorkoutsLabel.addGestureRecognizer(tapLegWorkoutsGestureRecognizer)
+    }
+    
+    func handleArmWorkouts() {
+        armWorkoutsLabel.backgroundColor = UIColor.gray
+        legWorkoutsLabel.backgroundColor = UIColor.white
+    }
+    
+    func handleLegWorkouts() {
+        armWorkoutsLabel.backgroundColor = UIColor.white
+        legWorkoutsLabel.backgroundColor = UIColor.gray
+    }*/
+    
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -460,6 +513,11 @@ class UserFilesViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 125.0;//Choose your custom row height
+    }
+    
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -491,16 +549,27 @@ extension UserFilesViewController: UIImagePickerControllerDelegate, UINavigation
         // Handle Video Uploads
         if mediaType.isEqual(to: kUTTypeMovie as String) {
             let videoURL: URL = info[UIImagePickerControllerMediaURL] as! URL
-            askForFilename(try! Data(contentsOf: videoURL))
+            
+            
+            let storyboard = UIStoryboard(name: "Workouts", bundle: nil)
+            let uploadWorkoutsViewController = storyboard.instantiateViewController(withIdentifier: "UploadWorkouts") as! UploadWorkoutsViewController
+            uploadWorkoutsViewController.data = try! Data(contentsOf: videoURL)
+            uploadWorkoutsViewController.url = videoURL
+            uploadWorkoutsViewController.manager = self.manager
+            self.navigationController!.pushViewController(uploadWorkoutsViewController, animated: true)
+            
+            //askForFilename(try! Data(contentsOf: videoURL))
+            
         }
     }
+    
 }
 
 class UserFilesCell: UITableViewCell {
     
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
-    
+    @IBOutlet weak var previewImage: UIImageView!
     
     //@IBOutlet weak var keepImageView: UIImageView!
     //@IBOutlet weak var downloadedImageView: UIImageView!
@@ -525,13 +594,10 @@ class UserFilesCell: UITableViewCell {
             
             detailLabel.numberOfLines = 0
             
-            if content.isDirectory {
-                detailLabel.text = "This is a folder"
-                accessoryType = .disclosureIndicator
-            } else {
-                detailLabel.text = "This is the description"
-                accessoryType = .none
-            }
+            detailLabel.text = "This is the description"
+            accessoryType = .none
+            
+            videoPreviewUIImage(content, previewImage)
             
             if let downloadedDate = content.downloadedDate, let knownRemoteLastModifiedDate = content.knownRemoteLastModifiedDate, knownRemoteLastModifiedDate.compare(downloadedDate) == .orderedDescending {
                 detailLabel.text = "\(detailLabel.text!) - New Version Available"
@@ -541,36 +607,36 @@ class UserFilesCell: UITableViewCell {
             }
         }
     }
-}
+    
+    //set preview UIImage for videos
+    func videoPreviewUIImage(_ content: AWSContent, _ vidImage: UIImageView) {
+        content.getRemoteFileURL {
+            [weak self] (url: URL?, error: Error?) in
+            guard self != nil else { return }
+            guard let url = url else {
+                print("Error getting URL for file. \(error)")
+                return
+            }
+            let asset = AVURLAsset(url: url as URL)
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            
+            let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
+            
+            do {
+                let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+                
+                vidImage.image = UIImage(cgImage: imageRef)
+            }
+            catch let error as NSError
+            {
+                print("Image generation failed with error \(error)")
+                return
+            }
+            return
+        }
+    }
 
-class UserFilesImageViewController: UIViewController {
-    
-    @IBOutlet weak var imageView: UIImageView!
-    var image: UIImage!
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        imageView.image = image
-    }
-}
-
-class UserFilesWebViewController: UIViewController, UIWebViewDelegate {
-    
-    @IBOutlet weak var webView: UIWebView!
-    var url: URL!
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        webView.delegate = self
-        webView.dataDetectorTypes = UIDataDetectorTypes()
-        webView.scalesPageToFit = true
-        webView.loadRequest(URLRequest(url: url))
-    }
-    
-    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-        print("The URL content failed to load \(error)")
-        webView.loadHTMLString("<html><body><h1>Cannot Open the content of the URL.</h1></body></html>", baseURL: nil)
-    }
 }
 
 class UserFilesUploadCell: UITableViewCell {
