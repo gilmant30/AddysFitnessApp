@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		B903FF021E82150E002FA684 /* WorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903FF011E82150E002FA684 /* WorkoutsViewController.swift */; };
 		B91ADF891E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */; };
+		B9255B2A1E914AC8000EF86D /* AWSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B221E914AC8000EF86D /* AWSConfiguration.swift */; };
+		B9255B2B1E914AC8000EF86D /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B231E914AC8000EF86D /* AWSMobileClient.swift */; };
+		B9255B2C1E914AC8000EF86D /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9255B241E914AC8000EF86D /* AWSMobileHubHelper.framework */; };
+		B9255B2D1E914AC8000EF86D /* Consumable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B271E914AC8000EF86D /* Consumable.swift */; };
+		B9255B2E1E914AC8000EF86D /* UserAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B281E914AC8000EF86D /* UserAccess.swift */; };
+		B9255B2F1E914AC8000EF86D /* Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B291E914AC8000EF86D /* Workouts.swift */; };
 		B94330F01E70C579008EF137 /* UserPools.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B94330EF1E70C579008EF137 /* UserPools.storyboard */; };
 		B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */; };
 		B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */; };
@@ -22,12 +28,8 @@
 		B9E3AE281E6E455100943A08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9E3AE271E6E455100943A08 /* Assets.xcassets */; };
 		B9E3AE361E6E455100943A08 /* AddysFitnessAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE351E6E455100943A08 /* AddysFitnessAppTests.swift */; };
 		B9E3AE411E6E455100943A08 /* AddysFitnessAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE401E6E455100943A08 /* AddysFitnessAppUITests.swift */; };
-		B9FB4FA11E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */; };
-		B9FB4FA21E6E5F2F006095DF /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F991E6E5F2F006095DF /* AWSCore.framework */; };
-		B9FB4FA31E6E5F2F006095DF /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9A1E6E5F2F006095DF /* AWSDynamoDB.framework */; };
 		B9FB4FA41E6E5F2F006095DF /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9B1E6E5F2F006095DF /* AWSS3.framework */; };
 		B9FB4FA51E6E5F2F006095DF /* Amazon_Software_License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B9FB4F9D1E6E5F2F006095DF /* Amazon_Software_License.txt */; };
-		B9FB4FA61E6E5F2F006095DF /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9E1E6E5F2F006095DF /* AWSCognito.framework */; };
 		B9FB4FA71E6E5F2F006095DF /* NOTICE in Resources */ = {isa = PBXBuildFile; fileRef = B9FB4F9F1E6E5F2F006095DF /* NOTICE */; };
 		B9FB4FA81E6E5F2F006095DF /* CheckXcodeVersion.sh in Resources */ = {isa = PBXBuildFile; fileRef = B9FB4FA01E6E5F2F006095DF /* CheckXcodeVersion.sh */; };
 		B9FB4FA91E6E5F38006095DF /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */; };
@@ -36,16 +38,9 @@
 		B9FB4FAC1E6E5F38006095DF /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F991E6E5F2F006095DF /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B9FB4FAD1E6E5F38006095DF /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9A1E6E5F2F006095DF /* AWSDynamoDB.framework */; };
 		B9FB4FAE1E6E5F38006095DF /* AWSDynamoDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9A1E6E5F2F006095DF /* AWSDynamoDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B9FB4FAF1E6E5F38006095DF /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9B1E6E5F2F006095DF /* AWSS3.framework */; };
 		B9FB4FB01E6E5F38006095DF /* AWSS3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9B1E6E5F2F006095DF /* AWSS3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B9FB4FB11E6E5F38006095DF /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9E1E6E5F2F006095DF /* AWSCognito.framework */; };
 		B9FB4FB21E6E5F38006095DF /* AWSCognito.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9E1E6E5F2F006095DF /* AWSCognito.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B9FB4FBE1E6E5F71006095DF /* AWSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FB4FB61E6E5F71006095DF /* AWSConfiguration.swift */; };
-		B9FB4FBF1E6E5F71006095DF /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FB4FB71E6E5F71006095DF /* AWSMobileClient.swift */; };
-		B9FB4FC01E6E5F71006095DF /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4FB81E6E5F71006095DF /* AWSMobileHubHelper.framework */; };
-		B9FB4FC11E6E5F71006095DF /* Consumable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FB4FBB1E6E5F71006095DF /* Consumable.swift */; };
-		B9FB4FC21E6E5F71006095DF /* UserAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FB4FBC1E6E5F71006095DF /* UserAccess.swift */; };
-		B9FB4FC31E6E5F71006095DF /* Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FB4FBD1E6E5F71006095DF /* Workouts.swift */; };
 		B9FB4FC61E6E5FA1006095DF /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4FC51E6E5FA1006095DF /* libsqlite3.tbd */; };
 		B9FB4FC81E6E5FA7006095DF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4FC71E6E5FA7006095DF /* libz.tbd */; };
 		B9FB4FCB1E6E60D1006095DF /* SignIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9FB4FCA1E6E60D1006095DF /* SignIn.storyboard */; };
@@ -91,6 +86,12 @@
 /* Begin PBXFileReference section */
 		B903FF011E82150E002FA684 /* WorkoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutsViewController.swift; path = AddysFitnessApp/WorkoutsViewController.swift; sourceTree = SOURCE_ROOT; };
 		B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadWorkoutsViewController.swift; path = AddysFitnessApp/UploadWorkoutsViewController.swift; sourceTree = SOURCE_ROOT; };
+		B9255B221E914AC8000EF86D /* AWSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConfiguration.swift; sourceTree = "<group>"; };
+		B9255B231E914AC8000EF86D /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
+		B9255B241E914AC8000EF86D /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSMobileHubHelper.framework; sourceTree = "<group>"; };
+		B9255B271E914AC8000EF86D /* Consumable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consumable.swift; sourceTree = "<group>"; };
+		B9255B281E914AC8000EF86D /* UserAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccess.swift; sourceTree = "<group>"; };
+		B9255B291E914AC8000EF86D /* Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workouts.swift; sourceTree = "<group>"; };
 		B94330EF1E70C579008EF137 /* UserPools.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = UserPools.storyboard; path = AddysFitnessApp/UserPools.storyboard; sourceTree = SOURCE_ROOT; };
 		B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolsSignUpViewController.swift; sourceTree = "<group>"; };
 		B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolSignUpConfirmationViewController.swift; sourceTree = "<group>"; };
@@ -118,12 +119,6 @@
 		B9FB4F9E1E6E5F2F006095DF /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCognito.framework; sourceTree = "<group>"; };
 		B9FB4F9F1E6E5F2F006095DF /* NOTICE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NOTICE; sourceTree = "<group>"; };
 		B9FB4FA01E6E5F2F006095DF /* CheckXcodeVersion.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = CheckXcodeVersion.sh; sourceTree = "<group>"; };
-		B9FB4FB61E6E5F71006095DF /* AWSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConfiguration.swift; sourceTree = "<group>"; };
-		B9FB4FB71E6E5F71006095DF /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
-		B9FB4FB81E6E5F71006095DF /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSMobileHubHelper.framework; sourceTree = "<group>"; };
-		B9FB4FBB1E6E5F71006095DF /* Consumable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consumable.swift; sourceTree = "<group>"; };
-		B9FB4FBC1E6E5F71006095DF /* UserAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccess.swift; sourceTree = "<group>"; };
-		B9FB4FBD1E6E5F71006095DF /* Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workouts.swift; sourceTree = "<group>"; };
 		B9FB4FC51E6E5FA1006095DF /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		B9FB4FC71E6E5FA7006095DF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		B9FB4FCA1E6E60D1006095DF /* SignIn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SignIn.storyboard; path = AddysFitnessApp/SignIn.storyboard; sourceTree = SOURCE_ROOT; };
@@ -138,17 +133,12 @@
 			files = (
 				B9FB4FC81E6E5FA7006095DF /* libz.tbd in Frameworks */,
 				B9FB4FC61E6E5FA1006095DF /* libsqlite3.tbd in Frameworks */,
+				B9255B2C1E914AC8000EF86D /* AWSMobileHubHelper.framework in Frameworks */,
 				B9FB4FA41E6E5F2F006095DF /* AWSS3.framework in Frameworks */,
 				B9FB4FAB1E6E5F38006095DF /* AWSCore.framework in Frameworks */,
-				B9FB4FAF1E6E5F38006095DF /* AWSS3.framework in Frameworks */,
 				B9FB4FAD1E6E5F38006095DF /* AWSDynamoDB.framework in Frameworks */,
 				B9FB4FB11E6E5F38006095DF /* AWSCognito.framework in Frameworks */,
 				B9FB4FA91E6E5F38006095DF /* AWSCognitoIdentityProvider.framework in Frameworks */,
-				B9FB4FA11E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework in Frameworks */,
-				B9FB4FA31E6E5F2F006095DF /* AWSDynamoDB.framework in Frameworks */,
-				B9FB4FC01E6E5F71006095DF /* AWSMobileHubHelper.framework in Frameworks */,
-				B9FB4FA21E6E5F2F006095DF /* AWSCore.framework in Frameworks */,
-				B9FB4FA61E6E5F2F006095DF /* AWSCognito.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +159,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B9255B211E914AC8000EF86D /* AmazonAws */ = {
+			isa = PBXGroup;
+			children = (
+				B9255B221E914AC8000EF86D /* AWSConfiguration.swift */,
+				B9255B231E914AC8000EF86D /* AWSMobileClient.swift */,
+				B9255B241E914AC8000EF86D /* AWSMobileHubHelper.framework */,
+				B9255B251E914AC8000EF86D /* Models */,
+			);
+			path = AmazonAws;
+			sourceTree = "<group>";
+		};
+		B9255B251E914AC8000EF86D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B9255B261E914AC8000EF86D /* NoSQL */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B9255B261E914AC8000EF86D /* NoSQL */ = {
+			isa = PBXGroup;
+			children = (
+				B9255B271E914AC8000EF86D /* Consumable.swift */,
+				B9255B281E914AC8000EF86D /* UserAccess.swift */,
+				B9255B291E914AC8000EF86D /* Workouts.swift */,
+			);
+			path = NoSQL;
+			sourceTree = "<group>";
+		};
 		B96816851E6FAC6D0010FE0F /* UserPools */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,7 +235,7 @@
 		B9E3AE1F1E6E455100943A08 /* AddysFitnessApp */ = {
 			isa = PBXGroup;
 			children = (
-				B9FB4FB51E6E5F71006095DF /* AmazonAws */,
+				B9255B211E914AC8000EF86D /* AmazonAws */,
 				B9FB4F961E6E5F2F006095DF /* Sdk */,
 				B9E3AE201E6E455100943A08 /* AppDelegate.swift */,
 				B9E3AE221E6E455100943A08 /* InitialViewController.swift */,
@@ -277,35 +296,6 @@
 				B9FB4F9F1E6E5F2F006095DF /* NOTICE */,
 			);
 			path = extras;
-			sourceTree = "<group>";
-		};
-		B9FB4FB51E6E5F71006095DF /* AmazonAws */ = {
-			isa = PBXGroup;
-			children = (
-				B9FB4FB61E6E5F71006095DF /* AWSConfiguration.swift */,
-				B9FB4FB71E6E5F71006095DF /* AWSMobileClient.swift */,
-				B9FB4FB81E6E5F71006095DF /* AWSMobileHubHelper.framework */,
-				B9FB4FB91E6E5F71006095DF /* Models */,
-			);
-			path = AmazonAws;
-			sourceTree = "<group>";
-		};
-		B9FB4FB91E6E5F71006095DF /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B9FB4FBA1E6E5F71006095DF /* NoSQL */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		B9FB4FBA1E6E5F71006095DF /* NoSQL */ = {
-			isa = PBXGroup;
-			children = (
-				B9FB4FBB1E6E5F71006095DF /* Consumable.swift */,
-				B9FB4FBC1E6E5F71006095DF /* UserAccess.swift */,
-				B9FB4FBD1E6E5F71006095DF /* Workouts.swift */,
-			);
-			path = NoSQL;
 			sourceTree = "<group>";
 		};
 		B9FB4FC41E6E5FA1006095DF /* Frameworks */ = {
@@ -392,7 +382,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Tharia LLC";
 				TargetAttributes = {
 					B9E3AE1C1E6E455100943A08 = {
@@ -486,20 +476,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9E3AE231E6E455100943A08 /* InitialViewController.swift in Sources */,
+				B9255B2D1E914AC8000EF86D /* Consumable.swift in Sources */,
 				B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */,
-				B9FB4FBE1E6E5F71006095DF /* AWSConfiguration.swift in Sources */,
-				B9FB4FC21E6E5F71006095DF /* UserAccess.swift in Sources */,
-				B9FB4FBF1E6E5F71006095DF /* AWSMobileClient.swift in Sources */,
+				B9255B2B1E914AC8000EF86D /* AWSMobileClient.swift in Sources */,
 				B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */,
 				B9FB4FCD1E6E613E006095DF /* SignInViewController.swift in Sources */,
 				B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */,
 				B91ADF891E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift in Sources */,
 				B903FF021E82150E002FA684 /* WorkoutsViewController.swift in Sources */,
 				B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */,
-				B9FB4FC11E6E5F71006095DF /* Consumable.swift in Sources */,
+				B9255B2E1E914AC8000EF86D /* UserAccess.swift in Sources */,
+				B9255B2F1E914AC8000EF86D /* Workouts.swift in Sources */,
 				B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */,
+				B9255B2A1E914AC8000EF86D /* AWSConfiguration.swift in Sources */,
 				B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */,
-				B9FB4FC31E6E5F71006095DF /* Workouts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

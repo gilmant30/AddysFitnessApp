@@ -65,7 +65,7 @@ class SignInViewController: UIViewController {
                     self.presentingViewController?.dismiss(animated: true, completion: nil)
                 })
             }
-            print("result = \(result), error = \(error)")
+            print("result = \(String(describing: result)), error = \(String(describing: error))")
         })
     }
     

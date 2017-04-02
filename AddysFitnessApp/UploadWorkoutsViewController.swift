@@ -14,6 +14,7 @@ import MediaPlayer
 import AVFoundation
 import MobileCoreServices
 import AWSMobileHubHelper
+import AWSDynamoDB
 import os.log
 
 import ObjectiveC
@@ -35,6 +36,7 @@ class UploadWorkoutsViewController: UIViewController {
     @IBOutlet weak var legVideo: UILabel!
     @IBOutlet weak var cardioVideo: UILabel!
     @IBOutlet weak var abVideo: UILabel!
+    @IBOutlet weak var workoutLength: UILabel!
     
     
     
@@ -46,6 +48,7 @@ class UploadWorkoutsViewController: UIViewController {
         self.progressView.isHidden = true
         self.uploadingLabel.isHidden = true
         setIcons()
+        videoPreviewUIImage()
     }
     
     fileprivate func uploadLocalContent(_ localContent: AWSLocalContent) {
@@ -59,12 +62,19 @@ class UploadWorkoutsViewController: UIViewController {
             }
             }, completionHandler: {[weak self](content: AWSLocalContent?, error: Error?) -> Void in
                 guard let strongSelf = self else { return }
+                os_log("Downloading to S3 complete", log: OSLog.default, type: .debug)
                 if let error = error {
                     os_log(error as! StaticString, log: OSLog.default, type: .debug)
                     strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to upload an object.", cancelButtonTitle: "OK")
                 } else {
-                    strongSelf.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
-                    strongSelf.navigationController?.popViewController(animated: true)
+                    strongSelf.insertNoSqlWorkout({(errors: [NSError]?) -> Void in
+                        os_log("Inserted into sql", log: OSLog.default, type: .debug)
+                        if errors != nil {
+                            strongSelf.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
+                        }
+                        strongSelf.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
+                        strongSelf.navigationController?.popViewController(animated: true)
+                    })
                 }
             })
     }
@@ -86,7 +96,7 @@ class UploadWorkoutsViewController: UIViewController {
         if let prefix = selectedCategory {
             if(workoutTitle.hasText) {
                 if let title: String = workoutTitle.text {
-                    let key: String = "\(WorkoutVideosDirectoryName)\(prefix)\(title).mp4"
+                    let key: String = "\(WorkoutVideosDirectoryName)\(prefix)/\(title).mp4"
                     let localContent = manager.localContent(with: data, key: key)
                     uploadLocalContent(localContent)
                     //self.uploadWithData(data, forKey: key)
@@ -113,7 +123,10 @@ class UploadWorkoutsViewController: UIViewController {
             
             do {
                 let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
-                
+                let time = CMTimeGetSeconds(asset.duration)
+                let minutes = Int(time) / 60 % 60
+                let seconds = Int(time) % 60
+                self.workoutLength.text = String(format:"%02i:%02i", minutes, seconds)
                 self.previewImage.image = UIImage(cgImage: imageRef)
             }
             catch let error as NSError
@@ -121,6 +134,47 @@ class UploadWorkoutsViewController: UIViewController {
                 print("Image generation failed with error \(error)")
                 return
             }
+    }
+    
+    func insertNoSqlWorkout(_ completionHandler: @escaping (_ errors: [NSError]?) -> Void) {
+        os_log("Inserting into sql", log: OSLog.default, type: .debug)
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        var errors: [NSError] = []
+        let group: DispatchGroup = DispatchGroup()
+        
+        let dbWorkout: Workouts! = Workouts()
+        
+        dbWorkout._createdBy = AWSIdentityManager.default().identityId!
+        dbWorkout._videoLength = workoutLength.text
+        dbWorkout._workoutName = workoutTitle.text
+        dbWorkout._workoutType = selectedCategory
+        dbWorkout._videoDescription = workoutDescription.text
+        
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        dbWorkout._createdDate = result
+    
+        group.enter()
+        
+        objectMapper.save(dbWorkout, completionHandler: {(error: Error?) -> Void in
+            if let error = error as NSError? {
+                DispatchQueue.main.async(execute: {
+                    errors.append(error)
+                })
+            }
+            group.leave()
+        })
+        
+        group.notify(queue: DispatchQueue.main, execute: {
+            if errors.count > 0 {
+                completionHandler(errors)
+            }
+            else {
+                completionHandler(nil)
+            }
+        })
     }
     
     func setIcons() {
@@ -153,7 +207,7 @@ class UploadWorkoutsViewController: UIViewController {
         legVideo.backgroundColor = UIColor.white
         cardioVideo.backgroundColor = UIColor.white
         abVideo.backgroundColor = UIColor.white
-        selectedCategory = "armVideos/"
+        selectedCategory = "armVideos"
     }
     
     func handleLegWorkouts() {

@@ -71,7 +71,7 @@ class UserPoolsSignUpViewController: UIViewController {
         self.pool?.signUp(userNameValue, password: passwordValue, userAttributes: attributes, validationData: nil).continueWith {[weak self] (task: AWSTask<AWSCognitoIdentityUserPoolSignUpResponse>) -> AnyObject? in
             guard let strongSelf = self else { return nil }
             DispatchQueue.main.async(execute: {
-                if let error = task.error as? NSError {
+                if let error = task.error as NSError? {
                     let alertController = UIAlertController(title: error.userInfo["__type"] as? String,
                                 message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.alert)
                     let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)
