@@ -18,6 +18,7 @@ import AVFoundation
 import MediaPlayer
 import MobileCoreServices
 import AWSMobileHubHelper
+import AWSDynamoDB
 import os.log
 
 import ObjectiveC
@@ -35,6 +36,7 @@ class WorkoutsViewController: UITableViewController {
     var cardioVidContent: [AWSContent]?
     var abVidContent: [AWSContent]?
     var selected: String!
+    var selectedNames: [String] = ["armVideos", "legVideos", "abVideos", "cardioVideos"]
     
     fileprivate var manager: AWSUserFileManager!
     fileprivate var identityManager: AWSIdentityManager!
@@ -55,9 +57,9 @@ class WorkoutsViewController: UITableViewController {
         self.tableView.delegate = self
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
-        
+
         setIcons()
-        selected = "Arm"
+        selected = "armVideos"
         handleCategories()
         
         // Sets up the UIs.
@@ -138,16 +140,16 @@ class WorkoutsViewController: UITableViewController {
             if let contents = contents, contents.count > 0 {
                 strongSelf.contents = contents
                 switch strongSelf.selected {
-                case "Arm":
+                case "armVideos":
                     os_log("Loading content into armVidContent", log: OSLog.default, type: .debug)
                     strongSelf.armVidContent = contents
-                case "Leg":
+                case "legVideos":
                     os_log("Loading content into legVidContent", log: OSLog.default, type: .debug)
                     strongSelf.legVidContent = contents
-                case "Cardio":
+                case "cardioVideos":
                     os_log("Loading content into cardioVidContent", log: OSLog.default, type: .debug)
                     strongSelf.cardioVidContent = contents
-                case "Ab":
+                case "abVideos":
                     os_log("Loading content into abVidContent", log: OSLog.default, type: .debug)
                     strongSelf.abVidContent = contents
                 default:
@@ -166,7 +168,7 @@ class WorkoutsViewController: UITableViewController {
     
     fileprivate func loadMoreContents() {
         switch selected {
-            case "Arm":
+            case "armVideos":
                 if let vidContent = armVidContent {
                     os_log("Arm videos already loaded", log: OSLog.default, type: .debug)
                     self.contents = vidContent
@@ -174,7 +176,7 @@ class WorkoutsViewController: UITableViewController {
                 } else {
                     loadSpecificContent()
                 }
-            case "Leg":
+            case "legVideos":
                 if let vidContent = legVidContent {
                     os_log("Leg videos already loaded", log: OSLog.default, type: .debug)
                     self.contents = vidContent
@@ -182,7 +184,7 @@ class WorkoutsViewController: UITableViewController {
                 } else {
                     loadSpecificContent()
                 }
-            case "Cardio":
+            case "cardioVideos":
                 if let vidContent = cardioVidContent {
                     os_log("Cardio videos already loaded", log: OSLog.default, type: .debug)
                     self.contents = vidContent
@@ -190,7 +192,7 @@ class WorkoutsViewController: UITableViewController {
                 } else {
                     loadSpecificContent()
                 }
-            case "Ab":
+            case "abVideos":
                 if let vidContent = abVidContent {
                     os_log("Ab videos already loaded", log: OSLog.default, type: .debug)
                     self.contents = vidContent
@@ -322,19 +324,19 @@ class WorkoutsViewController: UITableViewController {
     
     func handleCategories() {
         switch selected {
-        case "Arm":
+        case "armVideos":
             os_log("Arm is selected", log: OSLog.default, type: .debug)
             armWorkoutsLabel.backgroundColor = UIColor.lightGray
             self.prefix = "\(WorkoutVideosDirectoryName)armVideos/"
-        case "Leg":
+        case "legVideos":
             os_log("Leg is selected", log: OSLog.default, type: .debug)
             legWorkoutsLabel.backgroundColor = UIColor.lightGray
             self.prefix = "\(WorkoutVideosDirectoryName)legVideos/"
-        case "Cardio":
+        case "cardioVideos":
             os_log("Cardio is selected", log: OSLog.default, type: .debug)
             cardioWorkoutsLabel.backgroundColor = UIColor.lightGray
             self.prefix = "\(WorkoutVideosDirectoryName)cardioVideos/"
-        case "Ab":
+        case "abVideos":
             os_log("Ab is selected", log: OSLog.default, type: .debug)
             abWorkoutsLabel.backgroundColor = UIColor.lightGray
             self.prefix = "\(WorkoutVideosDirectoryName)abVideos/"
@@ -346,13 +348,13 @@ class WorkoutsViewController: UITableViewController {
     
     func resetCategory() {
         switch selected {
-            case "Arm":
+            case "armVideos":
                 armWorkoutsLabel.backgroundColor = UIColor.white
-            case "Leg":
+            case "legVideos":
                 legWorkoutsLabel.backgroundColor = UIColor.white
-            case "Ab":
+            case "abVideos":
                 abWorkoutsLabel.backgroundColor = UIColor.white
-            case "Cardio":
+            case "cardioVideos":
                 cardioWorkoutsLabel.backgroundColor = UIColor.white
             default:
                 os_log("This should never be called 2", log: OSLog.default, type: .debug)
@@ -361,25 +363,25 @@ class WorkoutsViewController: UITableViewController {
     
     func handleArmWorkouts() {
         resetCategory()
-        selected = "Arm"
+        selected = "armVideos"
         handleCategories()
     }
     
     func handleLegWorkouts() {
         resetCategory()
-        selected = "Leg"
+        selected = "legVideos"
         handleCategories()
     }
     
     func handleAbsWorkouts() {
         resetCategory()
-        selected = "Ab"
+        selected = "abVideos"
         handleCategories()
     }
     
     func handleCardioWorkouts() {
         resetCategory()
-        selected = "Cardio"
+        selected = "cardioVideos"
         handleCategories()
     }
     
@@ -413,6 +415,8 @@ class WorkoutsViewController: UITableViewController {
         let content: AWSContent = contents![indexPath.row]
         cell.prefix = prefix
         cell.content = content
+        
+        
         return cell
     }
     
@@ -471,7 +475,6 @@ extension WorkoutsViewController: UIImagePickerControllerDelegate, UINavigationC
             
         }
     }
-    
 }
 
 class WorkoutVideoCell: UITableViewCell {
@@ -479,11 +482,13 @@ class WorkoutVideoCell: UITableViewCell {
     @IBOutlet weak var fileNameLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var previewImage: UIImageView!
+    @IBOutlet weak var videoLength: UILabel!
     
     //@IBOutlet weak var keepImageView: UIImageView!
     //@IBOutlet weak var downloadedImageView: UIImageView!
     
     var prefix: String?
+    var vidDetails: Workouts?
     
     var content: AWSContent! {
         didSet {
@@ -503,7 +508,26 @@ class WorkoutVideoCell: UITableViewCell {
             
             detailLabel.numberOfLines = 0
             
-            detailLabel.text = "This is the description"
+            let endIndex = displayFilename.index(displayFilename.endIndex, offsetBy: -4)
+            let key = displayFilename.substring(to: endIndex)
+            print("key = \(key)")
+            
+            getDetails(name: key, {(response: AWSDynamoDBObjectModel?, error: NSError?) -> Void in
+                if let error = error {
+                    os_log("ERROR geting dynamodbObject", log: OSLog.default, type: .debug)
+                }
+                else if let response = response {
+                    let vidDetails = response as! Workouts
+                    self.detailLabel.text = vidDetails._videoDescription
+                    self.videoLength.text = vidDetails._videoLength
+                }
+                else {
+                    self.detailLabel.text = "N/A"
+                    self.videoLength.text = "0:00"
+                    
+                }
+            })
+            
             accessoryType = .none
             
             videoPreviewUIImage(content, previewImage)
@@ -514,6 +538,15 @@ class WorkoutVideoCell: UITableViewCell {
             } else {
                 detailLabel.textColor = UIColor.black
             }
+        }
+    }
+    
+    func getDetails(name: String, _ completionHandler: @escaping (_ response: AWSDynamoDBObjectModel?, _ error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(Workouts.self, hashKey: name, rangeKey: nil) { (response: AWSDynamoDBObjectModel?, error: Error?) in
+        DispatchQueue.main.async(execute: {
+            completionHandler(response, error as NSError?)
+            })
         }
     }
     

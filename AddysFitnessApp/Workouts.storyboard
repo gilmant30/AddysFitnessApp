@@ -101,6 +101,12 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSQ-cH-WZI">
+                                            <rect key="frame" x="102" y="70" width="36" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PRU-nR-J78">
                                             <rect key="frame" x="8" y="8" width="130" height="83"/>
                                             <constraints>
@@ -122,7 +128,9 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="y0P-Bi-gFy" firstAttribute="leading" secondItem="kbb-Hf-5H6" secondAttribute="leading" id="K9O-9q-tL9"/>
+                                        <constraint firstItem="sSQ-cH-WZI" firstAttribute="bottom" secondItem="PRU-nR-J78" secondAttribute="bottom" id="Leq-0G-Fnk"/>
                                         <constraint firstItem="kbb-Hf-5H6" firstAttribute="leading" secondItem="PRU-nR-J78" secondAttribute="trailing" constant="8" symbolic="YES" id="Ng5-9U-sRI"/>
+                                        <constraint firstItem="sSQ-cH-WZI" firstAttribute="trailing" secondItem="PRU-nR-J78" secondAttribute="trailing" id="OQN-1p-mSa"/>
                                         <constraint firstItem="PRU-nR-J78" firstAttribute="leading" secondItem="Uq3-Ls-nuu" secondAttribute="leadingMargin" id="cJ3-NY-uMS"/>
                                         <constraint firstItem="PRU-nR-J78" firstAttribute="top" secondItem="Uq3-Ls-nuu" secondAttribute="topMargin" id="ddF-Xh-PiB"/>
                                         <constraint firstItem="y0P-Bi-gFy" firstAttribute="top" secondItem="kbb-Hf-5H6" secondAttribute="bottom" constant="25" id="hyc-BA-cFe"/>
@@ -135,6 +143,7 @@
                                     <outlet property="detailLabel" destination="y0P-Bi-gFy" id="bjq-nH-TZb"/>
                                     <outlet property="fileNameLabel" destination="kbb-Hf-5H6" id="YlZ-y7-AHb"/>
                                     <outlet property="previewImage" destination="PRU-nR-J78" id="tYC-Xw-XR0"/>
+                                    <outlet property="videoLength" destination="sSQ-cH-WZI" id="4eB-Ix-Zwc"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
