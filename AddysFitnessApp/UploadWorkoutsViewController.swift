@@ -93,10 +93,10 @@ class UploadWorkoutsViewController: UIViewController {
     
     
     @IBAction func uploadWorkout(_ sender: Any) {
-        if let prefix = selectedCategory {
+        if selectedCategory != nil {
             if(workoutTitle.hasText) {
                 if let title: String = workoutTitle.text {
-                    let key: String = "\(WorkoutVideosDirectoryName)\(prefix)/\(title).mp4"
+                    let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
                     let localContent = manager.localContent(with: data, key: key)
                     uploadLocalContent(localContent)
                     //self.uploadWithData(data, forKey: key)

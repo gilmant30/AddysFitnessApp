@@ -31,19 +31,19 @@ private var cellAssociationKey: UInt8 = 0
 class WorkoutsViewController: UITableViewController {
     var prefix: String!
     
-    var armVidContent: [AWSContent]?
-    var legVidContent: [AWSContent]?
-    var cardioVidContent: [AWSContent]?
-    var abVidContent: [AWSContent]?
+    var vidContent: [AWSContent]?
+    var vidDetails = [String: [Workouts]]()
+    var workouts = [String: [WorkoutVids]]()
     var selected: String!
-    var selectedNames: [String] = ["armVideos", "legVideos", "abVideos", "cardioVideos"]
+    var loadedDetails: [String: Bool] = ["armVideos": false, "legVideos": false, "abVideos": false, "cardioVideos": false]
     
     fileprivate var manager: AWSUserFileManager!
     fileprivate var identityManager: AWSIdentityManager!
     fileprivate var contents: [AWSContent]?
     fileprivate var dateFormatter: DateFormatter!
     fileprivate var marker: String?
-    fileprivate var didLoadAllContents: Bool!
+    fileprivate var didLoadAllVideos: Bool!
+    fileprivate var didLoadAllDetails: Bool!
     
     @IBOutlet weak var armWorkoutsLabel: UILabel!
     @IBOutlet weak var legWorkoutsLabel: UILabel!
@@ -57,7 +57,7 @@ class WorkoutsViewController: UITableViewController {
         self.tableView.delegate = self
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
-
+        
         setIcons()
         selected = "armVideos"
         handleCategories()
@@ -74,32 +74,33 @@ class WorkoutsViewController: UITableViewController {
         
         //tableView.estimatedRowHeight = tableView.rowHeight
         //tableView.rowHeight = UITableViewAutomaticDimension
-        didLoadAllContents = false
+        didLoadAllVideos = false
+        didLoadAllDetails = false
         
         if let prefix = prefix {
             print("Prefix already initialized to \(prefix)")
         } else {
-            self.prefix = "\(WorkoutVideosDirectoryName)armVideos/"
+            self.prefix = "\(WorkoutVideosDirectoryName)"
         }
-        refreshContents()
-        updateUserInterface()
-        loadMoreContents()
+        
+        os_log("viewDidLoad - Before loadVideoDetails", log: OSLog.default, type: .debug)
+        loadVideoDetails()
+        os_log("viewDidLoad - After videoDetails", log: OSLog.default, type: .debug)
+        
+        //loadMoreContents()
+        //refreshContents()
+        //updateUserInterface()
+        //loadMoreContents()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        refreshContents()
-        updateUserInterface()
-        loadMoreContents()
+        //refreshContents()
+        //updateUserInterface()
+        //loadMoreContents()
     }
     
     fileprivate func updateUserInterface() {
         DispatchQueue.main.async {
-            if let prefix = self.prefix {
-                if (prefix.hasPrefix(UserFilesPrivateDirectoryName)) {
-                    let userId = AWSIdentityManager.default().identityId!
-                    let subStringRange: Range<String.Index> = prefix.characters.index(prefix.startIndex, offsetBy: UserFilesPrivateDirectoryName.characters.count + userId.characters.count + 1)..<prefix.characters.index(prefix.endIndex, offsetBy: -1)
-                }
-            }
             self.tableView.reloadData()
         }
     }
@@ -129,80 +130,104 @@ class WorkoutsViewController: UITableViewController {
         loadMoreContents()
     }
     
-    fileprivate func loadSpecificContent() {
+    fileprivate func addVideos() {
+        if let workouts = workouts[selected], workouts.count > 0 {
+            if let contents = self.contents, contents.count > 0 {
+                for workout in workouts {
+                    let key = self.prefix + workout.name! + ".mp4"
+                    if let i = contents.index(where: { $0.key == key }) {
+                        workout.content = contents[i]
+                    }
+                }
+            }
+        }
+    }
+    
+    fileprivate func loadMoreContents() {
         manager.listAvailableContents(withPrefix: prefix, marker: marker) {[weak self] (contents: [AWSContent]?, nextMarker: String?, error: Error?) in
             guard let strongSelf = self else { return }
-            os_log("Loading new videos", log: OSLog.default, type: .debug)
             if let error = error {
                 strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to load the list of contents.", cancelButtonTitle: "OK")
                 print("Failed to load the list of contents. \(error)")
             }
             if let contents = contents, contents.count > 0 {
                 strongSelf.contents = contents
-                switch strongSelf.selected {
-                case "armVideos":
-                    os_log("Loading content into armVidContent", log: OSLog.default, type: .debug)
-                    strongSelf.armVidContent = contents
-                case "legVideos":
-                    os_log("Loading content into legVidContent", log: OSLog.default, type: .debug)
-                    strongSelf.legVidContent = contents
-                case "cardioVideos":
-                    os_log("Loading content into cardioVidContent", log: OSLog.default, type: .debug)
-                    strongSelf.cardioVidContent = contents
-                case "abVideos":
-                    os_log("Loading content into abVidContent", log: OSLog.default, type: .debug)
-                    strongSelf.abVidContent = contents
-                default:
-                    os_log("In loadSpecificContent() this should never be called", log: OSLog.default, type: .debug)
-                }
                 if let nextMarker = nextMarker, !nextMarker.isEmpty {
-                    strongSelf.didLoadAllContents = false
+                    strongSelf.didLoadAllVideos = false
                 } else {
-                    strongSelf.didLoadAllContents = true
+                    strongSelf.didLoadAllVideos = true
                 }
                 strongSelf.marker = nextMarker
+                strongSelf.addVideos()
             }
+            
             strongSelf.updateUserInterface()
         }
     }
     
-    fileprivate func loadMoreContents() {
-        switch selected {
-            case "armVideos":
-                if let vidContent = armVidContent {
-                    os_log("Arm videos already loaded", log: OSLog.default, type: .debug)
-                    self.contents = vidContent
-                    updateUserInterface()
-                } else {
-                    loadSpecificContent()
+    func loadVideoDetails() {
+        let completionHandler = {(response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void in
+            if let error = error {
+                var errorMessage = "Failed to retrieve items. \(error.localizedDescription)"
+                if (error.domain == AWSServiceErrorDomain && error.code == AWSServiceErrorType.accessDeniedException.rawValue) {
+                    errorMessage = "Access denied. You are not allowed to perform this operation."
                 }
-            case "legVideos":
-                if let vidContent = legVidContent {
-                    os_log("Leg videos already loaded", log: OSLog.default, type: .debug)
-                    self.contents = vidContent
-                    updateUserInterface()
-                } else {
-                    loadSpecificContent()
+            }
+            else if response!.items.count == 0 {
+                self.showSimpleAlertWithTitle("Not Found", message: "No items match your criteria. Insert more sample data and try again.", cancelButtonTitle: "OK")
+            }
+            else {
+                // put data into correct spot
+                let response = response?.items as! [Workouts]
+                var vidArray = [WorkoutVids]()
+                var key: String?
+                for item in response {
+                    key = self.prefix + item._workoutName! + ".mp4"
+                    let workoutVid = WorkoutVids()
+                    workoutVid.name = item._workoutName
+                    workoutVid.description = item._videoDescription
+                    workoutVid.length = item._videoLength
+                    if let awsContents = self.contents {
+                        if let i = awsContents.index(where: { $0.key == key }) {
+                             workoutVid.content = awsContents[i]
+                        }
+                    }
+                    vidArray.append(workoutVid)
                 }
-            case "cardioVideos":
-                if let vidContent = cardioVidContent {
-                    os_log("Cardio videos already loaded", log: OSLog.default, type: .debug)
-                    self.contents = vidContent
-                    updateUserInterface()
-                } else {
-                    loadSpecificContent()
-                }
-            case "abVideos":
-                if let vidContent = abVidContent {
-                    os_log("Ab videos already loaded", log: OSLog.default, type: .debug)
-                    self.contents = vidContent
-                    updateUserInterface()
-                } else {
-                    loadSpecificContent()
-                }
-            default:
-                os_log("This should never be called 1", log: OSLog.default, type: .debug)
+                self.workouts[self.selected] = vidArray
+                self.loadedDetails[self.selected] = true
+            }
             
+            self.updateUserInterface()
+            
+            if !self.didLoadAllVideos {
+                os_log("video content has not yet been loaded", log: OSLog.default, type: .debug)
+                self.loadMoreContents()
+            }
+        }
+        
+        os_log("loading videoDetails content", log: OSLog.default, type: .debug)
+        if !self.loadedDetails[self.selected]! {
+            getVideoDetailsByType(completionHandler)
+        }
+        os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
+    }
+    
+    
+    
+    func getVideoDetailsByType(_ completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        
+        queryExpression.indexName = "workoutTypeIndex"
+        queryExpression.keyConditionExpression = "#workoutType = :workoutType"
+        queryExpression.expressionAttributeNames = ["#workoutType": "WorkoutType",]
+        queryExpression.expressionAttributeValues = [":workoutType": selected,]
+        
+        objectMapper.query(Workouts.self, expression: queryExpression) { (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error as NSError?)
+            })
         }
     }
     
@@ -291,12 +316,6 @@ class WorkoutsViewController: UITableViewController {
         present(imagePickerController, animated: true, completion: nil)
     }
     
-    fileprivate func updateUploadUI() {
-        DispatchQueue.main.async {
-            self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-        }
-    }
-    
     func setIcons() {
         // create tapGestureRecognizer for images
         let tapArmWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleArmWorkouts))
@@ -327,23 +346,23 @@ class WorkoutsViewController: UITableViewController {
         case "armVideos":
             os_log("Arm is selected", log: OSLog.default, type: .debug)
             armWorkoutsLabel.backgroundColor = UIColor.lightGray
-            self.prefix = "\(WorkoutVideosDirectoryName)armVideos/"
+            loadVideoDetails()
         case "legVideos":
             os_log("Leg is selected", log: OSLog.default, type: .debug)
             legWorkoutsLabel.backgroundColor = UIColor.lightGray
-            self.prefix = "\(WorkoutVideosDirectoryName)legVideos/"
+            loadVideoDetails()
         case "cardioVideos":
             os_log("Cardio is selected", log: OSLog.default, type: .debug)
             cardioWorkoutsLabel.backgroundColor = UIColor.lightGray
-            self.prefix = "\(WorkoutVideosDirectoryName)cardioVideos/"
+            loadVideoDetails()
         case "abVideos":
             os_log("Ab is selected", log: OSLog.default, type: .debug)
             abWorkoutsLabel.backgroundColor = UIColor.lightGray
-            self.prefix = "\(WorkoutVideosDirectoryName)abVideos/"
+            loadVideoDetails()
         default:
             os_log("This should never be called", log: OSLog.default, type: .debug)
         }
-        refreshContents()
+        updateUserInterface()
     }
     
     func resetCategory() {
@@ -388,41 +407,33 @@ class WorkoutsViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return manager.uploadingContents.count
-        }
-        if let contents = self.contents {
-            return contents.count
+        if let workouts = self.workouts[selected] {
+            return workouts.count
         }
         return 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UserFilesUploadCell", for: indexPath) as! UserFilesUploadCell
-            let localContent: AWSLocalContent = manager.uploadingContents[indexPath.row]
-            cell.prefix = prefix
-            cell.localContent = localContent
-            return cell
-        }
-        
         let cell: WorkoutVideoCell = tableView.dequeueReusableCell(withIdentifier: "WorkoutVideoCell", for: indexPath) as! WorkoutVideoCell
-        
-        let content: AWSContent = contents![indexPath.row]
+
+        let workoutvids: [WorkoutVids] = workouts[selected]!
+        let workout: WorkoutVids = workoutvids[indexPath.row]
+        //let content: AWSContent = contents![indexPath.row]
         cell.prefix = prefix
-        cell.content = content
+        cell.content = workout
         
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let contents = self.contents, indexPath.row == contents.count - 1, !didLoadAllContents {
-            loadMoreContents()
+        os_log("willDisplayCell", log: OSLog.default, type: .debug)
+        if let workouts = self.workouts[selected], indexPath.row == workouts.count - 1, !didLoadAllDetails {
+            // loadMoreContents()
         }
     }
     
@@ -435,19 +446,9 @@ class WorkoutsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        // Process only if it is a listed file. Ignore actions for files that are uploading.
-        if(indexPath.section != 0) {
-            let content = contents![indexPath.row]
-            if content.isDirectory {
-                let storyboard: UIStoryboard = UIStoryboard(name: "Workouts", bundle: nil)
-                let viewController: WorkoutsViewController = storyboard.instantiateViewController(withIdentifier: "UserFiles") as! WorkoutsViewController
-                viewController.prefix = content.key
-                navigationController?.pushViewController(viewController, animated: true)
-            } else {
-                let rowRect = tableView.rectForRow(at: indexPath);
-                showActionOptionsForContent(rowRect, content: content)
-            }
-        }
+        let content = contents![indexPath.row]
+        let rowRect = tableView.rectForRow(at: indexPath);
+        showActionOptionsForContent(rowRect, content: content)
     }
 }
 
@@ -488,97 +489,15 @@ class WorkoutVideoCell: UITableViewCell {
     //@IBOutlet weak var downloadedImageView: UIImageView!
     
     var prefix: String?
-    var vidDetails: Workouts?
     
-    var content: AWSContent! {
+    var content: WorkoutVids! {
         didSet {
-            var displayFilename: String = self.content.key
-            if let prefix = self.prefix {
-                if displayFilename.characters.count > prefix.characters.count {
-                    displayFilename = displayFilename.substring(from: prefix.endIndex)
-                }
-            }
-            fileNameLabel.text = displayFilename
-            //downloadedImageView.isHidden = !content.isCached
-            //keepImageView.isHidden = !content.isPinned
-            var contentByteCount: UInt = content.fileSize
-            if contentByteCount == 0 {
-                contentByteCount = content.knownRemoteByteCount
-            }
-            
-            detailLabel.numberOfLines = 0
-            
-            let endIndex = displayFilename.index(displayFilename.endIndex, offsetBy: -4)
-            let key = displayFilename.substring(to: endIndex)
-            print("key = \(key)")
-            
-            getDetails(name: key, {(response: AWSDynamoDBObjectModel?, error: NSError?) -> Void in
-                if let error = error {
-                    os_log("ERROR geting dynamodbObject", log: OSLog.default, type: .debug)
-                }
-                else if let response = response {
-                    let vidDetails = response as! Workouts
-                    self.detailLabel.text = vidDetails._videoDescription
-                    self.videoLength.text = vidDetails._videoLength
-                }
-                else {
-                    self.detailLabel.text = "N/A"
-                    self.videoLength.text = "0:00"
-                    
-                }
-            })
-            
-            accessoryType = .none
-            
-            videoPreviewUIImage(content, previewImage)
-            
-            if let downloadedDate = content.downloadedDate, let knownRemoteLastModifiedDate = content.knownRemoteLastModifiedDate, knownRemoteLastModifiedDate.compare(downloadedDate) == .orderedDescending {
-                detailLabel.text = "\(detailLabel.text!) - New Version Available"
-                detailLabel.textColor = UIColor.blue
-            } else {
-                detailLabel.textColor = UIColor.black
-            }
+            fileNameLabel.text = content.name
+            detailLabel.text = content.description
+            previewImage.image = content.previewImage
+            videoLength.text = content.length
         }
     }
-    
-    func getDetails(name: String, _ completionHandler: @escaping (_ response: AWSDynamoDBObjectModel?, _ error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.load(Workouts.self, hashKey: name, rangeKey: nil) { (response: AWSDynamoDBObjectModel?, error: Error?) in
-        DispatchQueue.main.async(execute: {
-            completionHandler(response, error as NSError?)
-            })
-        }
-    }
-    
-    //set preview UIImage for videos
-    func videoPreviewUIImage(_ content: AWSContent, _ vidImage: UIImageView) {
-        content.getRemoteFileURL {
-            [weak self] (url: URL?, error: Error?) in
-            guard self != nil else { return }
-            guard let url = url else {
-                print("Error getting URL for file. \(String(describing: error))")
-                return
-            }
-            let asset = AVURLAsset(url: url as URL)
-            let generator = AVAssetImageGenerator(asset: asset)
-            generator.appliesPreferredTrackTransform = true
-            
-            let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
-            
-            do {
-                let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
-                
-                vidImage.image = UIImage(cgImage: imageRef)
-            }
-            catch let error as NSError
-            {
-                print("Image generation failed with error \(error)")
-                return
-            }
-            return
-        }
-    }
-
 }
 
 class UserFilesUploadCell: UITableViewCell {

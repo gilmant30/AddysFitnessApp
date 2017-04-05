@@ -15,6 +15,7 @@
 		B9255B2D1E914AC8000EF86D /* Consumable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B271E914AC8000EF86D /* Consumable.swift */; };
 		B9255B2E1E914AC8000EF86D /* UserAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B281E914AC8000EF86D /* UserAccess.swift */; };
 		B9255B2F1E914AC8000EF86D /* Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B291E914AC8000EF86D /* Workouts.swift */; };
+		B9255B311E92FB0F000EF86D /* WorkoutVids.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9255B301E92FB0F000EF86D /* WorkoutVids.swift */; };
 		B94330F01E70C579008EF137 /* UserPools.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B94330EF1E70C579008EF137 /* UserPools.storyboard */; };
 		B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */; };
 		B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */; };
@@ -92,6 +93,7 @@
 		B9255B271E914AC8000EF86D /* Consumable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consumable.swift; sourceTree = "<group>"; };
 		B9255B281E914AC8000EF86D /* UserAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccess.swift; sourceTree = "<group>"; };
 		B9255B291E914AC8000EF86D /* Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workouts.swift; sourceTree = "<group>"; };
+		B9255B301E92FB0F000EF86D /* WorkoutVids.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutVids.swift; path = AddysFitnessApp/WorkoutVids.swift; sourceTree = SOURCE_ROOT; };
 		B94330EF1E70C579008EF137 /* UserPools.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = UserPools.storyboard; path = AddysFitnessApp/UserPools.storyboard; sourceTree = SOURCE_ROOT; };
 		B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolsSignUpViewController.swift; sourceTree = "<group>"; };
 		B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolSignUpConfirmationViewController.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				B9725CDB1E89A97C006F51BD /* Workouts.storyboard */,
 				B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */,
 				B903FF011E82150E002FA684 /* WorkoutsViewController.swift */,
+				B9255B301E92FB0F000EF86D /* WorkoutVids.swift */,
 			);
 			name = Workouts;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				B9255B2E1E914AC8000EF86D /* UserAccess.swift in Sources */,
 				B9255B2F1E914AC8000EF86D /* Workouts.swift in Sources */,
 				B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */,
+				B9255B311E92FB0F000EF86D /* WorkoutVids.swift in Sources */,
 				B9255B2A1E914AC8000EF86D /* AWSConfiguration.swift in Sources */,
 				B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */,
 			);
