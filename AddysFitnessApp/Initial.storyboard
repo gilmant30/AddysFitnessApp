@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pik-71-w6W">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pik-71-w6W">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,47 +23,46 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeImage" translatesAutoresizingMaskIntoConstraints="NO" id="XQW-29-MeM">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Food" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87y-xB-OhI">
-                                <rect key="frame" x="91" y="114" width="39" height="21"/>
+                                <rect key="frame" x="91" y="472" width="39" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Apple" translatesAutoresizingMaskIntoConstraints="NO" id="9cx-Dd-sbm">
-                                <rect key="frame" x="48" y="160" width="126" height="100"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="transparentApple" translatesAutoresizingMaskIntoConstraints="NO" id="9cx-Dd-sbm">
+                                <rect key="frame" x="60" y="518" width="100" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="8lW-l5-u0k"/>
-                                    <constraint firstAttribute="width" constant="126" id="Wdx-jc-ViE"/>
+                                    <constraint firstAttribute="width" constant="100" id="Wdx-jc-ViE"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workouts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aI0-8Y-bla">
-                                <rect key="frame" x="236" y="114" width="73" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dumbell" translatesAutoresizingMaskIntoConstraints="NO" id="2kv-8Q-Hkf">
-                                <rect key="frame" x="209" y="160" width="126" height="100"/>
-                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="transparentDumbell" translatesAutoresizingMaskIntoConstraints="NO" id="2kv-8Q-Hkf">
+                                <rect key="frame" x="222" y="518" width="100" height="100"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="126" id="9dX-gy-Epc"/>
+                                    <constraint firstAttribute="width" constant="100" id="9dX-gy-Epc"/>
                                     <constraint firstAttribute="height" constant="100" id="Tq0-s1-GZU"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workouts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aI0-8Y-bla">
+                                <rect key="frame" x="236" y="472" width="73" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="XQW-29-MeM" firstAttribute="top" secondItem="gid-7Q-b4G" secondAttribute="top" id="E3F-iB-XhV"/>
+                            <constraint firstItem="g6X-d7-rVh" firstAttribute="top" secondItem="9cx-Dd-sbm" secondAttribute="bottom" constant="49" id="H7t-yE-Z5C"/>
                             <constraint firstItem="aI0-8Y-bla" firstAttribute="centerX" secondItem="2kv-8Q-Hkf" secondAttribute="centerX" id="MLg-EO-xDG"/>
-                            <constraint firstItem="aI0-8Y-bla" firstAttribute="top" secondItem="eXA-Gw-w5Y" secondAttribute="bottom" constant="50" id="N5Y-ei-hUz"/>
                             <constraint firstItem="87y-xB-OhI" firstAttribute="leading" secondItem="gid-7Q-b4G" secondAttribute="leadingMargin" constant="75" id="S8F-c6-7mT"/>
                             <constraint firstItem="g6X-d7-rVh" firstAttribute="top" secondItem="XQW-29-MeM" secondAttribute="bottom" id="S8U-Kq-Rry"/>
                             <constraint firstItem="9cx-Dd-sbm" firstAttribute="centerX" secondItem="87y-xB-OhI" secondAttribute="centerX" id="Wqc-y5-jtQ"/>
-                            <constraint firstItem="87y-xB-OhI" firstAttribute="top" secondItem="eXA-Gw-w5Y" secondAttribute="bottom" constant="50" id="aiW-IY-Gpg"/>
                             <constraint firstAttribute="trailing" secondItem="XQW-29-MeM" secondAttribute="trailing" id="fLj-hY-hB0"/>
+                            <constraint firstItem="XQW-29-MeM" firstAttribute="top" secondItem="eXA-Gw-w5Y" secondAttribute="bottom" id="gr4-LM-GLs"/>
+                            <constraint firstItem="9cx-Dd-sbm" firstAttribute="top" secondItem="2kv-8Q-Hkf" secondAttribute="top" id="hny-5S-Yca"/>
                             <constraint firstItem="9cx-Dd-sbm" firstAttribute="top" secondItem="87y-xB-OhI" secondAttribute="bottom" constant="25" id="kd0-U8-7nP"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aI0-8Y-bla" secondAttribute="trailing" constant="50" id="n6H-q2-YHZ"/>
                             <constraint firstItem="XQW-29-MeM" firstAttribute="leading" secondItem="gid-7Q-b4G" secondAttribute="leading" id="rDc-9E-uNg"/>
@@ -100,8 +99,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Apple" width="112" height="112"/>
-        <image name="dumbell" width="112" height="112"/>
-        <image name="homeImage" width="400" height="400"/>
+        <image name="homeImage" width="441" height="324"/>
+        <image name="transparentApple" width="80" height="98"/>
+        <image name="transparentDumbell" width="112" height="38"/>
     </resources>
 </document>

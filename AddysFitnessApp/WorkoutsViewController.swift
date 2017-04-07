@@ -42,8 +42,8 @@ class WorkoutsViewController: UITableViewController {
     fileprivate var contents: [AWSContent]?
     fileprivate var dateFormatter: DateFormatter!
     fileprivate var marker: String?
+    fileprivate var refresh: Bool!
     fileprivate var didLoadAllVideos: Bool!
-    fileprivate var didLoadAllDetails: Bool!
     
     @IBOutlet weak var armWorkoutsLabel: UILabel!
     @IBOutlet weak var legWorkoutsLabel: UILabel!
@@ -58,9 +58,9 @@ class WorkoutsViewController: UITableViewController {
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
         
-        setIcons()
-        selected = "armVideos"
-        handleCategories()
+        DispatchQueue.main.async {
+            self.loadMoreContents()
+        }
         
         // Sets up the UIs.
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
@@ -75,7 +75,7 @@ class WorkoutsViewController: UITableViewController {
         //tableView.estimatedRowHeight = tableView.rowHeight
         //tableView.rowHeight = UITableViewAutomaticDimension
         didLoadAllVideos = false
-        didLoadAllDetails = false
+        refresh = false
         
         if let prefix = prefix {
             print("Prefix already initialized to \(prefix)")
@@ -83,20 +83,27 @@ class WorkoutsViewController: UITableViewController {
             self.prefix = "\(WorkoutVideosDirectoryName)"
         }
         
-        os_log("viewDidLoad - Before loadVideoDetails", log: OSLog.default, type: .debug)
-        loadVideoDetails()
-        os_log("viewDidLoad - After videoDetails", log: OSLog.default, type: .debug)
+        setIcons()
+        selected = "armVideos"
+        handleCategories()
         
-        //loadMoreContents()
-        //refreshContents()
-        //updateUserInterface()
-        //loadMoreContents()
+        self.refreshControl?.addTarget(self, action: #selector(WorkoutsViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //refreshContents()
         //updateUserInterface()
         //loadMoreContents()
+    }
+    
+    func handleRefresh(_ refreshControl: UIRefreshControl) {
+        refresh = true
+
+        os_log("handleRefresh", log: OSLog.default, type: .debug)
+        
+        self.loadVideoDetails()
+        
+        refreshControl.endRefreshing()
     }
     
     fileprivate func updateUserInterface() {
@@ -161,7 +168,9 @@ class WorkoutsViewController: UITableViewController {
                 strongSelf.addVideos()
             }
             
-            strongSelf.updateUserInterface()
+            if strongSelf.loadedDetails[strongSelf.selected]! {
+                strongSelf.updateUserInterface()
+            }
         }
     }
     
@@ -177,40 +186,53 @@ class WorkoutsViewController: UITableViewController {
                 self.showSimpleAlertWithTitle("Not Found", message: "No items match your criteria. Insert more sample data and try again.", cancelButtonTitle: "OK")
             }
             else {
-                // put data into correct spot
-                let response = response?.items as! [Workouts]
-                var vidArray = [WorkoutVids]()
-                var key: String?
-                for item in response {
-                    key = self.prefix + item._workoutName! + ".mp4"
-                    let workoutVid = WorkoutVids()
-                    workoutVid.name = item._workoutName
-                    workoutVid.description = item._videoDescription
-                    workoutVid.length = item._videoLength
-                    if let awsContents = self.contents {
-                        if let i = awsContents.index(where: { $0.key == key }) {
-                             workoutVid.content = awsContents[i]
+                if self.refresh {
+                    os_log("refresh called", log: OSLog.default, type: .debug)
+                    if response!.items.count != self.workouts[self.selected]?.count {
+                        DispatchQueue.main.async {
+                            self.loadMoreContents()
+                            
+                            self.refresh = false
                         }
+                        self.formatVideoDetails(response)
                     }
-                    vidArray.append(workoutVid)
+                } else {
+                    self.formatVideoDetails(response)
                 }
-                self.workouts[self.selected] = vidArray
-                self.loadedDetails[self.selected] = true
             }
             
             self.updateUserInterface()
-            
-            if !self.didLoadAllVideos {
-                os_log("video content has not yet been loaded", log: OSLog.default, type: .debug)
-                self.loadMoreContents()
-            }
         }
         
         os_log("loading videoDetails content", log: OSLog.default, type: .debug)
         if !self.loadedDetails[self.selected]! {
-            getVideoDetailsByType(completionHandler)
+            DispatchQueue.main.async {
+                self.getVideoDetailsByType(completionHandler)
+            }
         }
         os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
+    }
+    
+    func formatVideoDetails(_ response: AWSDynamoDBPaginatedOutput?) {
+        // put data into correct spot
+        let response = response?.items as! [Workouts]
+        var vidArray = [WorkoutVids]()
+        var key: String?
+        for item in response {
+            key = self.prefix + item._workoutName! + ".mp4"
+            let workoutVid = WorkoutVids()
+            workoutVid.name = item._workoutName
+            workoutVid.description = item._videoDescription
+            workoutVid.length = item._videoLength
+            if let awsContents = self.contents {
+                if let i = awsContents.index(where: { $0.key == key }) {
+                    workoutVid.content = awsContents[i]
+                }
+            }
+            vidArray.append(workoutVid)
+        }
+        self.workouts[self.selected] = vidArray
+        self.loadedDetails[self.selected] = true
     }
     
     
@@ -422,7 +444,6 @@ class WorkoutsViewController: UITableViewController {
 
         let workoutvids: [WorkoutVids] = workouts[selected]!
         let workout: WorkoutVids = workoutvids[indexPath.row]
-        //let content: AWSContent = contents![indexPath.row]
         cell.prefix = prefix
         cell.content = workout
         
@@ -431,10 +452,12 @@ class WorkoutsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        os_log("willDisplayCell", log: OSLog.default, type: .debug)
-        if let workouts = self.workouts[selected], indexPath.row == workouts.count - 1, !didLoadAllDetails {
-            // loadMoreContents()
-        }
+        cell.layer.shadowOpacity = 1.0
+        cell.layer.shadowRadius = 1
+        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowPath = UIBezierPath(rect: cell.bounds).cgPath
+        cell.layer.masksToBounds = false
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat

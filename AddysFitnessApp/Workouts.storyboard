@@ -94,7 +94,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WorkoutVideoCell" rowHeight="100" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="WorkoutVideoCell" rowHeight="100" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
                                 <rect key="frame" x="0.0" y="88" width="375" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vhh-iN-m73" id="Uq3-Ls-nuu">
@@ -106,6 +106,11 @@
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="130" id="paE-Bc-6Ao"/>
                                             </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="8"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="kbb-Hf-5H6">
                                             <rect key="frame" x="146" y="8" width="34" height="21"/>
@@ -122,7 +127,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSQ-cH-WZI">
                                             <rect key="frame" x="102" y="70" width="36" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -139,6 +144,7 @@
                                         <constraint firstItem="y0P-Bi-gFy" firstAttribute="leading" secondItem="PRU-nR-J78" secondAttribute="trailing" constant="8" symbolic="YES" id="xd5-Fc-sUX"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="detailLabel" destination="y0P-Bi-gFy" id="bjq-nH-TZb"/>
                                     <outlet property="fileNameLabel" destination="kbb-Hf-5H6" id="YlZ-y7-AHb"/>
@@ -152,6 +158,9 @@
                             <outlet property="delegate" destination="RD0-nj-RWC" id="oVx-qO-wej"/>
                         </connections>
                     </tableView>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Tc0-Bk-G9P">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <outlet property="abWorkoutsLabel" destination="oAw-a3-WxB" id="Ivg-c2-9Q0"/>
                         <outlet property="armWorkoutsLabel" destination="5N9-f7-VWX" id="4ot-W5-y4B"/>
@@ -175,7 +184,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ID0-3G-Kdw">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ID0-3G-Kdw">
                                 <rect key="frame" x="16" y="433.5" width="343" height="72"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
