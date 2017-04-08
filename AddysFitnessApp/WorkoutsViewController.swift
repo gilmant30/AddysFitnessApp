@@ -36,6 +36,8 @@ class WorkoutsViewController: UITableViewController {
     var workouts = [String: [WorkoutVids]]()
     var selected: String!
     var loadedDetails: [String: Bool] = ["armVideos": false, "legVideos": false, "abVideos": false, "cardioVideos": false]
+    var isCellTapped = false
+    var selectedRowIndex = -1
     
     fileprivate var manager: AWSUserFileManager!
     fileprivate var identityManager: AWSIdentityManager!
@@ -50,6 +52,8 @@ class WorkoutsViewController: UITableViewController {
     @IBOutlet weak var cardioWorkoutsLabel: UILabel!
     @IBOutlet weak var abWorkoutsLabel: UILabel!
     
+    
+    
     // MARK:- View lifecycle
     
     override func viewDidLoad() {
@@ -57,10 +61,6 @@ class WorkoutsViewController: UITableViewController {
         self.tableView.delegate = self
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
-        
-        DispatchQueue.main.async {
-            self.loadMoreContents()
-        }
         
         // Sets up the UIs.
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
@@ -91,9 +91,24 @@ class WorkoutsViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //refreshContents()
-        //updateUserInterface()
-        //loadMoreContents()
+        super.viewWillAppear(animated)
+        
+        // Add a background view to the table view
+        let backgroundImage = UIImage(named: "backgroundImage3")
+        let imageView = UIImageView(image: backgroundImage)
+        self.tableView.backgroundView = imageView
+        
+         // no lines where there aren't cells
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        
+        // center and scale background image
+        imageView.contentMode = .scaleToFill
+        
+        // blur it
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = imageView.bounds
+        imageView.addSubview(blurView)
     }
     
     func handleRefresh(_ refreshControl: UIRefreshControl) {
@@ -208,6 +223,10 @@ class WorkoutsViewController: UITableViewController {
         if !self.loadedDetails[self.selected]! {
             DispatchQueue.main.async {
                 self.getVideoDetailsByType(completionHandler)
+            }
+            
+            if self.contents == nil {
+                self.loadMoreContents()
             }
         }
         os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
@@ -447,31 +466,38 @@ class WorkoutsViewController: UITableViewController {
         cell.prefix = prefix
         cell.content = workout
         
-        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.layer.shadowOpacity = 1.0
-        cell.layer.shadowRadius = 1
-        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowPath = UIBezierPath(rect: cell.bounds).cgPath
-        cell.layer.masksToBounds = false
+        cell.backgroundColor = UIColor(white: 1, alpha: 0.5)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 125.0;//Choose your custom row height
+        if indexPath.row == selectedRowIndex {
+            return 160.0;//Choose your custom row height
+        }
+        
+        return 110
     }
     
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if selectedRowIndex == indexPath.row {
+            selectedRowIndex = -1
+        } else {
+            selectedRowIndex = indexPath.row
+        }
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+
+        /*
         tableView.deselectRow(at: indexPath, animated: true)
         let content = contents![indexPath.row]
         let rowRect = tableView.rectForRow(at: indexPath);
         showActionOptionsForContent(rowRect, content: content)
+         */
     }
 }
 
@@ -508,9 +534,6 @@ class WorkoutVideoCell: UITableViewCell {
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var videoLength: UILabel!
     
-    //@IBOutlet weak var keepImageView: UIImageView!
-    //@IBOutlet weak var downloadedImageView: UIImageView!
-    
     var prefix: String?
     
     var content: WorkoutVids! {
@@ -519,23 +542,6 @@ class WorkoutVideoCell: UITableViewCell {
             detailLabel.text = content.description
             previewImage.image = content.previewImage
             videoLength.text = content.length
-        }
-    }
-}
-
-class UserFilesUploadCell: UITableViewCell {
-    
-    @IBOutlet weak var fileNameLabel: UILabel!
-    @IBOutlet weak var progressView: UIProgressView!
-    
-    var prefix: String?
-    
-    var localContent: AWSLocalContent! {
-        didSet {
-            var displayFilename: String = localContent.key
-            displayFilename = displayFilename.replacingOccurrences(of: AWSIdentityManager.default().identityId!, with: "<private>")
-            fileNameLabel.text = displayFilename
-            progressView.progress = Float(localContent.progress.fractionCompleted)
         }
     }
 }

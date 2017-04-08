@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -94,16 +95,17 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="WorkoutVideoCell" rowHeight="100" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
-                                <rect key="frame" x="0.0" y="88" width="375" height="100"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="WorkoutVideoCell" rowHeight="160" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
+                                <rect key="frame" x="0.0" y="88" width="375" height="160"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vhh-iN-m73" id="Uq3-Ls-nuu">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PRU-nR-J78">
-                                            <rect key="frame" x="8" y="8" width="130" height="83"/>
+                                            <rect key="frame" x="8" y="8" width="130" height="105"/>
                                             <constraints>
+                                                <constraint firstAttribute="height" constant="105" id="16G-K4-mjm"/>
                                                 <constraint firstAttribute="width" constant="130" id="paE-Bc-6Ao"/>
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
@@ -125,26 +127,43 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSQ-cH-WZI">
-                                            <rect key="frame" x="102" y="70" width="36" height="21"/>
+                                            <rect key="frame" x="102" y="92" width="36" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="emptyHeart" translatesAutoresizingMaskIntoConstraints="NO" id="7Rl-e2-1Nm">
+                                            <rect key="frame" x="342" y="135" width="25" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="7Rl-e2-1Nm" secondAttribute="height" multiplier="1:1" id="CM4-Er-gDt"/>
+                                            </constraints>
+                                        </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="playButton" translatesAutoresizingMaskIntoConstraints="NO" id="fYz-KD-Xed">
+                                            <rect key="frame" x="166" y="135" width="25" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="fYz-KD-Xed" secondAttribute="height" multiplier="1:1" id="jii-IH-e2H"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="y0P-Bi-gFy" firstAttribute="leading" secondItem="kbb-Hf-5H6" secondAttribute="leading" id="K9O-9q-tL9"/>
                                         <constraint firstItem="sSQ-cH-WZI" firstAttribute="bottom" secondItem="PRU-nR-J78" secondAttribute="bottom" id="Leq-0G-Fnk"/>
                                         <constraint firstItem="kbb-Hf-5H6" firstAttribute="leading" secondItem="PRU-nR-J78" secondAttribute="trailing" constant="8" symbolic="YES" id="Ng5-9U-sRI"/>
                                         <constraint firstItem="sSQ-cH-WZI" firstAttribute="trailing" secondItem="PRU-nR-J78" secondAttribute="trailing" id="OQN-1p-mSa"/>
+                                        <constraint firstAttribute="trailing" secondItem="fYz-KD-Xed" secondAttribute="trailing" constant="170" id="YcD-yT-lo0"/>
+                                        <constraint firstAttribute="trailing" secondItem="7Rl-e2-1Nm" secondAttribute="trailing" constant="5" id="ZWY-bU-HM6"/>
                                         <constraint firstItem="PRU-nR-J78" firstAttribute="leading" secondItem="Uq3-Ls-nuu" secondAttribute="leadingMargin" id="cJ3-NY-uMS"/>
                                         <constraint firstItem="PRU-nR-J78" firstAttribute="top" secondItem="Uq3-Ls-nuu" secondAttribute="topMargin" id="ddF-Xh-PiB"/>
                                         <constraint firstItem="y0P-Bi-gFy" firstAttribute="top" secondItem="kbb-Hf-5H6" secondAttribute="bottom" constant="25" id="hyc-BA-cFe"/>
-                                        <constraint firstItem="PRU-nR-J78" firstAttribute="bottom" secondItem="Uq3-Ls-nuu" secondAttribute="bottomMargin" id="oxt-Dw-b3u"/>
+                                        <constraint firstItem="fYz-KD-Xed" firstAttribute="centerX" secondItem="Uq3-Ls-nuu" secondAttribute="centerX" id="iHD-P2-GfH"/>
+                                        <constraint firstItem="fYz-KD-Xed" firstAttribute="leading" secondItem="Uq3-Ls-nuu" secondAttribute="leading" constant="170" id="ky0-wx-AuI"/>
+                                        <constraint firstItem="fYz-KD-Xed" firstAttribute="top" secondItem="y0P-Bi-gFy" secondAttribute="bottom" constant="55" id="loK-CJ-vzd"/>
+                                        <constraint firstItem="7Rl-e2-1Nm" firstAttribute="top" secondItem="fYz-KD-Xed" secondAttribute="top" id="p2l-W8-6yu"/>
                                         <constraint firstItem="PRU-nR-J78" firstAttribute="top" secondItem="kbb-Hf-5H6" secondAttribute="top" id="qtK-Ae-iZy"/>
+                                        <constraint firstItem="7Rl-e2-1Nm" firstAttribute="bottom" secondItem="fYz-KD-Xed" secondAttribute="bottom" id="uIe-as-grZ"/>
                                         <constraint firstItem="y0P-Bi-gFy" firstAttribute="leading" secondItem="PRU-nR-J78" secondAttribute="trailing" constant="8" symbolic="YES" id="xd5-Fc-sUX"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="detailLabel" destination="y0P-Bi-gFy" id="bjq-nH-TZb"/>
                                     <outlet property="fileNameLabel" destination="kbb-Hf-5H6" id="YlZ-y7-AHb"/>
@@ -159,6 +178,7 @@
                         </connections>
                     </tableView>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Tc0-Bk-G9P">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                     <connections>
@@ -221,7 +241,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1g-Jt-5Wl">
-                                <rect key="frame" x="162" y="627" width="50" height="30"/>
+                                <rect key="frame" x="162.5" y="627" width="50" height="30"/>
                                 <state key="normal" title="Upload"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -342,5 +362,7 @@
     </scenes>
     <resources>
         <image name="downloadVideoImage" width="112" height="112"/>
+        <image name="emptyHeart" width="512" height="512"/>
+        <image name="playButton" width="90" height="91"/>
     </resources>
 </document>
