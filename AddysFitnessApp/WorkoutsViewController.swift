@@ -36,8 +36,6 @@ class WorkoutsViewController: UITableViewController {
     var workouts = [String: [WorkoutVids]]()
     var selected: String!
     var loadedDetails: [String: Bool] = ["armVideos": false, "legVideos": false, "abVideos": false, "cardioVideos": false]
-    var isCellTapped = false
-    var selectedRowIndex = -1
     
     fileprivate var manager: AWSUserFileManager!
     fileprivate var identityManager: AWSIdentityManager!
@@ -475,29 +473,16 @@ class WorkoutsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        if indexPath.row == selectedRowIndex {
-            return 160.0;//Choose your custom row height
-        }
-        
         return 110
     }
     
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if selectedRowIndex == indexPath.row {
-            selectedRowIndex = -1
-        } else {
-            selectedRowIndex = indexPath.row
-        }
-        tableView.reloadRows(at: [indexPath], with: .automatic)
-
-        /*
         tableView.deselectRow(at: indexPath, animated: true)
         let content = contents![indexPath.row]
         let rowRect = tableView.rectForRow(at: indexPath);
         showActionOptionsForContent(rowRect, content: content)
-         */
     }
 }
 
