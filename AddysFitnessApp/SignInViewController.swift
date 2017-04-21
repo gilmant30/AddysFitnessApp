@@ -47,8 +47,8 @@ class SignInViewController: UIViewController {
         customCreateAccountButton.addTarget(self, action: #selector(self.handleUserPoolSignUp), for: .touchUpInside)
         customForgotPasswordButton.addTarget(self, action: #selector(self.handleUserPoolForgotPassword), for: .touchUpInside)
         
-        
-
+        customEmailField.delegate = self
+        customPasswordField.delegate = self
     }
     
     func dimissController() {
@@ -77,4 +77,11 @@ class SignInViewController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 
+}
+
+extension SignInViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

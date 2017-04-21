@@ -23,6 +23,9 @@
 		B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */; };
 		B96816841E6FA5290010FE0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */; };
 		B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */; };
+		B96E1F7B1E9D087A000AE4A1 /* Food.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96E1F7A1E9D087A000AE4A1 /* Food.storyboard */; };
+		B96E1F7D1E9D08D1000AE4A1 /* FoodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96E1F7C1E9D08D1000AE4A1 /* FoodViewController.swift */; };
+		B96E1F7F1E9D095B000AE4A1 /* UploadFoodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96E1F7E1E9D095B000AE4A1 /* UploadFoodViewController.swift */; };
 		B9725CDC1E89A97C006F51BD /* Workouts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9725CDB1E89A97C006F51BD /* Workouts.storyboard */; };
 		B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE201E6E455100943A08 /* AppDelegate.swift */; };
 		B9E3AE231E6E455100943A08 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE221E6E455100943A08 /* InitialViewController.swift */; };
@@ -101,6 +104,9 @@
 		B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AddysFitnessApp/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignInViewControllerExtension.swift; path = AddysFitnessApp/SignInViewControllerExtension.swift; sourceTree = SOURCE_ROOT; };
+		B96E1F7A1E9D087A000AE4A1 /* Food.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Food.storyboard; path = AddysFitnessApp/Food.storyboard; sourceTree = SOURCE_ROOT; };
+		B96E1F7C1E9D08D1000AE4A1 /* FoodViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FoodViewController.swift; path = AddysFitnessApp/FoodViewController.swift; sourceTree = SOURCE_ROOT; };
+		B96E1F7E1E9D095B000AE4A1 /* UploadFoodViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadFoodViewController.swift; path = AddysFitnessApp/UploadFoodViewController.swift; sourceTree = SOURCE_ROOT; };
 		B9725CDB1E89A97C006F51BD /* Workouts.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Workouts.storyboard; path = AddysFitnessApp/Workouts.storyboard; sourceTree = SOURCE_ROOT; };
 		B9E3AE1D1E6E455100943A08 /* AddysFitnessApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AddysFitnessApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E3AE201E6E455100943A08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -203,6 +209,16 @@
 			name = UserPools;
 			sourceTree = "<group>";
 		};
+		B96E1F791E9D082F000AE4A1 /* Food */ = {
+			isa = PBXGroup;
+			children = (
+				B96E1F7A1E9D087A000AE4A1 /* Food.storyboard */,
+				B96E1F7C1E9D08D1000AE4A1 /* FoodViewController.swift */,
+				B96E1F7E1E9D095B000AE4A1 /* UploadFoodViewController.swift */,
+			);
+			name = Food;
+			sourceTree = "<group>";
+		};
 		B97CA1411E75DA9800B47AAE /* Workouts */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +261,7 @@
 				B9FB4FCE1E6F9BB1006095DF /* Initial.storyboard */,
 				B9FB4FC91E6E60A1006095DF /* SignIn */,
 				B97CA1411E75DA9800B47AAE /* Workouts */,
+				B96E1F791E9D082F000AE4A1 /* Food */,
 				B9E3AE271E6E455100943A08 /* Assets.xcassets */,
 				B9E3AE2C1E6E455100943A08 /* Info.plist */,
 				B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */,
@@ -390,6 +407,7 @@
 				TargetAttributes = {
 					B9E3AE1C1E6E455100943A08 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = DSPE7V4VL7;
 						ProvisioningStyle = Automatic;
 					};
 					B9E3AE301E6E455100943A08 = {
@@ -431,6 +449,7 @@
 			files = (
 				B9FB4FA71E6E5F2F006095DF /* NOTICE in Resources */,
 				B9E3AE281E6E455100943A08 /* Assets.xcassets in Resources */,
+				B96E1F7B1E9D087A000AE4A1 /* Food.storyboard in Resources */,
 				B9FB4FCF1E6F9BB1006095DF /* Initial.storyboard in Resources */,
 				B9FB4FA81E6E5F2F006095DF /* CheckXcodeVersion.sh in Resources */,
 				B96816841E6FA5290010FE0F /* LaunchScreen.storyboard in Resources */,
@@ -480,6 +499,8 @@
 			files = (
 				B9E3AE231E6E455100943A08 /* InitialViewController.swift in Sources */,
 				B9255B2D1E914AC8000EF86D /* Consumable.swift in Sources */,
+				B96E1F7D1E9D08D1000AE4A1 /* FoodViewController.swift in Sources */,
+				B96E1F7F1E9D095B000AE4A1 /* UploadFoodViewController.swift in Sources */,
 				B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */,
 				B9255B2B1E914AC8000EF86D /* AWSMobileClient.swift in Sources */,
 				B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */,
@@ -626,6 +647,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = DSPE7V4VL7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AddysFitnessApp/Sdk/Aws",
@@ -633,8 +655,9 @@
 					"$(PROJECT_DIR)/AddysFitnessApp/AmazonAws",
 				);
 				INFOPLIST_FILE = AddysFitnessApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tharia.AddysFitnessApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tharia.MVPFit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -644,6 +667,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = DSPE7V4VL7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AddysFitnessApp/Sdk/Aws",
@@ -651,8 +675,9 @@
 					"$(PROJECT_DIR)/AddysFitnessApp/AmazonAws",
 				);
 				INFOPLIST_FILE = AddysFitnessApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tharia.AddysFitnessApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tharia.MVPFit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

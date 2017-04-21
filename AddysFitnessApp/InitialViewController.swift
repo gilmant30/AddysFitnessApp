@@ -8,6 +8,7 @@
 
 import UIKit
 import AWSMobileHubHelper
+import os.log
 
 class InitialViewController: UIViewController {
     
@@ -26,7 +27,7 @@ class InitialViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         
-        print("going to presentSignInViewController")
+        os_log("Going to Sign in viewController", log: OSLog.default, type: .debug)
         presentSignInViewController()
         
         // create tapGestureRecognizer for images
@@ -46,13 +47,13 @@ class InitialViewController: UIViewController {
         
         signInObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.AWSIdentityManagerDidSignIn, object: AWSIdentityManager.default(), queue: OperationQueue.main, using: {[weak self] (note: Notification) -> Void in
             guard let strongSelf = self else { return }
-            print("Sign In Observer observed sign in.")
+            os_log("Sign in observer signed in", log: OSLog.default, type: .debug)
             strongSelf.setupRightBarButtonItem()
         })
         
         signOutObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.AWSIdentityManagerDidSignOut, object: AWSIdentityManager.default(), queue: OperationQueue.main, using: {[weak self](note: Notification) -> Void in
             guard let strongSelf = self else { return }
-            print("Sign Out Observer observed sign out.")
+            os_log("Sign out observer signed out", log: OSLog.default, type: .debug)
             strongSelf.setupRightBarButtonItem()
         })
         
@@ -66,14 +67,17 @@ class InitialViewController: UIViewController {
     }
     
     func handleWorkoutIconTapped() {
-        print("Sending to workouts storyboard")
+        os_log("Sending to workouts storyboard", log: OSLog.default, type: .debug)
         let storyboard = UIStoryboard(name: "Workouts", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "WorkoutsView")
         self.navigationController!.pushViewController(viewController, animated: true)
     }
     
     func handleFoodIconTapped() {
-        print("Going to send to food page")
+        os_log("Sending to Food storyboard", log: OSLog.default, type: .debug)
+        let storyboard = UIStoryboard(name: "Food", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "FoodView")
+        self.navigationController!.pushViewController(viewController, animated: true)
     }
     
     func setupRightBarButtonItem() {

@@ -20,7 +20,7 @@ import os.log
 import ObjectiveC
 
 
-class UploadWorkoutsViewController: UIViewController {
+class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
     var data:Data!
     var manager:AWSUserFileManager!
     var url:URL!
@@ -28,15 +28,12 @@ class UploadWorkoutsViewController: UIViewController {
     fileprivate var dateFormatter: DateFormatter!
     
     @IBOutlet weak var workoutTitle: UITextField!
-    @IBOutlet weak var workoutDescription: UITextView!
     @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var workoutDescription: UITextField!
     @IBOutlet weak var uploadingLabel: UILabel!
     @IBOutlet weak var previewImage: UIImageView!
-    @IBOutlet weak var armVideo: UILabel!
-    @IBOutlet weak var legVideo: UILabel!
-    @IBOutlet weak var cardioVideo: UILabel!
-    @IBOutlet weak var abVideo: UILabel!
     @IBOutlet weak var workoutLength: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     
     
@@ -47,7 +44,9 @@ class UploadWorkoutsViewController: UIViewController {
         navigationItem.title = "MVPFit"
         self.progressView.isHidden = true
         self.uploadingLabel.isHidden = true
-        setIcons()
+        self.workoutTitle.delegate = self
+        self.workoutDescription.delegate = self
+        self.view = self.scrollView
         videoPreviewUIImage()
     }
     
@@ -93,20 +92,21 @@ class UploadWorkoutsViewController: UIViewController {
     
     
     @IBAction func uploadWorkout(_ sender: Any) {
-        if selectedCategory != nil {
-            if(workoutTitle.hasText) {
-                if let title: String = workoutTitle.text {
-                    let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
-                    let localContent = manager.localContent(with: data, key: key)
-                    uploadLocalContent(localContent)
-                    //self.uploadWithData(data, forKey: key)
-                }
-            } else {
-                self.showSimpleAlertWithTitle("Error", message: "The title name cannot be empty.", cancelButtonTitle: "OK")
+        if(workoutTitle.hasText) {
+            if let title: String = workoutTitle.text {
+                let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
+                let localContent = manager.localContent(with: data, key: key)
+                uploadLocalContent(localContent)
+                //self.uploadWithData(data, forKey: key)
             }
         } else {
-            self.showSimpleAlertWithTitle("Error", message: "You must specify a workout category.", cancelButtonTitle: "OK")
+            self.showSimpleAlertWithTitle("Error", message: "The title name cannot be empty.", cancelButtonTitle: "OK")
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     
     //set preview UIImage for videos
@@ -147,7 +147,7 @@ class UploadWorkoutsViewController: UIViewController {
         dbWorkout._createdBy = AWSIdentityManager.default().identityId!
         dbWorkout._videoLength = workoutLength.text
         dbWorkout._workoutName = workoutTitle.text
-        dbWorkout._workoutType = selectedCategory
+        dbWorkout._workoutType = "workoutVideo"
         dbWorkout._videoDescription = workoutDescription.text
         
         let date = Date()
@@ -176,64 +176,6 @@ class UploadWorkoutsViewController: UIViewController {
             }
         })
     }
-    
-    func setIcons() {
-        // create tapGestureRecognizer for images
-        let tapArmWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleArmWorkouts))
-        let tapLegWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleLegWorkouts))
-        let tapCardioBodyWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleCardioWorkouts))
-        let tapAbsWorkoutsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleAbsWorkouts))
-        
-        // Optionally set the number of required taps, e.g., 2 for a double click
-        tapArmWorkoutsGestureRecognizer.numberOfTapsRequired = 1
-        tapLegWorkoutsGestureRecognizer.numberOfTapsRequired = 1
-        tapCardioBodyWorkoutsGestureRecognizer.numberOfTapsRequired = 1
-        tapAbsWorkoutsGestureRecognizer.numberOfTapsRequired = 1
-        
-        
-        // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
-        armVideo.isUserInteractionEnabled = true
-        armVideo.addGestureRecognizer(tapArmWorkoutsGestureRecognizer)
-        legVideo.isUserInteractionEnabled = true
-        legVideo.addGestureRecognizer(tapLegWorkoutsGestureRecognizer)
-        cardioVideo.isUserInteractionEnabled = true
-        cardioVideo.addGestureRecognizer(tapCardioBodyWorkoutsGestureRecognizer)
-        abVideo.isUserInteractionEnabled = true
-        abVideo.addGestureRecognizer(tapAbsWorkoutsGestureRecognizer)
-    }
-    
-    func handleArmWorkouts() {
-        armVideo.backgroundColor = UIColor.lightGray
-        legVideo.backgroundColor = UIColor.white
-        cardioVideo.backgroundColor = UIColor.white
-        abVideo.backgroundColor = UIColor.white
-        selectedCategory = "armVideos"
-    }
-    
-    func handleLegWorkouts() {
-        armVideo.backgroundColor = UIColor.white
-        legVideo.backgroundColor = UIColor.lightGray
-        cardioVideo.backgroundColor = UIColor.white
-        abVideo.backgroundColor = UIColor.white
-        selectedCategory = "legVideos"
-    }
-    
-    func handleAbsWorkouts() {
-        armVideo.backgroundColor = UIColor.white
-        legVideo.backgroundColor = UIColor.white
-        cardioVideo.backgroundColor = UIColor.white
-        abVideo.backgroundColor = UIColor.lightGray
-        selectedCategory = "abVideos"
-    }
-    
-    func handleCardioWorkouts() {
-        armVideo.backgroundColor = UIColor.white
-        legVideo.backgroundColor = UIColor.white
-        cardioVideo.backgroundColor = UIColor.lightGray
-        abVideo.backgroundColor = UIColor.white
-        selectedCategory = "cardioVideos"
-    }
-    
 }
 
 extension UInt {
