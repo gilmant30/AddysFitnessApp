@@ -19,7 +19,6 @@ import os.log
 import ObjectiveC
 
 let WorkoutVideosDirectoryName = "public/workoutVideos/"
-let UserFilesPrivateDirectoryName = "private"
 private var cellAssociationKey: UInt8 = 0
 
 class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
@@ -35,6 +34,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     
     fileprivate var manager: AWSUserFileManager!
     fileprivate var identityManager: AWSIdentityManager!
+    fileprivate var user: AWSCognitoCredentialsProvider!
     fileprivate var contents: [AWSContent]?
     fileprivate var dateFormatter: DateFormatter!
     fileprivate var marker: String?
@@ -51,8 +51,9 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         identityManager = AWSIdentityManager.default()
         configureSearchController()
         
+        
         // Sets up the UIs.
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
         navigationItem.title = "MVPFit"
         
         // Sets up the date formatter.
@@ -102,6 +103,17 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         searchController.dismiss(animated: false, completion: nil)
     }
     
+    func checkIfAdmin() {
+        if let username = identityManager.identityId {
+            if admin.contains(username) {
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
+            }
+        } else {
+            //just for testing
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
+        }
+    }
+    
     // MARK - Search Bar
     
     func configureSearchController() {
@@ -138,18 +150,6 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         refreshControl.endRefreshing()
     }
     
-    func filterContentForSearchText(searchText: String) {
-        // Filter the array using the filter method
-        if self.workouts == nil {
-            self.workoutsSearchResults = nil
-            return
-        }
-        self.workoutsSearchResults = self.workouts?.filter({( aWorkouts: WorkoutVids) -> Bool in
-            // to start, let's just search by name
-            return aWorkouts.name!.lowercased().range(of: searchText.lowercased()) != nil
-        })
-    }
-    
     fileprivate func updateUserInterface() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -158,22 +158,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     
     // MARK:- Content Manager user action methods
     func showContentManagerActionOptions(_ sender: AnyObject) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        let uploadObjectAction = UIAlertAction(title: "Upload", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-            self.showImagePicker()
-        })
-        alertController.addAction(uploadObjectAction)
-        
-        let refreshAction = UIAlertAction(title: "Refresh", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-            self.refreshContents()
-        })
-        alertController.addAction(refreshAction)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
-        present(alertController, animated: true, completion: nil)
+        self.showImagePicker()
     }
     
     fileprivate func refreshContents() {
@@ -230,17 +215,11 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
                 self.showSimpleAlertWithTitle("We're Sorry!", message: "Videos are being created for this category still.", cancelButtonTitle: "OK")
             }
             else {
-                if self.refresh {
-                    os_log("refresh called", log: OSLog.default, type: .debug)
-                    if response!.items.count != self.workouts?.count {
-                        DispatchQueue.main.async {
-                            self.loadMoreContents()
-                            
-                            self.refresh = false
-                        }
-                        self.formatVideoDetails(response)
-                    }
-                } else {
+                DispatchQueue.main.async {
+                    self.loadMoreContents()
+                    self.refresh = false
+                }
+                DispatchQueue.main.async {
                     self.formatVideoDetails(response)
                 }
             }
@@ -249,15 +228,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         }
         
         os_log("loading videoDetails content", log: OSLog.default, type: .debug)
-        if !self.loadedDetails {
-            DispatchQueue.main.async {
-                self.getVideoDetailsByType(completionHandler)
-            }
-            
-            if self.contents == nil {
-                self.loadMoreContents()
-            }
-        }
+        self.getVideoDetailsByType(completionHandler)
         os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
     }
     
@@ -282,6 +253,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         self.workouts = vidArray
         self.workoutsSearchResults = vidArray
         self.loadedDetails = true
+        self.updateUserInterface()
     }
     
     
@@ -301,6 +273,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
             })
         }
     }
+    
     
     // MARK:- Content user action methods
     
@@ -422,7 +395,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         let workout = workoutsSearchResults?[indexPath.row]
         let content = workout?.content
         let rowRect = tableView.rectForRow(at: indexPath);
-        showActionOptionsForContent(rowRect, content: content!)
+        self.openRemoteContent(content!)
     }
 }
 

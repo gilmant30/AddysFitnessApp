@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AWSMobileHubHelper
 import AWSCognitoIdentityProvider
+import AWSCognitoUserPoolsSignIn
 
 class UserPoolsSignUpViewController: UIViewController {
     //MARK: Properties

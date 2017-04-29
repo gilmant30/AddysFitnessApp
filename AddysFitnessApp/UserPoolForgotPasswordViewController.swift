@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AWSCognitoIdentityProvider
 import AWSMobileHubHelper
+import AWSCognitoUserPoolsSignIn
 
 class UserPoolForgotPasswordViewController: UIViewController {
     
@@ -43,7 +44,7 @@ class UserPoolForgotPasswordViewController: UIViewController {
         self.user?.forgotPassword().continueWith(block: {[weak self] (task: AWSTask) -> AnyObject? in
             guard let strongSelf = self else {return nil}
             DispatchQueue.main.async(execute: {
-                if let error = task.error as? NSError {
+                if let error = task.error as NSError? {
                     let alertController = UIAlertController(title: error.userInfo["__type"] as? String,
                         message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.alert)
                     let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)

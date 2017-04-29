@@ -10,6 +10,8 @@ import UIKit
 import AWSMobileHubHelper
 import os.log
 
+var admin = ["test123"]
+
 class InitialViewController: UIViewController {
     
     var signInObserver: AnyObject!
@@ -44,7 +46,7 @@ class InitialViewController: UIViewController {
         foodIcon.isUserInteractionEnabled = true
         foodIcon.addGestureRecognizer(tapFoodsGestureRecognizer)
         
-        
+        /*
         signInObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.AWSIdentityManagerDidSignIn, object: AWSIdentityManager.default(), queue: OperationQueue.main, using: {[weak self] (note: Notification) -> Void in
             guard let strongSelf = self else { return }
             os_log("Sign in observer signed in", log: OSLog.default, type: .debug)
@@ -56,6 +58,7 @@ class InitialViewController: UIViewController {
             os_log("Sign out observer signed out", log: OSLog.default, type: .debug)
             strongSelf.setupRightBarButtonItem()
         })
+         */
         
         setupRightBarButtonItem()
     }
@@ -84,16 +87,15 @@ class InitialViewController: UIViewController {
         navigationItem.rightBarButtonItem = loginButton
         navigationItem.rightBarButtonItem!.target = self
         
-        if (AWSIdentityManager.default().isLoggedIn) {
+        if (AWSSignInManager.sharedInstance().isLoggedIn) {
             navigationItem.rightBarButtonItem!.title = NSLocalizedString("Sign-Out", comment: "Label for the logout button.")
             navigationItem.rightBarButtonItem!.action = #selector(InitialViewController.handleLogout)
         }
+
     }
     
     func presentSignInViewController() {
-        print("presentSignInViewController - START")
-        if !AWSIdentityManager.default().isLoggedIn {
-            print("presentSignInViewController - user not logged in")
+        if !AWSSignInManager.sharedInstance().isLoggedIn {
             let storyboard = UIStoryboard(name: "SignIn", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "SignIn")
             self.present(viewController, animated: true, completion: nil)
@@ -101,8 +103,8 @@ class InitialViewController: UIViewController {
     }
     
     func handleLogout() {
-        if (AWSIdentityManager.default().isLoggedIn) {
-                AWSIdentityManager.default().logout(completionHandler: {(result: Any?, error: Error?) in
+        if (AWSSignInManager.sharedInstance().isLoggedIn) {
+            AWSSignInManager.sharedInstance().logout(completionHandler: {(result: Any?, authState: AWSIdentityManagerAuthState, error: Error?) in
                 self.navigationController!.popToRootViewController(animated: false)
                 self.setupRightBarButtonItem()
                 self.presentSignInViewController()
@@ -112,12 +114,5 @@ class InitialViewController: UIViewController {
             assert(false)
         }
     }
-    /*
-    func presentFoodViewController() {
-        print("entering food storyboard")
-        let storyboard = UIStoryboard(name: "Food", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "foodMain")
-        self.present(viewController, animated:true, completion:nil);
-    }
- */
+
 }

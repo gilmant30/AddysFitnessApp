@@ -15,122 +15,195 @@ import os.log
 
 import ObjectiveC
 
-class UploadFoodViewController: UIViewController {
-    var data:Data!
+class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var manager:AWSUserFileManager!
     var foodType: String?
+    var newRecipe = Recipe()
+    var activeField: UITextField?
+    var animateContenetView = true
+    var image: UIImage?
     
-    @IBOutlet weak var foodImage: UIImageView!
-    @IBOutlet weak var progressView: UIProgressView!
-    @IBOutlet weak var uploadingLabel: UILabel!
-    @IBOutlet weak var foodName: UITextField!
-    @IBOutlet weak var foodDescription: UITextField!
-    @IBOutlet weak var bfastType: UILabel!
-    @IBOutlet weak var lunchType: UILabel!
-    @IBOutlet weak var dinnerType: UIStackView!
-    @IBOutlet weak var snacksType: UILabel!
+    @IBOutlet weak var foodView: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var ingredientsLabel: UILabel!
+    @IBOutlet weak var stepsLabel: UILabel!
+    @IBOutlet weak var ingredientButton: UIButton!
+    @IBOutlet weak var stepButton: UIButton!
+    @IBOutlet weak var previewButton: UIButton!
+    @IBOutlet weak var recipeTitle: UITextField!
+    @IBOutlet weak var recipeDescription: UITextView!
     
-
+    @IBOutlet weak var categoryStackView: UIStackView!
+    @IBOutlet weak var recipeImage: UIImageView!
+    @IBOutlet weak var bfastLabel: UILabel!
+    @IBOutlet weak var lunchLabel: UILabel!
+    @IBOutlet weak var dinnerLabel: UILabel!
+    @IBOutlet weak var snackLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadFoodViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
-        navigationItem.title = "Add Food"
-        uploadingLabel.isHidden = true
-        progressView.isHidden = true
+        if let foodImage = image {
+            foodView.image = foodImage
+        }
+        
+        setupCategories()
+        
+        navigationItem.title = "Add Recipe"
+        
+        recipeTitle.delegate = self
+        recipeDescription.delegate = self
+        
+        ingredientsLabel.text = "Ingredients: \(newRecipe.ingredients.count)"
+        stepsLabel.text = "Steps: \(newRecipe.steps.count)"
+        
+        formatButtons()
+        
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+
+    // MARK: - Segues
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "ingredients") {
+            os_log("Heading to add ingredients view", log: OSLog.default, type: .debug)
+            let ingredientsViewController = segue.destination as! AddIngredientsController
+            ingredientsViewController.ingredients = newRecipe.ingredients
+        } else if (segue.identifier == "steps") {
+            os_log("Heading to add steps view", log: OSLog.default, type: .debug)
+            let stepsViewController = segue.destination as! AddStepsViewController
+            stepsViewController.steps = newRecipe.steps
+        } else if (segue.identifier == "recipeDetail") {
+            os_log("Heading to add preview recipe view", log: OSLog.default, type: .debug)
+            let previewRecipeViewController = segue.destination as! RecipeDetailViewController
+            previewRecipeViewController.data = UIImagePNGRepresentation(image!)!
+            previewRecipeViewController.recipe = newRecipe
+            previewRecipeViewController.preview = true
+        }
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "recipeDetail" {
+            return validateInput()
+        }
+        
+        return true
+    }
+    
+    func validateInput() -> Bool {
+        if let title = recipeTitle.text, title != "" {
+            if let description = recipeDescription.text, description != "" {
+                newRecipe.name = title
+                newRecipe.description = description
+                newRecipe.image = recipeImage.image
+            } else {
+                showSimpleAlertWithTitle("ERROR!", message: "Description cannot be empty", cancelButtonTitle: "Ok")
+                return false
+            }
+        } else {
+            showSimpleAlertWithTitle("ERROR!", message: "Title cannot be empty", cancelButtonTitle: "Ok")
+            return false
+        }
+        
+        return true
+    }
+    
+    @IBAction func unwindToUploadFood(segue: UIStoryboardSegue) {
+        // Here you can receive the parameter(s) from secondVC
+        os_log("Unwinding from addIngredientsVC", log: OSLog.default, type: .debug)
+        let addIngredientsViewController: AddIngredientsController = segue.source as! AddIngredientsController
+        newRecipe.ingredients = addIngredientsViewController.ingredients
+        ingredientsLabel.text = "Ingredients: \(newRecipe.ingredients.count)"
+    }
+    
+    @IBAction func unwindFromStepsToUploadFood(segue: UIStoryboardSegue) {
+        os_log("Unwinding from addStepsVC", log: OSLog.default, type: .debug)
+        let addStepsViewController = segue.source as! AddStepsViewController
+        newRecipe.steps = addStepsViewController.steps
+        stepsLabel.text = "Steps: \(newRecipe.steps.count)"
+    }
+    
+    //Calls this function when the tap is recognized.
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.activeField = nil
+    }
+    
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        os_log("textFieldDidBeginEditing", log: OSLog.default, type: .debug)
+        self.activeField = textField
+    }
+    
+    func adjustingHeight(show:Bool, notification:NSNotification) {
+        // 1
+        var userInfo = notification.userInfo!
+        // 2
+        let keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        // 3
+        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
+        // 4
+        let changeInHeight = (keyboardFrame.height + 40) * (show ? 1 : -1)
+        //5
+        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
+            self.contentViewHeight.constant += changeInHeight
+        })
         
     }
-        
-    fileprivate func showSimpleAlertWithTitle(_ title: String, message: String, cancelButtonTitle cancelTitle: String) {
+    
+    
+    func keyboardWillShow(notification: NSNotification) {
+        adjustingHeight(show: true, notification: notification)
+    }
+    
+    
+    func keyboardWillHide(notification: NSNotification) {
+        adjustingHeight(show: false, notification: notification)
+    }
+    
+    
+    func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: nil) { (_) -> Void in
+            self.scrollView.contentSize.height = self.contentView.frame.height
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n"  // Recognizes enter key in keyboard
+        {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    func showSimpleAlertWithTitle(_ title: String, message: String, cancelButtonTitle cancelTitle: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }
     
-    fileprivate func uploadLocalContent(_ localContent: AWSLocalContent) {
-        localContent.uploadWithPin(onCompletion: false, progressBlock: {[weak self] (content: AWSLocalContent, progress: Progress) in
-            guard let strongSelf = self else { return }
-            DispatchQueue.main.async {
-                // Update the upload UI if it is a new upload and the table is not yet updated
-                strongSelf.progressView.isHidden = false
-                strongSelf.uploadingLabel.isHidden = false
-                strongSelf.progressView.progress = Float(content.progress.fractionCompleted)
-            }
-            }, completionHandler: {[weak self](content: AWSLocalContent?, error: Error?) -> Void in
-                guard let strongSelf = self else { return }
-                os_log("Downloading to S3 complete", log: OSLog.default, type: .debug)
-                if let error = error {
-                    os_log(error as! StaticString, log: OSLog.default, type: .debug)
-                    strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to upload an object.", cancelButtonTitle: "OK")
-                } else {
-                    strongSelf.insertNoSqlFood({(errors: [NSError]?) -> Void in
-                        os_log("Inserted into sql", log: OSLog.default, type: .debug)
-                        if errors != nil {
-                            strongSelf.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
-                        }
-                        strongSelf.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
-                        strongSelf.navigationController?.popViewController(animated: true)
-                    })
-                }
-        })
+    deinit {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func insertNoSqlFood(_ completionHandler: @escaping (_ errors: [NSError]?) -> Void) {
-        os_log("Inserting into sql", log: OSLog.default, type: .debug)
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        var errors: [NSError] = []
-        let group: DispatchGroup = DispatchGroup()
-        
-        let dbConsumable: Consumable! = Consumable()
-        
-        //dbConsumable._createdBy = AWSIdentityManager.default().identityId!
-        dbConsumable._consumableType = foodType
-        dbConsumable._name = foodName.text
-        
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
-        let result = formatter.string(from: date)
-        //dbConsumable._createdDate = result
-        
-        group.enter()
-        
-        objectMapper.save(dbConsumable, completionHandler: {(error: Error?) -> Void in
-            if let error = error as NSError? {
-                DispatchQueue.main.async(execute: {
-                    errors.append(error)
-                })
-            }
-            group.leave()
-        })
-        
-        group.notify(queue: DispatchQueue.main, execute: {
-            if errors.count > 0 {
-                completionHandler(errors)
-            }
-            else {
-                completionHandler(nil)
-            }
-        })
-    }
-
-    // MARK: - Action
-    
-    @IBAction func uploadFood(_ sender: UIButton) {
-        if let name = foodName, name.hasText {
-            if let description = foodDescription, description.hasText {
-                if foodType != nil {
-                    let key: String = "\(FoodImagesDirectoryName)\(name)"
-                    let localContent = manager.localContent(with: data, key: key)
-                    uploadLocalContent(localContent)
-                } else {
-                    showSimpleAlertWithTitle("Error!", message: "Please select a food category", cancelButtonTitle: "Ok")
-                }
-            } else {
-                showSimpleAlertWithTitle("Error!", message: "Please input a description for the food", cancelButtonTitle: "Ok")
-            }
-        } else {
-            showSimpleAlertWithTitle("Error!", message: "Please input a title for the food", cancelButtonTitle: "Ok")
-        }
-    }
 }

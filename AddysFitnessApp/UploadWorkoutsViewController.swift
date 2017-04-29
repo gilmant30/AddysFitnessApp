@@ -33,7 +33,6 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var uploadingLabel: UILabel!
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var workoutLength: UILabel!
-    @IBOutlet weak var scrollView: UIScrollView!
     
     
     
@@ -46,7 +45,6 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
         self.uploadingLabel.isHidden = true
         self.workoutTitle.delegate = self
         self.workoutDescription.delegate = self
-        self.view = self.scrollView
         videoPreviewUIImage()
     }
     

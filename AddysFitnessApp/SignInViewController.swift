@@ -35,13 +35,6 @@ class SignInViewController: UIViewController {
         super.viewDidLoad()
         print("Sign In Loading.")
         
-        didSignInObserver =  NotificationCenter.default.addObserver(forName: NSNotification.Name.AWSIdentityManagerDidSignIn,
-                  object: AWSIdentityManager.default(),
-                  queue: OperationQueue.main,
-                  using: {(note: Notification) -> Void in
-                  // perform successful login actions here
-        })
-        
         // Custom UI Setup
         customSignInButton.addTarget(self, action: #selector(self.handleCustomSignIn), for: .touchUpInside)
         customCreateAccountButton.addTarget(self, action: #selector(self.handleUserPoolSignUp), for: .touchUpInside)
@@ -58,14 +51,16 @@ class SignInViewController: UIViewController {
     // MARK: - Utility Methods
     
     func handleLoginWithSignInProvider(_ signInProvider: AWSSignInProvider) {
-        AWSIdentityManager.default().login(signInProvider: signInProvider, completionHandler: {(result: Any?, error: Error?) in
-            // If no error reported by SignInProvider, discard the sign-in view controller.
-            if error == nil {
-                DispatchQueue.main.async(execute: {
-                    self.presentingViewController?.dismiss(animated: true, completion: nil)
-                })
-            }
+        AWSSignInManager.sharedInstance().login(signInProviderKey: signInProvider.identityProviderName, completionHandler: {(result: Any?, authState: AWSIdentityManagerAuthState, error: Error?) in
             print("result = \(String(describing: result)), error = \(String(describing: error))")
+            // If no error reported by SignInProvider, discard the sign-in view controller.
+            guard let _ = result else {
+                self.showErrorDialog(signInProvider.identityProviderName, withError: error! as NSError)
+                return
+            }
+            DispatchQueue.main.async(execute: {
+                self.presentingViewController?.dismiss(animated: true, completion: nil)
+            })
         })
     }
     

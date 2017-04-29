@@ -54,10 +54,19 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             bfast?._name = "bfast" + String(i)
             bfast?._consumableType = "bfast"
             consum.append(bfast!)
+            
+            let lunch = Consumable()
+            lunch?._name = "Lunch" + String(i)
+            lunch?._consumableType = "lunch"
+            consum.append(lunch!)
+            
+            let dinner = Consumable()
+            dinner?._name = "Dinner" + String(i)
+            dinner?._consumableType = "dinner"
+            consum.append(dinner!)
         }
         consumables = consum
         filteredConsumables = consum
-        print("Size of filteredConsumables is " + String(describing: filteredConsumables?.count))
         
        /* DispatchQueue.main.async {
             self.getConsumables()
@@ -66,6 +75,30 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         self.updateUserInterface()
         
         self.refreshControl?.addTarget(self, action: #selector(FoodViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // Add a background view to the table view
+        let backgroundImage = UIImage(named: "backgroundImage3")
+        let imageView = UIImageView(image: backgroundImage)
+        self.tableView.backgroundView = imageView
+        
+        // no lines where there aren't cells
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        
+        // center and scale background image
+        imageView.contentMode = .scaleToFill
+        
+        // blur it
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = imageView.bounds
+        imageView.addSubview(blurView)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchController.dismiss(animated: false, completion: nil)
     }
     
     func configureSearchController() {
@@ -82,11 +115,9 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            filteredConsumables = consumables.filter {
+            self.filteredConsumables = self.filteredConsumables?.filter {
                 $0._name?.range(of: searchText, options: .caseInsensitive) != nil
             }
-        } else {
-            filteredConsumables = consumables
         }
         updateUserInterface()
     }
@@ -109,6 +140,12 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     func addConsumable(_ sender: AnyObject) {
+        os_log("Sending to add Food storyboard", log: OSLog.default, type: .debug)
+        /*
+        let storyboard = UIStoryboard(name: "Food", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "UploadFood")
+        self.navigationController!.pushViewController(viewController, animated: true)
+        */
         let imagePickerController: UIImagePickerController = UIImagePickerController()
         imagePickerController.mediaTypes =  [kUTTypeImage as String]
         imagePickerController.delegate = self
@@ -119,6 +156,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         let completionHandler = {(response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void in
             if let error = error {
                 var errorMessage = "Failed to retrieve items. \(error.localizedDescription)"
+                print("\(errorMessage)")
                 if (error.domain == AWSServiceErrorDomain && error.code == AWSServiceErrorType.accessDeniedException.rawValue) {
                     errorMessage = "Access denied. You are not allowed to perform this operation."
                 }
@@ -159,7 +197,6 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     func valueChanged(segmentedControl: UISegmentedControl) {
-        print("Coming in : \(segmentedControl.selectedSegmentIndex)")
         if(segmentedControl.selectedSegmentIndex == 0){
             self.filteredConsumables = consumables
         } else if(segmentedControl.selectedSegmentIndex == 1){
@@ -174,7 +211,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             self.filteredConsumables = consumables.filter {
                 $0._consumableType == "dinner"
             }
-        } else if(segmentedControl.selectedSegmentIndex == 3){
+        } else if(segmentedControl.selectedSegmentIndex == 4){
             self.filteredConsumables = consumables.filter {
                 $0._consumableType == "snack"
             }
@@ -187,8 +224,8 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let control = UISegmentedControl(items: ["All","Bfast","Lunch","Dinner","Snack"])
-        control.addTarget(self, action: Selector(("valueChanged")), for: UIControlEvents.valueChanged)
+        let control = UISegmentedControl(items: self.consumableTypes)
+        control.addTarget(self, action: #selector(self.valueChanged), for: UIControlEvents.valueChanged)
         if(section == 0){
             return control;
         }
@@ -216,7 +253,6 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         if let consumableArray = filteredConsumables {
             let consumable = consumableArray[indexPath.row]
             cell.cellName.text = consumable._name
-            cell.cellDescription.text = consumable._consumableType
         }
         
         return cell
@@ -264,8 +300,7 @@ extension FoodViewController: UIImagePickerControllerDelegate, UINavigationContr
             let image: UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
             let storyboard = UIStoryboard(name: "Food", bundle: nil)
             let uploadFoodViewController = storyboard.instantiateViewController(withIdentifier: "UploadFood") as! UploadFoodViewController
-            uploadFoodViewController.foodImage.image = image
-            uploadFoodViewController.data = UIImagePNGRepresentation(image)!
+            uploadFoodViewController.image = image
             uploadFoodViewController.manager = self.manager
             self.navigationController!.pushViewController(uploadFoodViewController, animated: true)
         }
