@@ -20,16 +20,21 @@ import os.log
 import ObjectiveC
 
 
-class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
+class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var data:Data!
     var manager:AWSUserFileManager!
     var url:URL!
     var selectedCategory:String?
     fileprivate var dateFormatter: DateFormatter!
+    var activeField: UITextField?
     
+    @IBOutlet weak var contentView: UIView!
+
+    @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var workoutDescription: UITextView!
     @IBOutlet weak var workoutTitle: UITextField!
     @IBOutlet weak var progressView: UIProgressView!
-    @IBOutlet weak var workoutDescription: UITextField!
     @IBOutlet weak var uploadingLabel: UILabel!
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var workoutLength: UILabel!
@@ -38,6 +43,8 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadFoodViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
         os_log("Entering Upload Workouts View", log: OSLog.default, type: .debug)
         navigationItem.title = "MVPFit"
@@ -46,6 +53,10 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
         self.workoutTitle.delegate = self
         self.workoutDescription.delegate = self
         videoPreviewUIImage()
+        
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     fileprivate func uploadLocalContent(_ localContent: AWSLocalContent) {
@@ -100,11 +111,6 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
         } else {
             self.showSimpleAlertWithTitle("Error", message: "The title name cannot be empty.", cancelButtonTitle: "OK")
         }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
     }
     
     //set preview UIImage for videos
@@ -174,6 +180,68 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate {
             }
         })
     }
+    
+    //Calls this function when the tap is recognized.
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.activeField = nil
+    }
+    
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        os_log("textFieldDidBeginEditing", log: OSLog.default, type: .debug)
+        self.activeField = textField
+    }
+    
+    func adjustingHeight(show:Bool, notification:NSNotification) {
+        // 1
+        var userInfo = notification.userInfo!
+        // 2
+        let keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        // 3
+        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
+        // 4
+        let changeInHeight = (keyboardFrame.height + 40) * (show ? 1 : -1)
+        //5
+        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
+            self.contentViewHeight.constant += changeInHeight
+        })
+        
+    }
+    
+    
+    func keyboardWillShow(notification: NSNotification) {
+        adjustingHeight(show: true, notification: notification)
+    }
+    
+    
+    func keyboardWillHide(notification: NSNotification) {
+        adjustingHeight(show: false, notification: notification)
+    }
+    
+    
+    func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: nil) { (_) -> Void in
+            self.scrollView.contentSize.height = self.contentView.frame.height
+        }
+    }
+    
+    deinit {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+
 }
 
 extension UInt {

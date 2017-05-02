@@ -18,16 +18,19 @@ import os.log
 
 import ObjectiveC
 
-let FoodImagesDirectoryName = "public/foodImages/"
+let FoodImagesDirectoryName = "public/recipeImages/"
 
 class FoodViewController: UITableViewController, UISearchResultsUpdating {
-    
-    var testConsumables = [String: [Consumable]]()
-    var consumables = [Consumable]()
-    var filteredConsumables: [Consumable]?
+    var prefix: String!
+    var recipes = [Recipe]()
+    var filteredRecipes: [Recipe]?
     let consumableTypes: [String] = ["all", "bfast", "lunch", "dinner", "snacks"]
     var selected: String = "snacks"
+    var loadedDetails: Bool = false
     fileprivate var manager: AWSUserFileManager!
+    fileprivate var marker: String?
+    fileprivate var contents: [AWSContent]?
+    fileprivate var didLoadAllImages: Bool!
     
     var searchController: UISearchController!
     
@@ -37,42 +40,23 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.estimatedSectionHeaderHeight = 80
+        manager = AWSUserFileManager.defaultUserFileManager()
         
         // Sets up the UIs.
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(FoodViewController.addConsumable(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(FoodViewController.addRecipe(_:)))
         navigationItem.title = "MVPFit"
-        
-        var consum = [Consumable]()
-        
-        for i in 1...3 {
-            let snack = Consumable()
-            snack?._name = "Snack" + String(i)
-            snack?._consumableType = "snack"
-            consum.append(snack!)
-            
-            let bfast = Consumable()
-            bfast?._name = "bfast" + String(i)
-            bfast?._consumableType = "bfast"
-            consum.append(bfast!)
-            
-            let lunch = Consumable()
-            lunch?._name = "Lunch" + String(i)
-            lunch?._consumableType = "lunch"
-            consum.append(lunch!)
-            
-            let dinner = Consumable()
-            dinner?._name = "Dinner" + String(i)
-            dinner?._consumableType = "dinner"
-            consum.append(dinner!)
+  
+        if let prefix = prefix {
+            print("Prefix already initialized to \(prefix)")
+        } else {
+            self.prefix = "\(FoodImagesDirectoryName)"
         }
-        consumables = consum
-        filteredConsumables = consum
         
-       /* DispatchQueue.main.async {
-            self.getConsumables()
-        }*/
+        self.getRecipes()
+        
         configureSearchController()
         self.updateUserInterface()
+        
         
         self.refreshControl?.addTarget(self, action: #selector(FoodViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
     }
@@ -115,8 +99,8 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            self.filteredConsumables = self.filteredConsumables?.filter {
-                $0._name?.range(of: searchText, options: .caseInsensitive) != nil
+            self.filteredRecipes = self.recipes.filter {
+                $0.name.range(of: searchText, options: .caseInsensitive) != nil
             }
         }
         updateUserInterface()
@@ -127,7 +111,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         os_log("Handling Refresh", log: OSLog.default, type: .debug)
         
         DispatchQueue.main.sync {
-            self.getConsumables()
+            self.getRecipes()
         }
         
         refreshControl.endRefreshing()
@@ -139,7 +123,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         }
     }
     
-    func addConsumable(_ sender: AnyObject) {
+    func addRecipe(_ sender: AnyObject) {
         os_log("Sending to add Food storyboard", log: OSLog.default, type: .debug)
         /*
         let storyboard = UIStoryboard(name: "Food", bundle: nil)
@@ -152,7 +136,50 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         present(imagePickerController, animated: true, completion: nil)
     }
     
-    func getConsumables() {
+    func addImages() {
+        os_log("Adding images to recipes", log: OSLog.default, type: .debug)
+        if self.recipes.count > 0 {
+            if let contents = self.contents, contents.count > 0 {
+                for recipe in recipes {
+                    let key = FoodImagesDirectoryName + recipe.name + ".png"
+                    print("content key = \(contents[0].key)")
+                    print("key = \(key)")
+                    if let i = contents.index(where: { $0.key == key }) {
+                        recipe.content = contents[i]
+                    }
+                }
+            }
+        }
+
+    }
+    
+    func loadImages() {
+        manager.listAvailableContents(withPrefix: prefix, marker: marker) {[weak self] (contents: [AWSContent]?, nextMarker: String?, error: Error?) in
+            guard let strongSelf = self else { return }
+            if let error = error {
+                strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to load the list of contents.", cancelButtonTitle: "OK")
+                print("Failed to load the list of contents. \(error)")
+            }
+            if let contents = contents, contents.count > 0 {
+                strongSelf.contents = contents
+                if let nextMarker = nextMarker, !nextMarker.isEmpty {
+                    strongSelf.didLoadAllImages = false
+                } else {
+                    strongSelf.didLoadAllImages = true
+                }
+                print("contents count - \(contents.count)")
+                strongSelf.marker = nextMarker
+                strongSelf.addImages()
+            }
+            
+            if strongSelf.loadedDetails {
+                strongSelf.updateUserInterface()
+            }
+        }
+
+    }
+    
+    func getRecipes() {
         let completionHandler = {(response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void in
             if let error = error {
                 var errorMessage = "Failed to retrieve items. \(error.localizedDescription)"
@@ -162,61 +189,105 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
                 }
             }
             else if response!.items.count == 0 {
-                self.showSimpleAlertWithTitle("We're Sorry!", message: "Our favorite snacks have not been added in yet.", cancelButtonTitle: "OK")
+                self.showSimpleAlertWithTitle("We're Sorry!", message: "Our favorite recipes have not been added in yet.", cancelButtonTitle: "OK")
             }
             else {
-                if let items = response!.items as? [Consumable] {
-                    self.consumables = items
+                DispatchQueue.main.async {
+                    self.loadImages()
+                }
+                DispatchQueue.main.async {
+                   self.convertToRecipes(response)
                 }
             }
             
             self.updateUserInterface()
         }
         
-        os_log("loading consumables content", log: OSLog.default, type: .debug)
-        self.getConsumableDetailsByType(completionHandler)
-        os_log("after loading consumables content", log: OSLog.default, type: .debug)
+        os_log("loading recipes content", log: OSLog.default, type: .debug)
+        self.getRecipesWithCompletionHandler(completionHandler)
+        os_log("after loading recipes content", log: OSLog.default, type: .debug)
     }
     
     // MARK: - Databse Retrieve
     
-    func getConsumableDetailsByType(_ completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: NSError?) -> Void) {
+    func getRecipesWithCompletionHandler(_ completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         
-        queryExpression.indexName = "consumableTypeIndex"
-        queryExpression.keyConditionExpression = "#consumableType = :consumableType"
-        queryExpression.expressionAttributeNames = ["#consumableType": "ConsumableType",]
-        queryExpression.expressionAttributeValues = [":consumableType": selected,]
         
-        objectMapper.query(Consumable.self, expression: queryExpression) { (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+        queryExpression.indexName = "typeIndex"
+        queryExpression.keyConditionExpression = "#type = :type"
+        queryExpression.expressionAttributeNames = ["#type": "type",]
+        queryExpression.expressionAttributeValues = [":type": "recipe",]
+        
+        objectMapper.query(Food.self, expression: queryExpression) { (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 completionHandler(response, error as NSError?)
             })
         }
     }
     
+    func convertToRecipes(_ response: AWSDynamoDBPaginatedOutput?) {
+        let foodArr = response?.items as! [Food]
+        var recipeArr: [Recipe] = []
+        for item in foodArr {
+            let tempRecipe: Recipe = Recipe()
+            tempRecipe.name = item._foodName!
+            tempRecipe.description = item._description!
+            tempRecipe.category = item._category!
+            tempRecipe.steps = formatSteps(item._steps!)
+            tempRecipe.ingredients = formatIngredients(item._ingredients!)
+            recipeArr.append(tempRecipe)
+        }
+        
+        recipes = recipeArr
+        filteredRecipes = recipeArr
+        self.loadedDetails = true
+        self.updateUserInterface()
+    }
+    
+    func formatSteps(_ steps: Set<String>) -> [String] {
+        var arr: [String] = []
+        for step in steps {
+            arr.append(step)
+        }
+        return arr
+    }
+    
+    func formatIngredients(_ ingredients: [String: String]) -> [Ingredients] {
+        var listIngredients: [Ingredients] = []
+        for (name, amount) in ingredients {
+            let ingredient: Ingredients = Ingredients()
+            ingredient.ingredientName = name
+            ingredient.amount = amount
+            listIngredients.append(ingredient)
+        }
+        
+        return listIngredients
+    }
+
+    
     func valueChanged(segmentedControl: UISegmentedControl) {
         if(segmentedControl.selectedSegmentIndex == 0){
-            self.filteredConsumables = consumables
+            self.filteredRecipes = recipes
         } else if(segmentedControl.selectedSegmentIndex == 1){
-            self.filteredConsumables = consumables.filter {
-                $0._consumableType == "bfast"
+            self.filteredRecipes = recipes.filter {
+                $0.category == "bfast"
             }
         } else if(segmentedControl.selectedSegmentIndex == 2){
-            self.filteredConsumables = consumables.filter {
-                $0._consumableType == "lunch"
+            self.filteredRecipes = recipes.filter {
+                $0.category == "lunch"
             }
         } else if(segmentedControl.selectedSegmentIndex == 3){
-            self.filteredConsumables = consumables.filter {
-                $0._consumableType == "dinner"
+            self.filteredRecipes = recipes.filter {
+                $0.category == "dinner"
             }
         } else if(segmentedControl.selectedSegmentIndex == 4){
-            self.filteredConsumables = consumables.filter {
-                $0._consumableType == "snack"
+            self.filteredRecipes = recipes.filter {
+                $0.category == "snack"
             }
         } else {
-            self.filteredConsumables = consumables
+            self.filteredRecipes = recipes
         }
         self.updateUserInterface()
     }
@@ -241,7 +312,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let consumableArray = filteredConsumables else {
+        guard let consumableArray = filteredRecipes else {
             return 0
         }
         return consumableArray.count
@@ -250,9 +321,17 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: FoodCell = tableView.dequeueReusableCell(withIdentifier: "FoodCell", for: indexPath) as! FoodCell
         
-        if let consumableArray = filteredConsumables {
-            let consumable = consumableArray[indexPath.row]
-            cell.cellName.text = consumable._name
+        if let recipeArray = filteredRecipes {
+            let recipe = recipeArray[indexPath.row]
+            cell.cellDescription.lineBreakMode = .byWordWrapping
+            cell.cellDescription.numberOfLines = 0
+            cell.cellName.text = recipe.name
+            cell.cellDescription.text = recipe.description
+            if let image = recipe.image {
+                cell.cellImage.image = image
+            }
+            
+            
         }
         
         return cell
@@ -264,15 +343,32 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 50
+        return 350
+    }
+    
+    // MARK: - Table view delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        os_log("Clicked on a recipe", log: OSLog.default, type: .debug)
     }
 
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if  segue.identifier == "showDetailRecipe",
+            let destination = segue.destination as? RecipeDetailViewController,
+            let recipeIndex = tableView.indexPathForSelectedRow?.row
+        {
+            destination.recipe = filteredRecipes?[recipeIndex]
+        }
+    }
     
 }
 
 class FoodCell: UITableViewCell {
     @IBOutlet weak var cellName: UILabel!
     @IBOutlet weak var cellDescription: UILabel!
+    @IBOutlet weak var cellImage: UIImageView!
 
 }
 

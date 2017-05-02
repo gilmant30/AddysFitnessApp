@@ -38,6 +38,7 @@ class RecipeDetailViewController: UIViewController {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var recipeDescription: UILabel!
     @IBOutlet weak var buttonHeightConstraint: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         uploadLabel.isHidden = true
         progressView.isHidden = true
@@ -45,6 +46,7 @@ class RecipeDetailViewController: UIViewController {
             recipeDescription.lineBreakMode = .byWordWrapping
             recipeDescription.numberOfLines = 0
             if preview {
+                manager = AWSUserFileManager.defaultUserFileManager()
                 navigationItem.title = "Preivew Recipe"
                 let uploadTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RecipeDetailViewController.uploadNewRecipe))
                 uploadTap.numberOfTapsRequired = 1
@@ -108,7 +110,8 @@ class RecipeDetailViewController: UIViewController {
     }
     
     func uploadNewRecipe() {
-        let key: String = "\(RecipeImagesDirectoryName)\(recipe.name)"
+        let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).png"
+        data = UIImagePNGRepresentation(recipe.image!)!
         let localContent = manager.localContent(with: data, key: key)
         uploadLocalContent(localContent)
     }

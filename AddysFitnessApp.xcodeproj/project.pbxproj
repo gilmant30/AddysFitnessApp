@@ -13,6 +13,7 @@
 		B93D98811EB50A1800B9A388 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B93D987F1EB50A1800B9A388 /* AVFoundation.framework */; };
 		B93D98821EB50A1800B9A388 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B93D98801EB50A1800B9A388 /* AVKit.framework */; };
 		B93D98841EB50A1D00B9A388 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B93D98831EB50A1D00B9A388 /* MediaPlayer.framework */; };
+		B93D98861EB7EE0F00B9A388 /* WorkoutDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */; };
 		B94330F01E70C579008EF137 /* UserPools.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B94330EF1E70C579008EF137 /* UserPools.storyboard */; };
 		B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */; };
 		B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */; };
@@ -105,6 +106,7 @@
 		B93D987F1EB50A1800B9A388 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B93D98801EB50A1800B9A388 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		B93D98831EB50A1D00B9A388 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutDetailViewController.swift; sourceTree = "<group>"; };
 		B94330EF1E70C579008EF137 /* UserPools.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = UserPools.storyboard; path = AddysFitnessApp/UserPools.storyboard; sourceTree = SOURCE_ROOT; };
 		B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolsSignUpViewController.swift; sourceTree = "<group>"; };
 		B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolSignUpConfirmationViewController.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */,
 				B903FF011E82150E002FA684 /* WorkoutsViewController.swift */,
 				B9255B301E92FB0F000EF86D /* WorkoutVids.swift */,
+				B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */,
 			);
 			name = Workouts;
 			sourceTree = "<group>";
@@ -537,6 +540,7 @@
 			files = (
 				B9E3AE231E6E455100943A08 /* InitialViewController.swift in Sources */,
 				B955CB9A1EB10DBF007E84EE /* AddIngredientsController.swift in Sources */,
+				B93D98861EB7EE0F00B9A388 /* WorkoutDetailViewController.swift in Sources */,
 				B99BA0EE1EB4FDBF005135D7 /* UserPoolsIdentityProfile.swift in Sources */,
 				B99BA0E91EB4EE72005135D7 /* UserAccess.swift in Sources */,
 				B99BA0D71EB3AA4F005135D7 /* RecipeDetailViewController.swift in Sources */,

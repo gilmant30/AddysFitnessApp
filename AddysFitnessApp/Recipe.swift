@@ -25,6 +25,27 @@ class Recipe {
     var steps: [String] = []
     var image: UIImage?
     var category: String = ""
+    var content: AWSContent! {
+        didSet {
+            print("setting aws content")
+            self.content.getRemoteFileURL {
+                (url: URL?, error: Error?) in
+                guard let url = url else {
+                    print("Error getting URL for file. \(String(describing: error))")
+                    return
+                }
+                
+                do {
+                    DispatchQueue.main.async {
+                        let imageData = NSData(contentsOf: url)
+                        self.image = UIImage(data: imageData! as Data)
+                    }
+                }
+            return
+            }
+            
+        }
+    }
     
 }
 

@@ -30,7 +30,13 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var ingredientStackView: UIStackView!
     @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
     @IBOutlet weak var stackViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var inputStackView: UIStackView!
+    @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet weak var ingredientTextField: UITextField!
     
+    @IBOutlet weak var ingredientInputStackView: UIStackView!
+    @IBOutlet weak var ingredientInputStackViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var backgroundImage: UIImageView!
     override func viewDidLoad() {
         navigationItem.title = "Add Ingredients"
         let screenSize = UIScreen.main.bounds
@@ -38,129 +44,110 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         screenWidth = screenSize.width
         loadIngredientsList()
         
-        for case let button as UIButton in ingredientStackView.subviews {
-            button.layer.cornerRadius = 10
-            button.layer.borderColor = UIColor.black.cgColor
-            button.layer.borderWidth = 1
-        }
+        amountTextFields.append(amountTextField)
+        ingredientTextFields.append(ingredientTextField)
+        
+        setupUIElements()
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(AddIngredientsController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(AddIngredientsController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func loadIngredientsList() {
+    override func viewWillAppear(_ animated: Bool) {
+        // blur it
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = self.contentView.bounds
+        self.backgroundImage.addSubview(blurView)
+    }
+    
+    func setupUIElements() {
+        amountTextField.delegate = self
+        ingredientTextField.delegate = self
+        amountTextField.layer.borderColor = UIColor.blue.cgColor
+        amountTextField.layer.borderWidth = 0.5
+        amountTextField.layer.cornerRadius = 2
         
-        for i in 0 ..< ingredients.count {
-            let amountText = UITextField()
-            amountText.text = "\(ingredients[i].amount ?? "")"
-            if (i == 0) {
-                amountText.frame = CGRect(x: 8, y: self.ingredientStackView.frame.origin.y + 30, width: (screenWidth/2) - 5, height: 30)
-            } else {
-                let textField: UITextField = ingredientTextFields[ingredientTextFields.count - 1]
-                amountText.frame = CGRect(x: 8, y: textField.frame.origin.y + 65, width: (screenWidth/2) - 5, height: 30)
-            }
-            
-            amountText.delegate = self
-            
-            amountText.backgroundColor = UIColor.white
-            amountText.layer.borderColor = UIColor.blue.cgColor
-            amountText.layer.borderWidth = 0.5
-            amountText.layer.cornerRadius = 2
-            
-            let ingredientText = UITextField()
-            ingredientText.text = "\(ingredients[i].ingredientName ?? "")"
-            if (i == 0) {
-                ingredientText.frame = CGRect(x: screenWidth/2 + 5, y: self.ingredientStackView.frame.origin.y + 30, width: (screenWidth/2) - 10, height: 30)
-            } else {
-                let textField: UITextField = ingredientTextFields[ingredientTextFields.count - 1]
-                ingredientText.frame = CGRect(x: screenWidth/2 + 5, y: textField.frame.origin.y + 65, width: (screenWidth/2) - 10, height: 30)
-            }
-            
-            ingredientText.delegate = self
-            ingredientText.backgroundColor = UIColor.white
-            ingredientText.layer.borderColor = UIColor.darkGray.cgColor
-            ingredientText.layer.borderWidth = 0.5
-            ingredientText.layer.cornerRadius = 2
-            
-            ingredientTextFields.append(ingredientText)
-            amountTextFields.append(amountText)
-            
-            contentViewHeight.constant += 65
-            stackViewHeight.constant += 65
-            
-            contentView.addSubview(amountText)
-            contentView.addSubview(ingredientText)
-
+        ingredientTextField.layer.borderColor = UIColor.blue.cgColor
+        ingredientTextField.layer.borderWidth = 0.5
+        ingredientTextField.layer.cornerRadius = 2
+        
+        
+        for case let button as UIButton in ingredientStackView.subviews {
+            button.layer.cornerRadius = 10
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.borderWidth = 1
         }
     }
     
-    func addIngredientFields() {
-         let ingredientAmount = UITextField()
-         let ingredientName = UITextField()
-         
-         if ingredientTextFields.count > 0 {
-             os_log("some ingredients added already", log: OSLog.default, type: .debug)
-             let textField: UITextField = ingredientTextFields[ingredientTextFields.count - 1]
-             ingredientAmount.frame = CGRect(x: 8, y: textField.frame.origin.y + 65, width: (screenSize.width/2) - 5, height: 30)
-             ingredientAmount.placeholder = "Add Amount"
-             ingredientAmount.backgroundColor = UIColor.white
-             
-             ingredientName.frame = CGRect(x: screenSize.width/2 + 5, y: textField.frame.origin.y + 65, width: (screenSize.width/2) - 10, height: 30)
-             ingredientName.placeholder = "Add Name"
-             ingredientName.backgroundColor = UIColor.white
-             ingredientName.layer.borderColor = UIColor.darkGray.cgColor
-             ingredientName.layer.borderWidth = 0.5
-            ingredientName.layer.cornerRadius = 2
-            
-            ingredientAmount.layer.borderColor = UIColor.blue.cgColor
-            ingredientAmount.layer.borderWidth = 0.5
-            ingredientAmount.layer.cornerRadius = 2
-            
-             
-             ingredientName.delegate = self
-             ingredientAmount.delegate = self
-             
-             ingredientTextFields.append(ingredientName)
-             amountTextFields.append(ingredientAmount)
-             
-             contentViewHeight.constant += 65
-             stackViewHeight.constant += 65
-             
-             contentView.addSubview(ingredientAmount)
-             contentView.addSubview(ingredientName)
-         
-         } else {
-             os_log("no ingredients added yet", log: OSLog.default, type: .debug)
-             ingredientAmount.frame = CGRect(x: 8, y: self.ingredientStackView.frame.origin.y + 30, width: (screenSize.width/2) - 5, height: 30)
-             ingredientAmount.placeholder = "Add Amount"
-             ingredientAmount.backgroundColor = UIColor.white
-             
-             ingredientName.frame = CGRect(x: screenSize.width/2 + 5, y: self.ingredientStackView.frame.origin.y + 30, width: (screenSize.width/2) - 10, height: 30)
-             ingredientName.placeholder = "Add Name"
-             ingredientName.backgroundColor = UIColor.white
+    func loadIngredientsList() {
+        for i in 0 ..< ingredients.count {
+            if(i == 0) {
+                amountTextField.text = ingredients[i].amount
+                ingredientTextField.text = ingredients[i].ingredientName
+            } else {
+                addNewStackView(true, ingredients[i])
+            }
+        }
+    }
     
-            ingredientName.layer.borderColor = UIColor.darkGray.cgColor
-            ingredientName.layer.borderWidth = 0.5
-            ingredientName.layer.cornerRadius = 2
-            
-            ingredientAmount.layer.borderColor = UIColor.blue.cgColor
-            ingredientAmount.layer.borderWidth = 0.5
-            ingredientAmount.layer.cornerRadius = 2
-            
-             ingredientName.delegate = self
-             ingredientAmount.delegate = self
-             
-             ingredientTextFields.append(ingredientName)
-             amountTextFields.append(ingredientAmount)
-             
-             contentViewHeight.constant += 65
-             stackViewHeight.constant += 65
-             
-             contentView.addSubview(ingredientAmount)
-             contentView.addSubview(ingredientName)
-         }
-     }
+    func addNewStackView(_ insertText: Bool, _ ingredient: Ingredients) {
+        let newStackView = createStackView(insertText, ingredient.ingredientName!, ingredient.amount!)
+        
+        ingredientInputStackView.addArrangedSubview(newStackView)
+        
+        ingredientInputStackViewHeight.constant += 45
+        contentViewHeight.constant += 45
+    }
+    
+    func addIngredientFields() {
+        let temp = Ingredients()
+        temp.amount = ""
+        temp.ingredientName = ""
+        addNewStackView(false, temp)
+    }
+    
+    func createStackView(_ insertText: Bool, _ ingredient: String, _ amount: String) -> UIStackView {
+        let newStackView = UIStackView()
+        newStackView.frame = CGRect(x: 0, y: 0, width: ingredientInputStackView.frame.width, height: 30)
+        newStackView.alignment = .fill
+        newStackView.distribution = .fillEqually
+        newStackView.axis = .horizontal
+        newStackView.spacing = 10
+        
+        let amountText = UITextField()
+        amountText.frame = CGRect(x: 0, y: 0, width: amountTextField.frame.width, height: 30)
+        amountText.delegate = self
+        amountText.layer.borderColor = UIColor.blue.cgColor
+        amountText.layer.borderWidth = 0.5
+        amountText.layer.cornerRadius = 2
+        amountText.layer.cornerRadius = 5
+        
+        let ingredientText = UITextField()
+        ingredientText.frame = CGRect(x: 0, y: 0, width: ingredientTextField.frame.width, height: 30)
+        ingredientText.delegate = self
+        ingredientText.layer.cornerRadius = 5
+        ingredientText.layer.borderColor = UIColor.blue.cgColor
+        ingredientText.layer.borderWidth = 0.5
+        ingredientText.layer.cornerRadius = 2
+        
+        if(insertText) {
+            amountText.text = amount
+            ingredientText.text = ingredient
+        } else {
+            amountText.placeholder = "Enter Amount"
+            ingredientText.placeholder = "Enter Ingredient"
+        }
+        
+        ingredientTextFields.append(ingredientText)
+        amountTextFields.append(amountText)
+        
+        newStackView.addArrangedSubview(amountText)
+        newStackView.addArrangedSubview(ingredientText)
+        
+        return newStackView
+    }
     
     func verifyAllIngredientsAdded() -> Bool {
         os_log("Verifying all text fields have input", log: OSLog.default, type: .debug)

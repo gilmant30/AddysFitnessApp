@@ -33,6 +33,7 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var stepStackView: UIStackView!
     @IBOutlet weak var buttonStackView: UIStackView!
     
+    @IBOutlet weak var backgroundImage: UIImageView!
     override func viewDidLoad() {
         navigationItem.title = "Add Steps"
         let screenSize = UIScreen.main.bounds
@@ -45,6 +46,11 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         loadSteps()
         
         self.stepText.delegate = self
+        stepText.layer.cornerRadius = 5
+        stepText.layer.borderColor = UIColor.lightGray.cgColor
+        stepText.layer.borderWidth = 2
+        stepText.adjustsFontSizeToFitWidth = true
+        stepText.textAlignment = .natural
         
         for case let button as UIButton in buttonStackView.subviews {
             button.layer.cornerRadius = 10
@@ -56,6 +62,14 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         notificationCenter.addObserver(self, selector: #selector(AddStepsViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(AddStepsViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // blur it
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = self.contentView.bounds
+        self.backgroundImage.addSubview(blurView)
     }
     
     func loadSteps() {
@@ -130,6 +144,10 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         
         newStepText.delegate = self
         newStepText.layer.cornerRadius = 5
+        newStepText.layer.borderColor = UIColor.lightGray.cgColor
+        newStepText.layer.borderWidth = 2
+        newStepText.textAlignment = .natural
+        newStepText.adjustsFontSizeToFitWidth = true
         
         stepFields.append(newStepText)
         

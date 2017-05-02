@@ -41,6 +41,7 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
     @IBOutlet weak var lunchLabel: UILabel!
     @IBOutlet weak var dinnerLabel: UILabel!
     @IBOutlet weak var snackLabel: UILabel!
+    @IBOutlet weak var backgroundImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,6 +68,14 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
         notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // blur it
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = self.contentView.bounds
+        self.backgroundImage.addSubview(blurView)
+    }
 
     // MARK: - Segues
     
@@ -82,7 +91,6 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
         } else if (segue.identifier == "recipeDetail") {
             os_log("Heading to add preview recipe view", log: OSLog.default, type: .debug)
             let previewRecipeViewController = segue.destination as! RecipeDetailViewController
-            previewRecipeViewController.data = UIImagePNGRepresentation(image!)!
             previewRecipeViewController.recipe = newRecipe
             previewRecipeViewController.preview = true
         }

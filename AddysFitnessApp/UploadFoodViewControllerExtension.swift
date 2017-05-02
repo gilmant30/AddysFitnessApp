@@ -29,6 +29,9 @@ extension UploadFoodViewController {
         previewButton.layer.cornerRadius = 10
         previewButton.layer.borderColor = UIColor.black.cgColor
         previewButton.layer.borderWidth = 1
+        
+        recipeDescription.layer.borderColor = UIColor.lightGray.cgColor
+        recipeDescription.layer.borderWidth = 2
 
     }
     
@@ -66,6 +69,7 @@ extension UploadFoodViewController {
             label.layer.borderColor = UIColor.black.cgColor
             label.layer.borderWidth = 0.5
             label.layer.backgroundColor = UIColor.white.cgColor
+            label.layer.masksToBounds = true
         }
     }
     
