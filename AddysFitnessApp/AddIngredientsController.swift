@@ -43,6 +43,7 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         contentViewHeight.constant = screenSize.height
         screenWidth = screenSize.width
         loadIngredientsList()
+        contentViewHeight.constant = screenSize.height
         
         amountTextFields.append(amountTextField)
         ingredientTextFields.append(ingredientTextField)
@@ -116,21 +117,23 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         newStackView.axis = .horizontal
         newStackView.spacing = 10
         
-        let amountText = UITextField()
-        amountText.frame = CGRect(x: 0, y: 0, width: amountTextField.frame.width, height: 30)
+        let amountText = TextField()
+        amountText.frame = amountTextField.frame
         amountText.delegate = self
-        amountText.layer.borderColor = UIColor.blue.cgColor
-        amountText.layer.borderWidth = 0.5
-        amountText.layer.cornerRadius = 2
-        amountText.layer.cornerRadius = 5
+        amountText.layer.borderColor = amountTextField.layer.borderColor
+        amountText.textAlignment = amountTextField.textAlignment
+        amountText.font = amountTextField.font
+        amountText.layer.borderWidth = amountTextField.layer.borderWidth
+        amountText.layer.cornerRadius = amountTextField.layer.cornerRadius
         
-        let ingredientText = UITextField()
+        let ingredientText = TextField()
         ingredientText.frame = CGRect(x: 0, y: 0, width: ingredientTextField.frame.width, height: 30)
         ingredientText.delegate = self
-        ingredientText.layer.cornerRadius = 5
-        ingredientText.layer.borderColor = UIColor.blue.cgColor
-        ingredientText.layer.borderWidth = 0.5
-        ingredientText.layer.cornerRadius = 2
+        ingredientText.textAlignment = ingredientTextField.textAlignment
+        ingredientText.font = ingredientTextField.font
+        ingredientText.layer.cornerRadius = ingredientTextField.layer.cornerRadius
+        ingredientText.layer.borderColor = ingredientTextField.layer.borderColor
+        ingredientText.layer.borderWidth = ingredientTextField.layer.borderWidth
         
         if(insertText) {
             amountText.text = amount
@@ -232,5 +235,4 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
-
 }

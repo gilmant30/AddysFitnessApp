@@ -47,6 +47,7 @@
 		B9E3AE281E6E455100943A08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9E3AE271E6E455100943A08 /* Assets.xcassets */; };
 		B9E3AE361E6E455100943A08 /* AddysFitnessAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE351E6E455100943A08 /* AddysFitnessAppTests.swift */; };
 		B9E3AE411E6E455100943A08 /* AddysFitnessAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3AE401E6E455100943A08 /* AddysFitnessAppUITests.swift */; };
+		B9F74AFF1EBF63560062F1E4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F74AFE1EBF63560062F1E4 /* TextField.swift */; };
 		B9FB4FA41E6E5F2F006095DF /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9B1E6E5F2F006095DF /* AWSS3.framework */; };
 		B9FB4FA91E6E5F38006095DF /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */; };
 		B9FB4FAA1E6E5F38006095DF /* AWSCognitoIdentityProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -144,6 +145,7 @@
 		B9E3AE3C1E6E455100943A08 /* AddysFitnessAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AddysFitnessAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E3AE401E6E455100943A08 /* AddysFitnessAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddysFitnessAppUITests.swift; sourceTree = "<group>"; };
 		B9E3AE421E6E455100943A08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B9F74AFE1EBF63560062F1E4 /* TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextField.swift; path = AddysFitnessApp/TextField.swift; sourceTree = SOURCE_ROOT; };
 		B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
 		B9FB4F991E6E5F2F006095DF /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		B9FB4F9A1E6E5F2F006095DF /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSDynamoDB.framework; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				B955CB951EAEA784007E84EE /* Recipe.swift */,
 				B955CB991EB10DBF007E84EE /* AddIngredientsController.swift */,
 				B99BA0D41EB15E57005135D7 /* AddStepsViewController.swift */,
+				B9F74AFE1EBF63560062F1E4 /* TextField.swift */,
 			);
 			name = Food;
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				B9E3AE231E6E455100943A08 /* InitialViewController.swift in Sources */,
 				B955CB9A1EB10DBF007E84EE /* AddIngredientsController.swift in Sources */,
 				B93D98861EB7EE0F00B9A388 /* WorkoutDetailViewController.swift in Sources */,
+				B9F74AFF1EBF63560062F1E4 /* TextField.swift in Sources */,
 				B99BA0EE1EB4FDBF005135D7 /* UserPoolsIdentityProfile.swift in Sources */,
 				B99BA0E91EB4EE72005135D7 /* UserAccess.swift in Sources */,
 				B99BA0D71EB3AA4F005135D7 /* RecipeDetailViewController.swift in Sources */,

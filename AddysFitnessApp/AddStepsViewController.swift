@@ -135,7 +135,7 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         newLabel.textAlignment = .center
         newLabel.text = "\(stepFields.count + 1)."
         
-        let newStepText = UITextField()
+        let newStepText = TextField()
         if(insertText) {
             newStepText.text = step
         } else {
@@ -146,7 +146,8 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         newStepText.layer.cornerRadius = 5
         newStepText.layer.borderColor = UIColor.lightGray.cgColor
         newStepText.layer.borderWidth = 2
-        newStepText.textAlignment = .natural
+        newStepText.textAlignment = .justified
+        newStepText.font = stepText.font
         newStepText.adjustsFontSizeToFitWidth = true
         
         stepFields.append(newStepText)

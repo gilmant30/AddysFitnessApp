@@ -137,6 +137,12 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
         stepsLabel.text = "Steps: \(newRecipe.steps.count)"
     }
     
+    @IBAction func unwindFromDetailToUploadFood(segue: UIStoryboardSegue) {
+        os_log("Unwinding from detailVC", log: OSLog.default, type: .debug)
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
+    }
+    
     //Calls this function when the tap is recognized.
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.

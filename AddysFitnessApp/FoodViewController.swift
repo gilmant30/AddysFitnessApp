@@ -31,8 +31,10 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     fileprivate var marker: String?
     fileprivate var contents: [AWSContent]?
     fileprivate var didLoadAllImages: Bool!
+    let queue1 = DispatchQueue(label: "com.mvpfit.queue1", qos: .userInteractive, attributes: .concurrent)
     
     var searchController: UISearchController!
+    let myActivityIndicator = UIActivityIndicatorView()
     
     // MARK:- View lifecycle
     
@@ -51,8 +53,6 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         } else {
             self.prefix = "\(FoodImagesDirectoryName)"
         }
-        
-        self.getRecipes()
         
         configureSearchController()
         self.updateUserInterface()
@@ -78,6 +78,13 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = imageView.bounds
         imageView.addSubview(blurView)
+        
+        myActivityIndicator.center = self.view.center
+        myActivityIndicator.hidesWhenStopped = true
+        myActivityIndicator.activityIndicatorViewStyle = .gray
+        self.view.addSubview(myActivityIndicator)
+        myActivityIndicator.startAnimating()
+        self.getRecipes()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -125,11 +132,6 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     func addRecipe(_ sender: AnyObject) {
         os_log("Sending to add Food storyboard", log: OSLog.default, type: .debug)
-        /*
-        let storyboard = UIStoryboard(name: "Food", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "UploadFood")
-        self.navigationController!.pushViewController(viewController, animated: true)
-        */
         let imagePickerController: UIImagePickerController = UIImagePickerController()
         imagePickerController.mediaTypes =  [kUTTypeImage as String]
         imagePickerController.delegate = self
@@ -317,6 +319,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         }
         return consumableArray.count
     }
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: FoodCell = tableView.dequeueReusableCell(withIdentifier: "FoodCell", for: indexPath) as! FoodCell

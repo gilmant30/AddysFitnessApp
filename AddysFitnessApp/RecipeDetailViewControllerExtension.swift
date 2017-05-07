@@ -83,7 +83,7 @@ extension RecipeDetailViewController {
                             strongSelf.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
                         }
                         strongSelf.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
-                        strongSelf.navigationController?.popViewController(animated: true)
+                        strongSelf.performSegue(withIdentifier: "unwindFromDetailToUpload", sender: self)
                     })
                 }
         })

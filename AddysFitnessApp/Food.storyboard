@@ -24,7 +24,7 @@
                                 <rect key="frame" x="0.0" y="28" width="414" height="350"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TM7-92-CRM" id="yCd-y3-VSg">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="349"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="350"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Apple" translatesAutoresizingMaskIntoConstraints="NO" id="Jn8-Vw-E5V">
@@ -437,7 +437,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vc6-Fd-Kie" userLabel="Content View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="700"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="650"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="np6-aE-hJ1">
                                                 <rect key="frame" x="30" y="25" width="354" height="201"/>
@@ -521,7 +521,7 @@
                                             <constraint firstItem="Epi-Yt-ls0" firstAttribute="leading" secondItem="Vc6-Fd-Kie" secondAttribute="leading" constant="8" id="3Nv-l4-RxB"/>
                                             <constraint firstAttribute="trailing" secondItem="APh-9W-71X" secondAttribute="trailing" constant="8" id="7ic-CO-TUf"/>
                                             <constraint firstItem="np6-aE-hJ1" firstAttribute="leading" secondItem="Vc6-Fd-Kie" secondAttribute="leading" constant="30" id="Hmm-xz-Ndf"/>
-                                            <constraint firstAttribute="height" constant="700" id="I25-l9-kso"/>
+                                            <constraint firstAttribute="height" constant="650" id="I25-l9-kso"/>
                                             <constraint firstItem="APh-9W-71X" firstAttribute="leading" secondItem="Vc6-Fd-Kie" secondAttribute="leading" constant="8" id="MgB-2S-Z3M"/>
                                             <constraint firstItem="Epi-Yt-ls0" firstAttribute="top" secondItem="GlM-A3-dhu" secondAttribute="bottom" constant="25" id="NTh-3c-Ldl"/>
                                             <constraint firstItem="8tz-FB-nZc" firstAttribute="top" secondItem="DgX-h0-gW5" secondAttribute="bottom" constant="30" id="PSe-4i-IFc"/>
@@ -578,9 +578,11 @@
                         <outlet property="stepStackViewHeight" destination="qYu-AA-h4F" id="96A-sC-HmI"/>
                         <outlet property="uploadLabel" destination="r24-Re-phD" id="8kR-J7-Rhs"/>
                         <outlet property="uploadRecipe" destination="3bU-w6-glS" id="6Ro-Ec-vXd"/>
+                        <segue destination="Wgt-Vs-j2I" kind="unwind" identifier="unwindFromDetailToUpload" unwindAction="unwindFromDetailToUploadFoodWithSegue:" id="vTA-Po-rah"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QeS-XI-NHn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Wgt-Vs-j2I" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1778" y="143"/>
         </scene>

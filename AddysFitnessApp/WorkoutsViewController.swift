@@ -392,10 +392,16 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let workout = workoutsSearchResults?[indexPath.row]
-        let content = workout?.content
-        let rowRect = tableView.rectForRow(at: indexPath);
-        self.openRemoteContent(content!)
+        os_log("Clicked on a workout video", log: OSLog.default, type: .debug)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if  segue.identifier == "workoutDetailShow",
+            let destination = segue.destination as? WorkoutDetailViewController,
+            let workoutIndex = tableView.indexPathForSelectedRow?.row
+        {
+            destination.workout = (workoutsSearchResults?[workoutIndex])!
+        }
     }
 }
 
