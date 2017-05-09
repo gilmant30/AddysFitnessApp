@@ -37,13 +37,18 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         navigationItem.title = "Add Steps"
         let screenSize = UIScreen.main.bounds
-        contentViewHeight.constant = screenSize.height
         screenWidth = screenSize.width
         
         stepFields.append(stepText)
         stepStackViewArr.append(stepStackView)
         
         loadSteps()
+        
+        if (contentViewHeight.constant < screenSize.height) {
+            contentViewHeight.constant = screenSize.height
+        }
+        
+        backgroundImage.addBlurEffect()
         
         self.stepText.delegate = self
         stepText.layer.cornerRadius = 5
@@ -62,14 +67,6 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         notificationCenter.addObserver(self, selector: #selector(AddStepsViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(AddStepsViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        // blur it
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = self.contentView.bounds
-        self.backgroundImage.addSubview(blurView)
     }
     
     func loadSteps() {
@@ -98,8 +95,8 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         
         stepStackViewArr.append(newStackView)
         
-        buttonStackViewHeight.constant += 45
-        contentViewHeight.constant += 45
+        buttonStackViewHeight.constant += 40
+        contentViewHeight.constant += 40
         
         contentView.addSubview(newStackView)
     }
@@ -166,6 +163,7 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        os_log("Text field did end editing", log: OSLog.default, type: .debug)
         self.activeField = nil
     }
     
@@ -194,6 +192,7 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func keyboardWillHide(notification: NSNotification) {
+        os_log("will hide keyboard", log: OSLog.default, type: .debug)
         adjustingHeight(show: false, notification: notification)
     }
     
@@ -210,4 +209,17 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
     }
 
 
+}
+
+extension UIImageView
+{
+    func addBlurEffect()
+    {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // for supporting device rotation
+        self.addSubview(blurEffectView)
+    }
 }

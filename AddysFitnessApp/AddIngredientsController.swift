@@ -43,7 +43,11 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         contentViewHeight.constant = screenSize.height
         screenWidth = screenSize.width
         loadIngredientsList()
-        contentViewHeight.constant = screenSize.height
+        if (contentViewHeight.constant < screenSize.height) {
+            contentViewHeight.constant = screenSize.height
+        }
+        
+        backgroundImage.addBlurEffect()
         
         amountTextFields.append(amountTextField)
         ingredientTextFields.append(ingredientTextField)
@@ -53,14 +57,6 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(AddIngredientsController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(AddIngredientsController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        // blur it
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = self.contentView.bounds
-        self.backgroundImage.addSubview(blurView)
     }
     
     func setupUIElements() {
@@ -98,8 +94,8 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         
         ingredientInputStackView.addArrangedSubview(newStackView)
         
-        ingredientInputStackViewHeight.constant += 45
-        contentViewHeight.constant += 45
+        ingredientInputStackViewHeight.constant += 40
+        contentViewHeight.constant += 40
     }
     
     func addIngredientFields() {

@@ -180,17 +180,14 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
         })
         
     }
-    
-    
+        
     func keyboardWillShow(notification: NSNotification) {
         adjustingHeight(show: true, notification: notification)
     }
     
-    
     func keyboardWillHide(notification: NSNotification) {
         adjustingHeight(show: false, notification: notification)
     }
-    
     
     func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animate(alongsideTransition: nil) { (_) -> Void in

@@ -17,12 +17,13 @@ import AWSDynamoDB
 import os.log
 
 import ObjectiveC
+var recipes = [Recipe]()
+var recipesLoaded = false
 
 let FoodImagesDirectoryName = "public/recipeImages/"
 
 class FoodViewController: UITableViewController, UISearchResultsUpdating {
     var prefix: String!
-    var recipes = [Recipe]()
     var filteredRecipes: [Recipe]?
     let consumableTypes: [String] = ["all", "bfast", "lunch", "dinner", "snacks"]
     var selected: String = "snacks"
@@ -31,7 +32,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     fileprivate var marker: String?
     fileprivate var contents: [AWSContent]?
     fileprivate var didLoadAllImages: Bool!
-    let queue1 = DispatchQueue(label: "com.mvpfit.queue1", qos: .userInteractive, attributes: .concurrent)
+    var refresh = false
     
     var searchController: UISearchController!
     let myActivityIndicator = UIActivityIndicatorView()
@@ -40,6 +41,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("recipes count is - \(recipes.count)")
         self.tableView.delegate = self
         self.tableView.estimatedSectionHeaderHeight = 80
         manager = AWSUserFileManager.defaultUserFileManager()
@@ -47,13 +49,14 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         // Sets up the UIs.
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(FoodViewController.addRecipe(_:)))
         navigationItem.title = "MVPFit"
-  
+        
         if let prefix = prefix {
             print("Prefix already initialized to \(prefix)")
         } else {
             self.prefix = "\(FoodImagesDirectoryName)"
         }
         
+        getRecipes()
         configureSearchController()
         self.updateUserInterface()
         
@@ -84,7 +87,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         myActivityIndicator.activityIndicatorViewStyle = .gray
         self.view.addSubview(myActivityIndicator)
         myActivityIndicator.startAnimating()
-        self.getRecipes()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,7 +109,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            self.filteredRecipes = self.recipes.filter {
+            self.filteredRecipes = recipes.filter {
                 $0.name.range(of: searchText, options: .caseInsensitive) != nil
             }
         }
@@ -116,7 +119,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     func handleRefresh(_ refreshControl: UIRefreshControl) {
         os_log("Handling Refresh", log: OSLog.default, type: .debug)
-        
+        refresh = true
         DispatchQueue.main.sync {
             self.getRecipes()
         }
@@ -140,14 +143,11 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     func addImages() {
         os_log("Adding images to recipes", log: OSLog.default, type: .debug)
-        if self.recipes.count > 0 {
+        if recipes.count > 0 {
             if let contents = self.contents, contents.count > 0 {
                 for recipe in recipes {
-                    let key = FoodImagesDirectoryName + recipe.name + ".png"
-                    print("content key = \(contents[0].key)")
-                    print("key = \(key)")
-                    if let i = contents.index(where: { $0.key == key }) {
-                        recipe.content = contents[i]
+                    let key = FoodImagesDirectoryName + recipe.name + ".jpg"
+                    if let i = contents.index(where: { $0.key == key }) {                        recipe.content = contents[i]
                     }
                 }
             }
@@ -177,6 +177,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             if strongSelf.loadedDetails {
                 strongSelf.updateUserInterface()
             }
+            strongSelf.myActivityIndicator.stopAnimating()
         }
 
     }
@@ -192,6 +193,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             }
             else if response!.items.count == 0 {
                 self.showSimpleAlertWithTitle("We're Sorry!", message: "Our favorite recipes have not been added in yet.", cancelButtonTitle: "OK")
+                self.myActivityIndicator.stopAnimating()
             }
             else {
                 DispatchQueue.main.async {
@@ -205,9 +207,18 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             self.updateUserInterface()
         }
         
-        os_log("loading recipes content", log: OSLog.default, type: .debug)
-        self.getRecipesWithCompletionHandler(completionHandler)
-        os_log("after loading recipes content", log: OSLog.default, type: .debug)
+        if(!recipesLoaded || refresh) {
+            os_log("loading recipes content", log: OSLog.default, type: .debug)
+            recipesLoaded = true
+            self.getRecipesWithCompletionHandler(completionHandler)
+            os_log("after loading recipes content", log: OSLog.default, type: .debug)
+        } else {
+            os_log("don't need to load recipes", log: OSLog.default, type: .debug)
+            myActivityIndicator.stopAnimating()
+            filteredRecipes = recipes
+            updateUserInterface()
+            
+        }
     }
     
     // MARK: - Databse Retrieve
@@ -330,8 +341,26 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             cell.cellDescription.numberOfLines = 0
             cell.cellName.text = recipe.name
             cell.cellDescription.text = recipe.description
-            if let image = recipe.image {
-                cell.cellImage.image = image
+            if let url = recipe.url {
+                if let image = recipe.image {
+                    cell.cellImage.image = image
+                } else {
+                    DispatchQueue.global(qos: .default).async {
+                        os_log("recipe url is set", log: OSLog.default, type: .debug)
+                        let imageData = NSData(contentsOf: url)
+                        if let imageDat = imageData {
+                            let image = UIImage(data: imageDat as Data)
+                            recipe.image = image
+                            DispatchQueue.main.async(execute: {() -> Void in
+                                // Main thread stuff.
+                                cell.cellImage.image = image
+                            })
+                        }
+
+                    }
+                }
+                
+                // cell.cellImage.image(url, recipe)
             }
             
             
@@ -365,14 +394,12 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             destination.recipe = filteredRecipes?[recipeIndex]
         }
     }
-    
 }
 
 class FoodCell: UITableViewCell {
     @IBOutlet weak var cellName: UILabel!
     @IBOutlet weak var cellDescription: UILabel!
     @IBOutlet weak var cellImage: UIImageView!
-
 }
 
 // MARK: - Utility
@@ -404,6 +431,88 @@ extension FoodViewController: UIImagePickerControllerDelegate, UINavigationContr
             self.navigationController!.pushViewController(uploadFoodViewController, animated: true)
         }
         
+    }
+}
+
+extension UIImage {
+    
+    func fixedOrientation() -> UIImage {
+        
+        if imageOrientation == UIImageOrientation.up {
+            return self
+        }
+        
+        var transform: CGAffineTransform = CGAffineTransform.identity
+        
+        switch imageOrientation {
+        case UIImageOrientation.down, UIImageOrientation.downMirrored:
+            transform = transform.translatedBy(x: size.width, y: size.height)
+            transform = transform.rotated(by: CGFloat(Double.pi))
+            break
+        case UIImageOrientation.left, UIImageOrientation.leftMirrored:
+            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.rotated(by: CGFloat(Double.pi/2))
+            break
+        case UIImageOrientation.right, UIImageOrientation.rightMirrored:
+            transform = transform.translatedBy(x: 0, y: size.height)
+            transform = transform.rotated(by: CGFloat(-Double.pi/2))
+            break
+        case UIImageOrientation.up, UIImageOrientation.upMirrored:
+            break
+        }
+        
+        switch imageOrientation {
+        case UIImageOrientation.upMirrored, UIImageOrientation.downMirrored:
+            transform.translatedBy(x: size.width, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+            break
+        case UIImageOrientation.leftMirrored, UIImageOrientation.rightMirrored:
+            transform.translatedBy(x: size.height, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+        case UIImageOrientation.up, UIImageOrientation.down, UIImageOrientation.left, UIImageOrientation.right:
+            break
+        }
+        
+        let ctx: CGContext = CGContext(data: nil,
+                                       width: Int(size.width),
+                                       height: Int(size.height),
+                                       bitsPerComponent: self.cgImage!.bitsPerComponent,
+                                       bytesPerRow: 0,
+                                       space: self.cgImage!.colorSpace!,
+                                       bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        
+        ctx.concatenate(transform)
+        
+        switch imageOrientation {
+        case UIImageOrientation.left, UIImageOrientation.leftMirrored, UIImageOrientation.right, UIImageOrientation.rightMirrored:
+            ctx.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
+        default:
+            ctx.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            break
+        }
+        
+        let cgImage: CGImage = ctx.makeImage()!
+        
+        return UIImage(cgImage: cgImage)
+    }
+}
+
+extension UIImageView {
+    func image(_ url: URL?, _ recipe: Recipe?) {
+        guard let url = url else {
+            print("Couldn't create URL")
+            return
+        }
+        let theTask = URLSession.shared.dataTask(with: url) {
+            data, response, error in
+            if let response = data {
+                DispatchQueue.main.async {
+                    self.image = UIImage(data: response)
+                    recipe?.image = recipe?.image
+                }
+            }
+        }
+        theTask.resume()
     }
 }
 

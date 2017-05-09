@@ -27,6 +27,7 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
     var selectedCategory:String?
     fileprivate var dateFormatter: DateFormatter!
     var activeField: UITextField?
+    var workoutType: String?
     
     @IBOutlet weak var contentView: UIView!
 
@@ -38,6 +39,10 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
     @IBOutlet weak var uploadingLabel: UILabel!
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var workoutLength: UILabel!
+    @IBOutlet weak var armWorkout: UIImageView!
+    @IBOutlet weak var legWorkout: UIImageView!
+    @IBOutlet weak var totalBodyWorkout: UIImageView!
+    @IBOutlet weak var fitTricks: UIImageView!
     
     
     
@@ -52,7 +57,10 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
         self.uploadingLabel.isHidden = true
         self.workoutTitle.delegate = self
         self.workoutDescription.delegate = self
+        workoutDescription.layer.borderColor = UIColor.lightGray.cgColor
+        workoutDescription.layer.borderWidth = 2
         videoPreviewUIImage()
+        categorySetup()
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -102,11 +110,15 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
     
     @IBAction func uploadWorkout(_ sender: Any) {
         if(workoutTitle.hasText) {
-            if let title: String = workoutTitle.text {
-                let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
-                let localContent = manager.localContent(with: data, key: key)
-                uploadLocalContent(localContent)
-                //self.uploadWithData(data, forKey: key)
+            if workoutType != nil {
+                if let title: String = workoutTitle.text {
+                    let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
+                    let localContent = manager.localContent(with: data, key: key)
+                    uploadLocalContent(localContent)
+                    //self.uploadWithData(data, forKey: key)
+                }
+            } else {
+                self.showSimpleAlertWithTitle("Error", message: "Select a category type.", cancelButtonTitle: "OK")
             }
         } else {
             self.showSimpleAlertWithTitle("Error", message: "The title name cannot be empty.", cancelButtonTitle: "OK")
@@ -151,8 +163,9 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
         dbWorkout._createdBy = AWSIdentityManager.default().identityId!
         dbWorkout._videoLength = workoutLength.text
         dbWorkout._workoutName = workoutTitle.text
-        dbWorkout._workoutType = "workoutVideo"
+        dbWorkout._workoutType = "\(workoutType ?? "totalBodyWorkout")"
         dbWorkout._videoDescription = workoutDescription.text
+        dbWorkout._workoutIndex = "workout"
         
         let date = Date()
         let formatter = DateFormatter()

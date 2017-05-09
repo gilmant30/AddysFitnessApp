@@ -116,7 +116,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iBT-gu-2TF" userLabel="Content View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="downloadVideoImage" translatesAutoresizingMaskIntoConstraints="NO" id="DCd-ji-fIB">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="downloadVideoImage" translatesAutoresizingMaskIntoConstraints="NO" id="DCd-ji-fIB">
                                                 <rect key="frame" x="77" y="8" width="261" height="173"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="173" id="vGw-Ew-oN9"/>
@@ -152,16 +152,16 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="MMG-sx-RqB">
-                                                <rect key="frame" x="8" y="366" width="398" height="200"/>
+                                                <rect key="frame" x="8" y="366" width="398" height="150"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="200" id="zvU-0y-PfN"/>
+                                                    <constraint firstAttribute="height" constant="150" id="zvU-0y-PfN"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="mWO-CC-HXB">
-                                                <rect key="frame" x="8" y="627" width="398" height="21"/>
+                                                <rect key="frame" x="8" y="647" width="398" height="21"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EpI-FN-Qef">
                                                         <rect key="frame" x="0.0" y="0.0" width="184" height="21"/>
@@ -175,7 +175,7 @@
                                                 </subviews>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1g-Jt-5Wl">
-                                                <rect key="frame" x="132" y="673" width="150" height="30"/>
+                                                <rect key="frame" x="132" y="693" width="150" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="150" id="Wz1-nV-2Sq"/>
                                                 </constraints>
@@ -190,7 +190,7 @@
                                                 </connections>
                                             </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="lWD-OY-AOY">
-                                                <rect key="frame" x="8" y="586" width="398" height="21"/>
+                                                <rect key="frame" x="8" y="606" width="398" height="21"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Video Length:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VAm-kk-GT1">
                                                         <rect key="frame" x="0.0" y="0.0" width="199" height="21"/>
@@ -206,12 +206,33 @@
                                                     </label>
                                                 </subviews>
                                             </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HUS-M0-CP8" userLabel="Category Stack View">
+                                                <rect key="frame" x="8" y="536" width="398" height="50"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="upperBodyWorkout" translatesAutoresizingMaskIntoConstraints="NO" id="WZl-rn-dhD">
+                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="50"/>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lowerBodyWorkout" translatesAutoresizingMaskIntoConstraints="NO" id="YtO-GZ-naA">
+                                                        <rect key="frame" x="100" y="0.0" width="99" height="50"/>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="totalBodyWorkout" translatesAutoresizingMaskIntoConstraints="NO" id="aoh-wo-zF4">
+                                                        <rect key="frame" x="199" y="0.0" width="100" height="50"/>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fitTricks" translatesAutoresizingMaskIntoConstraints="NO" id="2Ce-yE-Qsc">
+                                                        <rect key="frame" x="299" y="0.0" width="99" height="50"/>
+                                                    </imageView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="8lG-N2-OLT"/>
+                                                </constraints>
+                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="Nvm-RA-0Ua" firstAttribute="top" secondItem="541-vX-HPF" secondAttribute="bottom" constant="30" id="4Ld-S5-cCX"/>
                                             <constraint firstItem="DCd-ji-fIB" firstAttribute="centerX" secondItem="iBT-gu-2TF" secondAttribute="centerX" id="8O0-VM-HR2"/>
                                             <constraint firstItem="M1g-Jt-5Wl" firstAttribute="top" secondItem="mWO-CC-HXB" secondAttribute="bottom" constant="25" id="Ay6-Z6-w2j"/>
+                                            <constraint firstAttribute="trailing" secondItem="HUS-M0-CP8" secondAttribute="trailing" constant="8" id="C9K-xa-olN"/>
                                             <constraint firstItem="MMG-sx-RqB" firstAttribute="top" secondItem="Nvm-RA-0Ua" secondAttribute="bottom" constant="20" id="DcM-vL-pry"/>
                                             <constraint firstItem="Nvm-RA-0Ua" firstAttribute="leading" secondItem="iBT-gu-2TF" secondAttribute="leading" constant="8" id="DwH-1a-Nyz"/>
                                             <constraint firstAttribute="trailing" secondItem="Nvm-RA-0Ua" secondAttribute="trailing" constant="8" id="HKn-V7-lPP"/>
@@ -219,16 +240,18 @@
                                             <constraint firstItem="mWO-CC-HXB" firstAttribute="leading" secondItem="iBT-gu-2TF" secondAttribute="leading" constant="8" id="PMZ-Mu-oIo"/>
                                             <constraint firstItem="mWO-CC-HXB" firstAttribute="top" secondItem="lWD-OY-AOY" secondAttribute="bottom" constant="20" id="PUd-KE-s6W"/>
                                             <constraint firstItem="541-vX-HPF" firstAttribute="leading" secondItem="iBT-gu-2TF" secondAttribute="leading" constant="8" id="VCM-X2-i3n"/>
+                                            <constraint firstItem="HUS-M0-CP8" firstAttribute="top" secondItem="MMG-sx-RqB" secondAttribute="bottom" constant="20" id="X7R-EL-a1J"/>
                                             <constraint firstAttribute="trailing" secondItem="mWO-CC-HXB" secondAttribute="trailing" constant="8" id="Y9O-9B-YEc"/>
                                             <constraint firstItem="Woq-7I-4Kp" firstAttribute="top" secondItem="DCd-ji-fIB" secondAttribute="bottom" constant="25" id="YGd-a7-Tof"/>
                                             <constraint firstItem="DCd-ji-fIB" firstAttribute="top" secondItem="iBT-gu-2TF" secondAttribute="top" constant="8" id="Zrj-ex-3sU"/>
+                                            <constraint firstItem="lWD-OY-AOY" firstAttribute="top" secondItem="HUS-M0-CP8" secondAttribute="bottom" constant="20" id="glJ-Ti-Njb"/>
                                             <constraint firstItem="MMG-sx-RqB" firstAttribute="leading" secondItem="iBT-gu-2TF" secondAttribute="leading" constant="8" id="gwf-2H-Jro"/>
                                             <constraint firstAttribute="trailing" secondItem="541-vX-HPF" secondAttribute="trailing" constant="8" id="jqk-7p-nyF"/>
                                             <constraint firstAttribute="height" constant="725" id="kbV-gQ-F6O"/>
                                             <constraint firstItem="Woq-7I-4Kp" firstAttribute="leading" secondItem="iBT-gu-2TF" secondAttribute="leading" constant="8" id="mDY-N9-UYX"/>
                                             <constraint firstAttribute="trailing" secondItem="MMG-sx-RqB" secondAttribute="trailing" constant="8" id="mTU-NN-LzE"/>
-                                            <constraint firstItem="lWD-OY-AOY" firstAttribute="top" secondItem="MMG-sx-RqB" secondAttribute="bottom" constant="20" id="oVr-JV-D2d"/>
                                             <constraint firstItem="M1g-Jt-5Wl" firstAttribute="centerX" secondItem="iBT-gu-2TF" secondAttribute="centerX" id="pCF-Kk-VD0"/>
+                                            <constraint firstItem="HUS-M0-CP8" firstAttribute="leading" secondItem="iBT-gu-2TF" secondAttribute="leading" constant="8" id="spF-BB-cOg"/>
                                             <constraint firstAttribute="trailing" secondItem="Woq-7I-4Kp" secondAttribute="trailing" constant="8" id="uXv-iF-zQq"/>
                                             <constraint firstItem="lWD-OY-AOY" firstAttribute="leading" secondItem="iBT-gu-2TF" secondAttribute="leading" constant="8" id="wvm-D6-Qy4"/>
                                             <constraint firstAttribute="trailing" secondItem="lWD-OY-AOY" secondAttribute="trailing" constant="8" id="xi2-D5-76N"/>
@@ -253,11 +276,15 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="armWorkout" destination="WZl-rn-dhD" id="VZ8-SY-DNP"/>
                         <outlet property="contentView" destination="iBT-gu-2TF" id="tN2-FP-4Gf"/>
                         <outlet property="contentViewHeight" destination="kbV-gQ-F6O" id="6vP-NC-W21"/>
+                        <outlet property="fitTricks" destination="2Ce-yE-Qsc" id="wsa-3Q-bb7"/>
+                        <outlet property="legWorkout" destination="YtO-GZ-naA" id="UT4-XL-MDF"/>
                         <outlet property="previewImage" destination="DCd-ji-fIB" id="flW-zr-wos"/>
                         <outlet property="progressView" destination="t4f-Ou-0BL" id="aaX-En-5qu"/>
                         <outlet property="scrollView" destination="90D-8G-MpK" id="ey9-yo-hcD"/>
+                        <outlet property="totalBodyWorkout" destination="aoh-wo-zF4" id="cx0-st-YJ8"/>
                         <outlet property="uploadingLabel" destination="EpI-FN-Qef" id="8As-sr-xsF"/>
                         <outlet property="workoutDescription" destination="MMG-sx-RqB" id="vGl-W1-ao5"/>
                         <outlet property="workoutLength" destination="VoF-4q-pO5" id="WfM-23-4pA"/>
@@ -354,5 +381,9 @@
     </scenes>
     <resources>
         <image name="downloadVideoImage" width="112" height="112"/>
+        <image name="fitTricks" width="36" height="52"/>
+        <image name="lowerBodyWorkout" width="112" height="38"/>
+        <image name="totalBodyWorkout" width="90" height="91"/>
+        <image name="upperBodyWorkout" width="80" height="98"/>
     </resources>
 </document>

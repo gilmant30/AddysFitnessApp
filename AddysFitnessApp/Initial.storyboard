@@ -34,14 +34,8 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="uya-WN-r96">
                                         <rect key="frame" x="58.5" y="0.0" width="100" height="125"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Snacks" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87y-xB-OhI">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="25"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="transparentApple" translatesAutoresizingMaskIntoConstraints="NO" id="9cx-Dd-sbm">
-                                                <rect key="frame" x="0.0" y="25" width="100" height="100"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SnackButton" translatesAutoresizingMaskIntoConstraints="NO" id="9cx-Dd-sbm">
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="125"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="100" id="8lW-l5-u0k"/>
                                                     <constraint firstAttribute="width" constant="100" id="Wdx-jc-ViE"/>
@@ -56,14 +50,8 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bMz-We-Eui">
                                         <rect key="frame" x="216.5" y="0.0" width="100" height="125"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workouts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aI0-8Y-bla">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="25"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="transparentDumbell" translatesAutoresizingMaskIntoConstraints="NO" id="2kv-8Q-Hkf">
-                                                <rect key="frame" x="0.0" y="25" width="100" height="100"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="workoutButton" translatesAutoresizingMaskIntoConstraints="NO" id="2kv-8Q-Hkf">
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="125"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="9dX-gy-Epc"/>
@@ -135,8 +123,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="homeImage" width="441" height="324"/>
-        <image name="transparentApple" width="80" height="98"/>
-        <image name="transparentDumbell" width="112" height="38"/>
+        <image name="SnackButton" width="64" height="64"/>
+        <image name="homeImage" width="374" height="386"/>
+        <image name="workoutButton" width="64" height="64"/>
     </resources>
 </document>

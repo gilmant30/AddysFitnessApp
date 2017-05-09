@@ -11,22 +11,44 @@ import UIKit
 import AWSMobileHubHelper
 import AWSCognitoIdentityProvider
 import AWSCognitoUserPoolsSignIn
+import os.log
 
-class UserPoolsSignUpViewController: UIViewController {
+class UserPoolsSignUpViewController: UIViewController, UITextFieldDelegate {
     //MARK: Properties
     
     var pool: AWSCognitoIdentityUserPool?
     var sentTo: String?
+    var activeField: UITextField?
+    
+    let myActivityIndicator = UIActivityIndicatorView()
     
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var backgroundImage: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var contentView: UIView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.pool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
+        backgroundImage.addBlurEffect()
+        
+        username.delegate = self
+        password.delegate = self
+        phone.delegate = self
+        email.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        myActivityIndicator.center = self.view.center
+        myActivityIndicator.hidesWhenStopped = true
+        myActivityIndicator.activityIndicatorViewStyle = .gray
+        self.view.addSubview(myActivityIndicator)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -67,7 +89,7 @@ class UserPoolsSignUpViewController: UIViewController {
             email?.value = emailValue
             attributes.append(email!)
         }
-        
+        self.myActivityIndicator.startAnimating()
         //sign up the user
         self.pool?.signUp(userNameValue, password: passwordValue, userAttributes: attributes, validationData: nil).continueWith {[weak self] (task: AWSTask<AWSCognitoIdentityUserPoolSignUpResponse>) -> AnyObject? in
             guard let strongSelf = self else { return nil }
@@ -80,6 +102,7 @@ class UserPoolsSignUpViewController: UIViewController {
                         (result : UIAlertAction) -> Void in
                         print("You pressed OK")
                     }
+                    strongSelf.myActivityIndicator.stopAnimating()
                     alertController.addAction(okAction)
                     self?.present(alertController, animated: true, completion: nil)
                 }
@@ -97,6 +120,7 @@ class UserPoolsSignUpViewController: UIViewController {
                             (result : UIAlertAction) -> Void in
                             print("You pressed OK")
                         }
+                        strongSelf.myActivityIndicator.stopAnimating()
                         alertController.addAction(okAction)
                         self?.present(alertController, animated: true, completion: nil)
                         strongSelf.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -112,4 +136,22 @@ class UserPoolsSignUpViewController: UIViewController {
     @IBAction func onCancel(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
+    
+    // MARK: - Keyboard
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        os_log("Text field did end editing", log: OSLog.default, type: .debug)
+        self.activeField = nil
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        os_log("Text field is being edited", log: OSLog.default, type: .debug)
+        self.activeField = textField
+    }
+
 }

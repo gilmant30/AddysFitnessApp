@@ -31,6 +31,8 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     var selected: String!
     var loadedDetails: Bool = false
     var searchController: UISearchController!
+    var workoutTypes: [UIImage] = []
+
     
     fileprivate var manager: AWSUserFileManager!
     fileprivate var identityManager: AWSIdentityManager!
@@ -41,6 +43,8 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     fileprivate var refresh: Bool!
     fileprivate var didLoadAllVideos: Bool!
     
+    let myActivityIndicator = UIActivityIndicatorView()
+    
     
     // MARK:- View lifecycle
     
@@ -50,12 +54,13 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
         configureSearchController()
+        self.tableView.estimatedSectionHeaderHeight = 150
         
         
         // Sets up the UIs.
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
-        navigationItem.title = "MVPFit"
-        
+        navigationItem.title = "MVPFit Workouts"
+        setHeaderImages()
         // Sets up the date formatter.
         dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -96,11 +101,30 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = imageView.bounds
         imageView.addSubview(blurView)
+        
+        myActivityIndicator.center = self.view.center
+        myActivityIndicator.hidesWhenStopped = true
+        myActivityIndicator.activityIndicatorViewStyle = .gray
+        self.view.addSubview(myActivityIndicator)
+        myActivityIndicator.startAnimating()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         searchController.dismiss(animated: false, completion: nil)
+    }
+    
+    func setHeaderImages() {
+        let upperBody = UIImage(named: "upperBodyWorkout")!
+        let lowerBody = UIImage(named: "lowerBodyWorkout")!
+        let totalBody = UIImage(named: "totalBodyWorkout")!
+        let fitTricks = UIImage(named: "fitTricks")!
+        
+        workoutTypes.append(upperBody)
+        workoutTypes.append(lowerBody)
+        workoutTypes.append(totalBody)
+        workoutTypes.append(fitTricks)
+        
     }
     
     func checkIfAdmin() {
@@ -215,8 +239,10 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
                 self.showSimpleAlertWithTitle("We're Sorry!", message: "Videos are being created for this category still.", cancelButtonTitle: "OK")
             }
             else {
+                print("items count - \(response!.items.count)")
                 DispatchQueue.main.async {
                     self.loadMoreContents()
+                    self.myActivityIndicator.stopAnimating()
                     self.refresh = false
                 }
                 DispatchQueue.main.async {
@@ -243,6 +269,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
             workoutVid.name = item._workoutName
             workoutVid.description = item._videoDescription
             workoutVid.length = item._videoLength
+            workoutVid.workoutType = item._workoutType
             if let awsContents = self.contents {
                 if let i = awsContents.index(where: { $0.key == key }) {
                     workoutVid.content = awsContents[i]
@@ -262,10 +289,10 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         
-        queryExpression.indexName = "workoutTypeIndex"
-        queryExpression.keyConditionExpression = "#workoutType = :workoutType"
-        queryExpression.expressionAttributeNames = ["#workoutType": "WorkoutType",]
-        queryExpression.expressionAttributeValues = [":workoutType": "workoutVideo",]
+        queryExpression.indexName = "workoutIndex"
+        queryExpression.keyConditionExpression = "#workoutIndex = :workoutIndex"
+        queryExpression.expressionAttributeNames = ["#workoutIndex": "workoutIndex",]
+        queryExpression.expressionAttributeValues = [":workoutIndex": "workout",]
         
         objectMapper.query(Workouts.self, expression: queryExpression) { (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
@@ -274,76 +301,6 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         }
     }
     
-    
-    // MARK:- Content user action methods
-    
-    fileprivate func showActionOptionsForContent(_ rect: CGRect, content: AWSContent) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        if alertController.popoverPresentationController != nil {
-            alertController.popoverPresentationController?.sourceView = self.view
-            alertController.popoverPresentationController?.sourceRect = CGRect(x: rect.midX, y: rect.midY, width: 1.0, height: 1.0)
-        }
-        if content.isCached {
-            let openAction = UIAlertAction(title: "Open", style: .default, handler: {(action: UIAlertAction) -> Void in
-                DispatchQueue.main.async {
-                    self.openContent(content)
-                }
-            })
-            alertController.addAction(openAction)
-        }
-        
-        // Allow opening of remote files natively or in browser based on their type.
-        let openRemoteAction = UIAlertAction(title: "Open Remote", style: .default, handler: {[unowned self](action: UIAlertAction) -> Void in
-            self.openRemoteContent(content)
-            
-        })
-        alertController.addAction(openRemoteAction)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    fileprivate func openContent(_ content: AWSContent) {
-        if content.isAudioVideo() { // Video and sound files
-            let directories: [AnyObject] = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [AnyObject]
-            let cacheDirectoryPath = directories.first as! String
-            
-            let movieURL: URL = URL(fileURLWithPath: "\(cacheDirectoryPath)/\(content.key.getLastPathComponent())")
-            
-            try? content.cachedData.write(to: movieURL, options: [.atomic])
-            
-            let player = AVPlayer(url: movieURL)
-            let playerViewController = AVPlayerViewController()
-            playerViewController.player = player
-            self.present(playerViewController, animated: true) {
-                playerViewController.player!.play()
-            }
-        } else {
-            showSimpleAlertWithTitle("Sorry!", message: "We can only open video, and sound files.", cancelButtonTitle: "OK")
-        }
-    }
-    
-    fileprivate func openRemoteContent(_ content: AWSContent) {
-        content.getRemoteFileURL {[weak self] (url: URL?, error: Error?) in
-            guard let strongSelf = self else { return }
-            guard let url = url else {
-                print("Error getting URL for file. \(String(describing: error))")
-                return
-            }
-            if content.isAudioVideo() { // Open Audio and Video files natively in app.
-                let player = AVPlayer(url: url)
-                let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
-                strongSelf.present(playerViewController, animated: true) {
-                    playerViewController.player!.play()
-                }
-            } else { // Open other file types like PDF in web browser.
-                
-            }
-        }
-    }
     
     // MARK:- Content uploads
     
@@ -354,7 +311,44 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         present(imagePickerController, animated: true, completion: nil)
     }
     
+    func valueChanged(segmentedControl: UISegmentedControl) {
+        if(segmentedControl.selectedSegmentIndex == 0){
+            self.workoutsSearchResults = workouts?.filter {
+                $0.workoutType == "upperBodyWorkout"
+            }
+        } else if(segmentedControl.selectedSegmentIndex == 1){
+            self.workoutsSearchResults = workouts?.filter {
+                $0.workoutType == "lowerBodyWorkout"
+            }
+        } else if(segmentedControl.selectedSegmentIndex == 2){
+            self.workoutsSearchResults = workouts?.filter {
+                $0.workoutType == "totalBodyWorkout"
+            }
+        } else if(segmentedControl.selectedSegmentIndex == 3){
+            self.workoutsSearchResults = workouts?.filter {
+                $0.workoutType == "fitTricks"
+            }
+        } else {
+            self.workoutsSearchResults = workouts
+        }
+        self.updateUserInterface()
+    }
+    
     // MARK: - Table view data source
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let control = UISegmentedControl(items: self.workoutTypes)
+        control.frame.size.height = 150
+        control.addTarget(self, action: #selector(self.valueChanged), for: UIControlEvents.valueChanged)
+        if(section == 0){
+            return control;
+        }
+        return nil;
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 150.0
+    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1

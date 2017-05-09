@@ -9,8 +9,9 @@
 import UIKit
 import AWSMobileHubHelper
 import AWSCognitoIdentityProvider
+import os.log
 
-class SignInViewController: UIViewController {
+class SignInViewController: UIViewController, UITextFieldDelegate {
 
     //MARK: - Properties
     @IBOutlet weak var customEmailField: UITextField!
@@ -21,19 +22,29 @@ class SignInViewController: UIViewController {
    
     @IBOutlet weak var customForgotPasswordButton: UIButton!
     
+    @IBOutlet weak var backgroundImage: UIImageView!
     
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var customSignInImage: UIImageView!
     
+    @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var scrollView: UIScrollView!
     let signInImage = UIImage(named: "SignIn")
+    let myActivityIndicator = UIActivityIndicatorView()
     
     var didSignInObserver: AnyObject!
     var passwordAuthenticationCompletion: AWSTaskCompletionSource<AnyObject>?
+    var activeField: UITextField?
     
     // MARK: - View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Sign In Loading.")
+        backgroundImage.addBlurEffect()
+        let screenSize = UIScreen.main.bounds
+        
+        contentViewHeight.constant = screenSize.height
         
         // Custom UI Setup
         customSignInButton.addTarget(self, action: #selector(self.handleCustomSignIn), for: .touchUpInside)
@@ -44,6 +55,14 @@ class SignInViewController: UIViewController {
         customPasswordField.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        myActivityIndicator.center = self.view.center
+        myActivityIndicator.hidesWhenStopped = true
+        myActivityIndicator.activityIndicatorViewStyle = .gray
+        self.view.addSubview(myActivityIndicator)
+        
+    }
+    
     func dimissController() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -51,13 +70,16 @@ class SignInViewController: UIViewController {
     // MARK: - Utility Methods
     
     func handleLoginWithSignInProvider(_ signInProvider: AWSSignInProvider) {
+        myActivityIndicator.startAnimating()
         AWSSignInManager.sharedInstance().login(signInProviderKey: signInProvider.identityProviderName, completionHandler: {(result: Any?, authState: AWSIdentityManagerAuthState, error: Error?) in
             print("result = \(String(describing: result)), error = \(String(describing: error))")
             // If no error reported by SignInProvider, discard the sign-in view controller.
             guard let _ = result else {
                 self.showErrorDialog(signInProvider.identityProviderName, withError: error! as NSError)
+                self.myActivityIndicator.stopAnimating()
                 return
             }
+            self.myActivityIndicator.stopAnimating()
             DispatchQueue.main.async(execute: {
                 self.presentingViewController?.dismiss(animated: true, completion: nil)
             })
@@ -71,12 +93,22 @@ class SignInViewController: UIViewController {
         alertController.addAction(doneAction)
         present(alertController, animated: true, completion: nil)
     }
-
-}
-
-extension SignInViewController: UITextFieldDelegate {
+    
+    // MARK: - Keyboard
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        os_log("Text field did end editing", log: OSLog.default, type: .debug)
+        self.activeField = nil
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        os_log("Text field is being edited", log: OSLog.default, type: .debug)
+        self.activeField = textField
+    }
+
 }

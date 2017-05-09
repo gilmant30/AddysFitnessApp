@@ -110,14 +110,10 @@ class RecipeDetailViewController: UIViewController {
     }
     
     func uploadNewRecipe() {
-        os_log("unwinding from upload", log: OSLog.default, type: .debug)
-        performSegue(withIdentifier: "unwindFromDetailToUpload", sender: self)
-        /*
-        let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).png"
-        data = UIImagePNGRepresentation(recipe.image!)!
+        let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).jpg"
+        data = UIImageJPEGRepresentation(recipe.image!, 0.25)
         let localContent = manager.localContent(with: data, key: key)
         uploadLocalContent(localContent)
-         */
     }
 }
 
