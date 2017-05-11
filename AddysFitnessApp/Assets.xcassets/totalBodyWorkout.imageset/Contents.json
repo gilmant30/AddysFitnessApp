@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "playButton.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "totalWorkout.png",
       "scale" : "2x"
     },
     {

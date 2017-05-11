@@ -86,8 +86,9 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         myActivityIndicator.hidesWhenStopped = true
         myActivityIndicator.activityIndicatorViewStyle = .gray
         self.view.addSubview(myActivityIndicator)
-        myActivityIndicator.startAnimating()
-        
+        if (!recipesLoaded) {
+            myActivityIndicator.startAnimating()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -122,9 +123,10 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         refresh = true
         DispatchQueue.main.sync {
             self.getRecipes()
+            refreshControl.endRefreshing()
         }
         
-        refreshControl.endRefreshing()
+        
     }
     
     fileprivate func updateUserInterface() {

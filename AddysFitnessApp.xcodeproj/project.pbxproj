@@ -49,6 +49,7 @@
 		B9F74AFF1EBF63560062F1E4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F74AFE1EBF63560062F1E4 /* TextField.swift */; };
 		B9F74B031EC133E90062F1E4 /* UploadWorkoutsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F74B021EC133E90062F1E4 /* UploadWorkoutsViewControllerExtension.swift */; };
 		B9F74B051EC13C280062F1E4 /* Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F74B041EC13C280062F1E4 /* Workouts.swift */; };
+		B9F74B0D1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F74B0C1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift */; };
 		B9FB4FA41E6E5F2F006095DF /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F9B1E6E5F2F006095DF /* AWSS3.framework */; };
 		B9FB4FA91E6E5F38006095DF /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */; };
 		B9FB4FAA1E6E5F38006095DF /* AWSCognitoIdentityProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -148,6 +149,7 @@
 		B9F74AFE1EBF63560062F1E4 /* TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextField.swift; path = AddysFitnessApp/TextField.swift; sourceTree = SOURCE_ROOT; };
 		B9F74B021EC133E90062F1E4 /* UploadWorkoutsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadWorkoutsViewControllerExtension.swift; sourceTree = "<group>"; };
 		B9F74B041EC13C280062F1E4 /* Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Workouts.swift; path = "../../../../../../../Downloads/AddysFitnessApp-integration-lib-aws-my-sample-app-ios-swift (2)/AmazonAws/Models/NoSQL/Workouts.swift"; sourceTree = "<group>"; };
+		B9F74B0C1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutsViewControllerExtension.swift; sourceTree = "<group>"; };
 		B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
 		B9FB4F991E6E5F2F006095DF /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		B9FB4F9A1E6E5F2F006095DF /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSDynamoDB.framework; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				B91ADF881E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift */,
 				B9F74B021EC133E90062F1E4 /* UploadWorkoutsViewControllerExtension.swift */,
 				B903FF011E82150E002FA684 /* WorkoutsViewController.swift */,
+				B9F74B0C1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift */,
 				B9255B301E92FB0F000EF86D /* WorkoutVids.swift */,
 				B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */,
 			);
@@ -554,6 +557,7 @@
 				B96E1F7D1E9D08D1000AE4A1 /* FoodViewController.swift in Sources */,
 				B96E1F7F1E9D095B000AE4A1 /* UploadFoodViewController.swift in Sources */,
 				B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */,
+				B9F74B0D1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift in Sources */,
 				B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */,
 				B9F74B051EC13C280062F1E4 /* Workouts.swift in Sources */,
 				B9FB4FCD1E6E613E006095DF /* SignInViewController.swift in Sources */,

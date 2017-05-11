@@ -29,8 +29,7 @@ class UserPoolSignUpConfirmationViewController: UIViewController, UITextFieldDel
     override func viewDidLoad() {
         super.viewDidLoad()
         self.username.text = self.user!.username
-        self.sendTo.text = "\(self.sendTo)"
-        backgroundImage.addBlurEffect()
+        self.sendTo.text = "\(self.sendTo!)"
         username.delegate = self
         confirmationCode.delegate = self
     }
@@ -40,6 +39,7 @@ class UserPoolSignUpConfirmationViewController: UIViewController, UITextFieldDel
         myActivityIndicator.hidesWhenStopped = true
         myActivityIndicator.activityIndicatorViewStyle = .gray
         self.view.addSubview(myActivityIndicator)
+        backgroundImage.addBlurEffect()
         
     }
     

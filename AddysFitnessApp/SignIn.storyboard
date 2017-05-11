@@ -27,11 +27,11 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3YN-BY-HDA" userLabel="Content View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="700"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage3" translatesAutoresizingMaskIntoConstraints="NO" id="XVF-ki-MwB">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurredHomeScreen" translatesAutoresizingMaskIntoConstraints="NO" id="XVF-ki-MwB">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="700"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </imageView>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gAR-wW-8iZ">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gAR-wW-8iZ">
                                                 <rect key="frame" x="16" y="157" width="382" height="30"/>
                                                 <color key="tintColor" red="1" green="0.33633700427329583" blue="0.21142515557165986" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
@@ -60,7 +60,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hPy-h4-xru">
-                                                <rect key="frame" x="8" y="645" width="398" height="30"/>
+                                                <rect key="frame" x="8" y="620" width="398" height="30"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ehn-pR-pNZ">
                                                         <rect key="frame" x="0.0" y="0.0" width="130" height="30"/>
@@ -96,10 +96,10 @@
                                                 </constraints>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lz6-mQ-mza">
-                                                <rect key="frame" x="182" y="585" width="50" height="30"/>
+                                                <rect key="frame" x="170" y="560" width="75" height="30"/>
                                                 <color key="backgroundColor" red="1" green="0.21953786189115754" blue="0.19093317345301419" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="50" id="Rt1-eY-Mja"/>
+                                                    <constraint firstAttribute="width" constant="75" id="Rt1-eY-Mja"/>
                                                 </constraints>
                                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Sign In"/>
@@ -122,7 +122,7 @@
                                             <constraint firstAttribute="trailing" secondItem="gAR-wW-8iZ" secondAttribute="trailing" constant="16" id="T96-WR-wzb"/>
                                             <constraint firstItem="XVF-ki-MwB" firstAttribute="leading" secondItem="3YN-BY-HDA" secondAttribute="leading" id="UgF-si-7zz"/>
                                             <constraint firstItem="DxF-JT-hr0" firstAttribute="centerX" secondItem="3YN-BY-HDA" secondAttribute="centerX" id="Wzh-hq-hZ8"/>
-                                            <constraint firstAttribute="bottom" secondItem="hPy-h4-xru" secondAttribute="bottom" constant="25" id="gYA-NO-JnY"/>
+                                            <constraint firstAttribute="bottom" secondItem="hPy-h4-xru" secondAttribute="bottom" constant="50" id="gYA-NO-JnY"/>
                                             <constraint firstAttribute="trailing" secondItem="K6Y-lU-cfc" secondAttribute="trailing" constant="16" id="h12-DY-zuY"/>
                                             <constraint firstItem="gAR-wW-8iZ" firstAttribute="top" secondItem="DxF-JT-hr0" secondAttribute="bottom" constant="100" id="l6J-Wx-QWs"/>
                                             <constraint firstItem="lz6-mQ-mza" firstAttribute="centerX" secondItem="3YN-BY-HDA" secondAttribute="centerX" id="nXW-fY-b6R"/>
@@ -170,6 +170,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="backgroundImage3" width="318" height="385"/>
+        <image name="blurredHomeScreen" width="749" height="773"/>
     </resources>
 </document>

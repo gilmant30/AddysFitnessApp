@@ -18,20 +18,23 @@ import os.log
 
 import ObjectiveC
 
+var workouts = [WorkoutVids]()
+var workoutsLoaded = false
 let WorkoutVideosDirectoryName = "public/workoutVideos/"
 private var cellAssociationKey: UInt8 = 0
+
 
 class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     var prefix: String!
     
     var vidContent: [AWSContent]?
     var vidDetails: [Workouts] = [Workouts]()
-    var workouts: [WorkoutVids]?
     var workoutsSearchResults: [WorkoutVids]?
     var selected: String!
     var loadedDetails: Bool = false
     var searchController: UISearchController!
     var workoutTypes: [UIImage] = []
+    var refresh = false
 
     
     fileprivate var manager: AWSUserFileManager!
@@ -40,8 +43,13 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     fileprivate var contents: [AWSContent]?
     fileprivate var dateFormatter: DateFormatter!
     fileprivate var marker: String?
-    fileprivate var refresh: Bool!
     fileprivate var didLoadAllVideos: Bool!
+    let screenSize = UIScreen.main.bounds
+    let upper = UIImageView()
+    let lower = UIImageView()
+    let total = UIImageView()
+    let fit = UIImageView()
+    
     
     let myActivityIndicator = UIActivityIndicatorView()
     
@@ -49,18 +57,19 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     // MARK:- View lifecycle
     
     override func viewDidLoad() {
+        print("workouts count is - \(workouts.count)")
         super.viewDidLoad()
         self.tableView.delegate = self
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
         configureSearchController()
-        self.tableView.estimatedSectionHeaderHeight = 150
+        self.tableView.estimatedSectionHeaderHeight = 75
+        self.tableView.sectionHeaderHeight = 75
         
         
         // Sets up the UIs.
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
+        checkIfAdmin()
         navigationItem.title = "MVPFit Workouts"
-        setHeaderImages()
         // Sets up the date formatter.
         dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -86,27 +95,31 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         super.viewWillAppear(animated)
         
         // Add a background view to the table view
-        let backgroundImage = UIImage(named: "backgroundImage3")
-        let imageView = UIImageView(image: backgroundImage)
-        self.tableView.backgroundView = imageView
+        //let backgroundImage = UIImage(named: "backgroundImage3")
+        //let imageView = UIImageView(image: backgroundImage)
+        //self.tableView.backgroundView = imageView
+        self.tableView.backgroundColor = UIColor.lightGray
         
          // no lines where there aren't cells
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
         // center and scale background image
-        imageView.contentMode = .scaleToFill
+        //imageView.contentMode = .scaleToFill
         
         // blur it
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = imageView.bounds
-        imageView.addSubview(blurView)
+        //let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        //let blurView = UIVisualEffectView(effect: blurEffect)
+        //blurView.frame = imageView.bounds
+        //imageView.addSubview(blurView)
         
         myActivityIndicator.center = self.view.center
         myActivityIndicator.hidesWhenStopped = true
         myActivityIndicator.activityIndicatorViewStyle = .gray
         self.view.addSubview(myActivityIndicator)
-        myActivityIndicator.startAnimating()
+        
+        if(!workoutsLoaded) {
+            myActivityIndicator.startAnimating()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -114,27 +127,16 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         searchController.dismiss(animated: false, completion: nil)
     }
     
-    func setHeaderImages() {
-        let upperBody = UIImage(named: "upperBodyWorkout")!
-        let lowerBody = UIImage(named: "lowerBodyWorkout")!
-        let totalBody = UIImage(named: "totalBodyWorkout")!
-        let fitTricks = UIImage(named: "fitTricks")!
-        
-        workoutTypes.append(upperBody)
-        workoutTypes.append(lowerBody)
-        workoutTypes.append(totalBody)
-        workoutTypes.append(fitTricks)
-        
-    }
-    
     func checkIfAdmin() {
-        if let username = identityManager.identityId {
+        if let username = identityManager.identityProfile?.userName {
+            print("Username is - \(username)")
             if admin.contains(username) {
+                os_log("is an admin", log: OSLog.default, type: .debug)
                 navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
             }
         } else {
-            //just for testing
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(WorkoutsViewController.showContentManagerActionOptions(_:)))
+            os_log("not an admin", log: OSLog.default, type: .debug)
+           
         }
     }
     
@@ -154,7 +156,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            workoutsSearchResults = workouts?.filter {
+            workoutsSearchResults = workouts.filter {
                 $0.name?.range(of: searchText, options: .caseInsensitive) != nil
             }
         } else {
@@ -174,7 +176,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         refreshControl.endRefreshing()
     }
     
-    fileprivate func updateUserInterface() {
+    func updateUserInterface() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -191,7 +193,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     fileprivate func addVideos() {
-        if let workouts = self.workouts, workouts.count > 0 {
+        if workouts.count > 0 {
             if let contents = self.contents, contents.count > 0 {
                 for workout in workouts {
                     let key = self.prefix + workout.name! + ".mp4"
@@ -219,6 +221,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
                 }
                 strongSelf.marker = nextMarker
                 strongSelf.addVideos()
+                strongSelf.myActivityIndicator.stopAnimating()
             }
             
             if strongSelf.loadedDetails {
@@ -242,7 +245,6 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
                 print("items count - \(response!.items.count)")
                 DispatchQueue.main.async {
                     self.loadMoreContents()
-                    self.myActivityIndicator.stopAnimating()
                     self.refresh = false
                 }
                 DispatchQueue.main.async {
@@ -253,9 +255,17 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
             self.updateUserInterface()
         }
         
-        os_log("loading videoDetails content", log: OSLog.default, type: .debug)
-        self.getVideoDetailsByType(completionHandler)
-        os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
+        if(!workoutsLoaded || refresh) {
+            os_log("loading videoDetails content", log: OSLog.default, type: .debug)
+            self.getVideoDetailsByType(completionHandler)
+            workoutsLoaded = true
+            os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
+        } else {
+            os_log("workouts already loaded", log: OSLog.default, type: .debug)
+            self.myActivityIndicator.stopAnimating()
+            self.workoutsSearchResults = workouts
+            updateUserInterface()
+        }
     }
     
     func formatVideoDetails(_ response: AWSDynamoDBPaginatedOutput?) {
@@ -277,7 +287,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
             }
             vidArray.append(workoutVid)
         }
-        self.workouts = vidArray
+        workouts = vidArray
         self.workoutsSearchResults = vidArray
         self.loadedDetails = true
         self.updateUserInterface()
@@ -311,43 +321,18 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         present(imagePickerController, animated: true, completion: nil)
     }
     
-    func valueChanged(segmentedControl: UISegmentedControl) {
-        if(segmentedControl.selectedSegmentIndex == 0){
-            self.workoutsSearchResults = workouts?.filter {
-                $0.workoutType == "upperBodyWorkout"
-            }
-        } else if(segmentedControl.selectedSegmentIndex == 1){
-            self.workoutsSearchResults = workouts?.filter {
-                $0.workoutType == "lowerBodyWorkout"
-            }
-        } else if(segmentedControl.selectedSegmentIndex == 2){
-            self.workoutsSearchResults = workouts?.filter {
-                $0.workoutType == "totalBodyWorkout"
-            }
-        } else if(segmentedControl.selectedSegmentIndex == 3){
-            self.workoutsSearchResults = workouts?.filter {
-                $0.workoutType == "fitTricks"
-            }
-        } else {
-            self.workoutsSearchResults = workouts
-        }
-        self.updateUserInterface()
-    }
-    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let control = UISegmentedControl(items: self.workoutTypes)
-        control.frame.size.height = 150
-        control.addTarget(self, action: #selector(self.valueChanged), for: UIControlEvents.valueChanged)
+        
         if(section == 0){
-            return control;
+            return createTableHeader()
         }
         return nil;
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 150.0
+        return 75
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

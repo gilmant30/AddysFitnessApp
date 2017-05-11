@@ -41,7 +41,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Sign In Loading.")
-        backgroundImage.addBlurEffect()
         let screenSize = UIScreen.main.bounds
         
         contentViewHeight.constant = screenSize.height

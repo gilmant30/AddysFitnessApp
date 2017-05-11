@@ -14,13 +14,13 @@
         <scene sceneID="Hac-i3-8QO">
             <objects>
                 <tableViewController storyboardIdentifier="WorkoutsView" title="Workouts View" id="RD0-nj-RWC" customClass="WorkoutsViewController" customModule="AddysFitnessApp" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="MVP-gI-4r9">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="MVP-gI-4r9">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="WorkoutVideoCell" rowHeight="110" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
-                                <rect key="frame" x="0.0" y="28" width="414" height="110"/>
+                                <rect key="frame" x="0.0" y="56" width="414" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vhh-iN-m73" id="Uq3-Ls-nuu">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="109"/>
@@ -382,8 +382,8 @@
     <resources>
         <image name="downloadVideoImage" width="112" height="112"/>
         <image name="fitTricks" width="36" height="52"/>
-        <image name="lowerBodyWorkout" width="112" height="38"/>
-        <image name="totalBodyWorkout" width="90" height="91"/>
-        <image name="upperBodyWorkout" width="80" height="98"/>
+        <image name="lowerBodyWorkout" width="300" height="319"/>
+        <image name="totalBodyWorkout" width="230" height="319"/>
+        <image name="upperBodyWorkout" width="424" height="197"/>
     </resources>
 </document>

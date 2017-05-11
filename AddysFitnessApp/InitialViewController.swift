@@ -10,7 +10,7 @@ import UIKit
 import AWSMobileHubHelper
 import os.log
 
-var admin = ["test123"]
+var admin = ["mvpfitadmin", "addysonwilgus15", "gilmant30"]
 
 class InitialViewController: UIViewController {
     
