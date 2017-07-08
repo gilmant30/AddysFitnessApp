@@ -36,8 +36,7 @@ extension RecipeDetailViewController {
         insertRecipe._createdDate = result
         insertRecipe._description = recipe.description
         insertRecipe._ingredients = convertIngredientsToMap()
-        insertRecipe._steps = convertArrayToSet()
-        
+        insertRecipe._listSteps = recipe.steps
         
         group.enter()
         
@@ -82,7 +81,7 @@ extension RecipeDetailViewController {
                         if errors != nil {
                             strongSelf.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
                         }
-                        strongSelf.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
+                        strongSelf.performSegue(withIdentifier: "unwindFromDetailToUpload", sender: self)
                     })
                 }
         })
@@ -96,6 +95,19 @@ extension RecipeDetailViewController {
         
         return dictionary
     }
+    
+    /*
+    func convertStepsToMap() -> [String:String] {
+        var dictionary: [String: String] = [:]
+        var stepNum = 0
+        for value in recipe.steps {
+            dictionary["\(stepNum)"] = value
+            stepNum += 1
+        }
+        
+        return dictionary
+    }
+    */
     
     func convertArrayToSet() -> Set<String> {
         var set: Set<String> = Set()

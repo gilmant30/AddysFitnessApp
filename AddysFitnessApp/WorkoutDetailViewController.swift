@@ -21,10 +21,13 @@ import ObjectiveC
 class WorkoutDetailViewController: UIViewController {
     
     @IBOutlet weak var videoPlayerView: UIView!
-    @IBOutlet weak var workoutDescription: UILabel!
     @IBOutlet weak var workoutTitle: UILabel!
     let screenSize = UIScreen.main.bounds
+    let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
     
+    @IBOutlet weak var workoutDescriptionText: UITextView!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
     var workout: WorkoutVids!
     var player: AVPlayer!
     var avpController: AVPlayerViewController!
@@ -32,7 +35,6 @@ class WorkoutDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.shouldRotate = true // or false to disable rotation
         
         videoPlayerView.frame = CGRect(x: 1, y: -20, width: screenSize.width - 2, height: screenSize.height/3 * 2)
@@ -47,14 +49,15 @@ class WorkoutDetailViewController: UIViewController {
             player.play()
         }
         
+        workoutDescriptionText.isEditable = false
+        workoutDescriptionText.text = workout.description
+        
         workoutTitle.text = workout.name
-        workoutDescription.numberOfLines = 0
-        workoutDescription.lineBreakMode = .byWordWrapping
-        workoutDescription.text = workout.description
+        
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
+    override func viewWillDisappear(_ animated: Bool) {
+        appDelegate.shouldRotate = false
     }
 }

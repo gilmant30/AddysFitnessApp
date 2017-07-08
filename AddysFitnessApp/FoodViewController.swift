@@ -33,6 +33,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     fileprivate var contents: [AWSContent]?
     fileprivate var didLoadAllImages: Bool!
     var refresh = false
+    fileprivate var identityManager: AWSIdentityManager!
     
     var searchController: UISearchController!
     let myActivityIndicator = UIActivityIndicatorView()
@@ -45,9 +46,9 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         self.tableView.delegate = self
         self.tableView.estimatedSectionHeaderHeight = 80
         manager = AWSUserFileManager.defaultUserFileManager()
+        identityManager = AWSIdentityManager.default()
         
         // Sets up the UIs.
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(FoodViewController.addRecipe(_:)))
         navigationItem.title = "MVPFit"
         
         if let prefix = prefix {
@@ -55,6 +56,8 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         } else {
             self.prefix = "\(FoodImagesDirectoryName)"
         }
+        
+        checkIfAdmin()
         
         getRecipes()
         configureSearchController()
@@ -93,6 +96,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        myActivityIndicator.stopAnimating()
         searchController.dismiss(animated: false, completion: nil)
     }
     
@@ -108,6 +112,19 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         tableView.tableHeaderView = searchController.searchBar
     }
     
+    func checkIfAdmin() {
+        if let username = identityManager.identityProfile?.userName {
+            print("Username is - \(username)")
+            if admin.contains(username) {
+                os_log("is an admin", log: OSLog.default, type: .debug)
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(FoodViewController.addRecipe(_:)))
+            }
+        } else {
+            os_log("not an admin", log: OSLog.default, type: .debug)
+            
+        }
+    }
+    
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             self.filteredRecipes = recipes.filter {
@@ -121,12 +138,8 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     func handleRefresh(_ refreshControl: UIRefreshControl) {
         os_log("Handling Refresh", log: OSLog.default, type: .debug)
         refresh = true
-        DispatchQueue.main.sync {
-            self.getRecipes()
-            refreshControl.endRefreshing()
-        }
-        
-        
+        self.getRecipes()
+        refreshControl.endRefreshing()
     }
     
     fileprivate func updateUserInterface() {
@@ -137,8 +150,9 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     func addRecipe(_ sender: AnyObject) {
         os_log("Sending to add Food storyboard", log: OSLog.default, type: .debug)
+        myActivityIndicator.startAnimating()
         let imagePickerController: UIImagePickerController = UIImagePickerController()
-        imagePickerController.mediaTypes =  [kUTTypeImage as String]
+        imagePickerController.mediaTypes =  [kUTTypeImage as String, kUTTypeMovie as String]
         imagePickerController.delegate = self
         present(imagePickerController, animated: true, completion: nil)
     }
@@ -149,7 +163,11 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             if let contents = self.contents, contents.count > 0 {
                 for recipe in recipes {
                     let key = FoodImagesDirectoryName + recipe.name + ".jpg"
-                    if let i = contents.index(where: { $0.key == key }) {                        recipe.content = contents[i]
+                    let keyVid = FoodImagesDirectoryName + recipe.name + ".mp4"
+                    if let i = contents.index(where: { $0.key == key }) {
+                        recipe.content = contents[i]
+                    } else if let i = contents.index(where: { $0.key == keyVid }) {
+                        recipe.content = contents[i]
                     }
                 }
             }
@@ -200,6 +218,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             else {
                 DispatchQueue.main.async {
                     self.loadImages()
+                    recipesLoaded = true
                 }
                 DispatchQueue.main.async {
                    self.convertToRecipes(response)
@@ -211,7 +230,6 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         
         if(!recipesLoaded || refresh) {
             os_log("loading recipes content", log: OSLog.default, type: .debug)
-            recipesLoaded = true
             self.getRecipesWithCompletionHandler(completionHandler)
             os_log("after loading recipes content", log: OSLog.default, type: .debug)
         } else {
@@ -250,7 +268,12 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             tempRecipe.name = item._foodName!
             tempRecipe.description = item._description!
             tempRecipe.category = item._category!
-            tempRecipe.steps = formatSteps(item._steps!)
+            if let steps = item._listSteps {
+                tempRecipe.steps = steps
+            } else if let steps2 = item._steps {
+                tempRecipe.steps = Array(steps2)
+            }
+            
             tempRecipe.ingredients = formatIngredients(item._ingredients!)
             recipeArr.append(tempRecipe)
         }
@@ -343,12 +366,15 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             cell.cellDescription.numberOfLines = 0
             cell.cellName.text = recipe.name
             cell.cellDescription.text = recipe.description
+            cell.playButtonOverlay.isHidden = true
+            
             if let url = recipe.url {
+                cell.playButtonOverlay.isHidden = !recipe.isVideo
                 if let image = recipe.image {
                     cell.cellImage.image = image
                 } else {
                     DispatchQueue.global(qos: .default).async {
-                        os_log("recipe url is set", log: OSLog.default, type: .debug)
+                        //os_log("recipe url is set", log: OSLog.default, type: .debug)
                         let imageData = NSData(contentsOf: url)
                         if let imageDat = imageData {
                             let image = UIImage(data: imageDat as Data)
@@ -393,8 +419,18 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
             let destination = segue.destination as? RecipeDetailViewController,
             let recipeIndex = tableView.indexPathForSelectedRow?.row
         {
-            destination.recipe = filteredRecipes?[recipeIndex]
+            let clickedRecipe: Recipe = (filteredRecipes?[recipeIndex])!
+            destination.recipe = clickedRecipe
+            if clickedRecipe.content.key.contains(".mp4") {
+                destination.isVideo = true
+            }
         }
+    }
+    
+    @IBAction func unwindFromUploadToMain(segue: UIStoryboardSegue) {
+        os_log("Unwinding from upload to main", log: OSLog.default, type: .debug)
+        recipesLoaded = false
+        getRecipes()
     }
 }
 
@@ -402,6 +438,7 @@ class FoodCell: UITableViewCell {
     @IBOutlet weak var cellName: UILabel!
     @IBOutlet weak var cellDescription: UILabel!
     @IBOutlet weak var cellImage: UIImageView!
+    @IBOutlet weak var playButtonOverlay: UIImageView!
 }
 
 // MARK: - Utility
@@ -429,7 +466,17 @@ extension FoodViewController: UIImagePickerControllerDelegate, UINavigationContr
             let storyboard = UIStoryboard(name: "Food", bundle: nil)
             let uploadFoodViewController = storyboard.instantiateViewController(withIdentifier: "UploadFood") as! UploadFoodViewController
             uploadFoodViewController.image = image
+            uploadFoodViewController.isVideo = false
             uploadFoodViewController.manager = self.manager
+            self.navigationController!.pushViewController(uploadFoodViewController, animated: true)
+        } else if mediaType.isEqual(to: kUTTypeMovie as String) {
+            let videoURL: URL = info[UIImagePickerControllerMediaURL] as! URL
+            let storyboard = UIStoryboard(name: "Food", bundle: nil)
+            let uploadFoodViewController = storyboard.instantiateViewController(withIdentifier: "UploadFood") as! UploadFoodViewController
+            uploadFoodViewController.manager = self.manager
+            uploadFoodViewController.data = try! Data(contentsOf: videoURL)
+            uploadFoodViewController.url = videoURL
+            uploadFoodViewController.isVideo = true
             self.navigationController!.pushViewController(uploadFoodViewController, animated: true)
         }
         

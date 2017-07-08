@@ -93,24 +93,10 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Add a background view to the table view
-        //let backgroundImage = UIImage(named: "backgroundImage3")
-        //let imageView = UIImageView(image: backgroundImage)
-        //self.tableView.backgroundView = imageView
-        self.tableView.backgroundColor = UIColor.lightGray
+        self.tableView.backgroundColor = UIColor.white
         
          // no lines where there aren't cells
         tableView.tableFooterView = UIView(frame: CGRect.zero)
-        
-        // center and scale background image
-        //imageView.contentMode = .scaleToFill
-        
-        // blur it
-        //let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        //let blurView = UIVisualEffectView(effect: blurEffect)
-        //blurView.frame = imageView.bounds
-        //imageView.addSubview(blurView)
         
         myActivityIndicator.center = self.view.center
         myActivityIndicator.hidesWhenStopped = true
@@ -184,6 +170,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     
     // MARK:- Content Manager user action methods
     func showContentManagerActionOptions(_ sender: AnyObject) {
+        self.myActivityIndicator.startAnimating()
         self.showImagePicker()
     }
     
@@ -240,12 +227,14 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
             }
             else if response!.items.count == 0 {
                 self.showSimpleAlertWithTitle("We're Sorry!", message: "Videos are being created for this category still.", cancelButtonTitle: "OK")
+                self.myActivityIndicator.stopAnimating()
             }
             else {
                 print("items count - \(response!.items.count)")
                 DispatchQueue.main.async {
                     self.loadMoreContents()
                     self.refresh = false
+                    workoutsLoaded = true
                 }
                 DispatchQueue.main.async {
                     self.formatVideoDetails(response)
@@ -258,7 +247,6 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         if(!workoutsLoaded || refresh) {
             os_log("loading videoDetails content", log: OSLog.default, type: .debug)
             self.getVideoDetailsByType(completionHandler)
-            workoutsLoaded = true
             os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
         } else {
             os_log("workouts already loaded", log: OSLog.default, type: .debug)
@@ -402,6 +390,7 @@ extension WorkoutsViewController: UIImagePickerControllerDelegate, UINavigationC
             uploadWorkoutsViewController.data = try! Data(contentsOf: videoURL)
             uploadWorkoutsViewController.url = videoURL
             uploadWorkoutsViewController.manager = self.manager
+            self.myActivityIndicator.stopAnimating()
             self.navigationController!.pushViewController(uploadWorkoutsViewController, animated: true)
             
             //askForFilename(try! Data(contentsOf: videoURL))

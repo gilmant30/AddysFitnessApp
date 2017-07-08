@@ -19,18 +19,23 @@ class UserPoolsSignUpViewController: UIViewController, UITextFieldDelegate {
     var pool: AWSCognitoIdentityUserPool?
     var sentTo: String?
     var activeField: UITextField?
+    let capitalLetterRegEx  = ".*[A-Z]+.*"
+    let lowerLetterRegEx = ".*[a-z]+.*"
+    let specialCharacterRegEx  = ".*[!&^%$#@()/.,?]+.*"
     
     let myActivityIndicator = UIActivityIndicatorView()
     
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
-    @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
     
+    @IBOutlet weak var lowerCaseLetter: UILabel!
+    @IBOutlet weak var symbolLetter: UILabel!
+    @IBOutlet weak var upperCaseLetter: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +44,9 @@ class UserPoolsSignUpViewController: UIViewController, UITextFieldDelegate {
         
         username.delegate = self
         password.delegate = self
-        phone.delegate = self
         email.delegate = self
+        password.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,13 +81,6 @@ class UserPoolsSignUpViewController: UIViewController, UITextFieldDelegate {
             }
         
         var attributes = [AWSCognitoIdentityUserAttributeType]()
-        
-        if let phoneValue = self.phone.text, !phoneValue.isEmpty {
-            let phone = AWSCognitoIdentityUserAttributeType()
-            phone?.name = "phone_number"
-            phone?.value = phoneValue
-            attributes.append(phone!)
-        }
         
         if let emailValue = self.email.text, !emailValue.isEmpty {
             let email = AWSCognitoIdentityUserAttributeType()
@@ -137,6 +136,35 @@ class UserPoolsSignUpViewController: UIViewController, UITextFieldDelegate {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
+    func textFieldDidChange(_ textField: UITextField) {
+        print("text field changed")
+        if let password = password.text {
+            let lower = NSPredicate(format:"SELF MATCHES %@", lowerLetterRegEx)
+            let upper = NSPredicate(format:"SELF MATCHES %@", capitalLetterRegEx)
+            if(lower.evaluate(with: password)) {
+                lowerCaseLetter.text = "o Lowercase Letter"
+                lowerCaseLetter.textColor = UIColor.green
+            } else {
+                lowerCaseLetter.text = "x Lowercase Letter"
+                lowerCaseLetter.textColor = UIColor.red
+                }
+            if(upper.evaluate(with: password)) {
+                upperCaseLetter.text = "o Uppercase Letter"
+                upperCaseLetter.textColor = UIColor.green
+            } else {
+                upperCaseLetter.text = "x Uppercase Letter"
+                upperCaseLetter.textColor = UIColor.red
+            }
+            if(password.characters.count >= 6) {
+                symbolLetter.text = "o At least 6 characters long"
+                symbolLetter.textColor = UIColor.green
+            } else {
+                symbolLetter.text = "o At least 6 characters long"
+                symbolLetter.textColor = UIColor.red
+            }
+        }
+    }
+    
     // MARK: - Keyboard
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -145,12 +173,10 @@ class UserPoolsSignUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        os_log("Text field did end editing", log: OSLog.default, type: .debug)
         self.activeField = nil
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        os_log("Text field is being edited", log: OSLog.default, type: .debug)
         self.activeField = textField
     }
 

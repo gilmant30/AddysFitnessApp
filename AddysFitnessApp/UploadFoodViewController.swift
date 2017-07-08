@@ -22,6 +22,9 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
     var activeField: UITextField?
     var animateContenetView = true
     var image: UIImage?
+    var data:Data!
+    var url:URL!
+    var isVideo: Bool = false
     
     @IBOutlet weak var foodView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -43,14 +46,22 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
     @IBOutlet weak var snackLabel: UILabel!
     @IBOutlet weak var backgroundImage: UIImageView!
     
+    @IBOutlet weak var playButtonOverlay: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadFoodViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
-        if let foodImage = image {
-            foodView.image = foodImage
+        if isVideo {
+            setVideoImage()
+        } else {
+            if let foodImage = image {
+                foodView.image = foodImage
+                playButtonOverlay.isHidden = true
+            }
         }
+    
+        contentViewHeight.constant = 700
         
         setupCategories()
         
@@ -87,12 +98,19 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
         } else if (segue.identifier == "steps") {
             os_log("Heading to add steps view", log: OSLog.default, type: .debug)
             let stepsViewController = segue.destination as! AddStepsViewController
+            print("Number of steps before heading to steps controller is \(newRecipe.steps.count)")
             stepsViewController.steps = newRecipe.steps
         } else if (segue.identifier == "recipeDetail") {
             os_log("Heading to add preview recipe view", log: OSLog.default, type: .debug)
             let previewRecipeViewController = segue.destination as! RecipeDetailViewController
             previewRecipeViewController.recipe = newRecipe
             previewRecipeViewController.preview = true
+            previewRecipeViewController.isVideo = self.isVideo
+            if isVideo {
+                if let vidData = data {
+                    previewRecipeViewController.data = vidData
+                }
+            }
         }
     }
     
@@ -102,6 +120,27 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
         }
         
         return true
+    }
+    
+    func setVideoImage() {
+        let asset = AVURLAsset(url: url as URL)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        
+        let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
+        
+        do {
+            let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+            
+            foodView.image = UIImage(cgImage: imageRef)
+            newRecipe.image = foodView.image
+        }
+        catch let error as NSError
+        {
+            print("Image generation failed with error \(error)")
+            return
+        }
+
     }
     
     func validateInput() -> Bool {
@@ -139,8 +178,7 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     @IBAction func unwindFromDetailToUploadFood(segue: UIStoryboardSegue) {
         os_log("Unwinding from detailVC", log: OSLog.default, type: .debug)
-        navigationController?.popViewController(animated: true)
-        dismiss(animated: true, completion: nil)
+        self.performSegue(withIdentifier: "unwindFromDetailToUpload", sender: self)
     }
     
     //Calls this function when the tap is recognized.

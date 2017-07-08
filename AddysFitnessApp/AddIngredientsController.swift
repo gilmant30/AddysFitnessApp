@@ -37,6 +37,7 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var ingredientInputStackView: UIStackView!
     @IBOutlet weak var ingredientInputStackViewHeight: NSLayoutConstraint!
     @IBOutlet weak var backgroundImage: UIImageView!
+    
     override func viewDidLoad() {
         navigationItem.title = "Add Ingredients"
         let screenSize = UIScreen.main.bounds
@@ -57,6 +58,10 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(AddIngredientsController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(AddIngredientsController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        dismissKeyboard()
     }
     
     func setupUIElements() {
@@ -224,6 +229,12 @@ class AddIngredientsController: UIViewController, UITextFieldDelegate {
         coordinator.animate(alongsideTransition: nil) { (_) -> Void in
             self.scrollView.contentSize.height = self.contentView.frame.height
         }
+    }
+    
+    //Calls this function when the tap is recognized.
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     deinit {

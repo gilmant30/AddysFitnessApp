@@ -29,7 +29,7 @@ class UserPoolSignUpConfirmationViewController: UIViewController, UITextFieldDel
     override func viewDidLoad() {
         super.viewDidLoad()
         self.username.text = self.user!.username
-        self.sendTo.text = "\(self.sendTo!)"
+        self.sendTo.text = "\(self.sentTo!)"
         username.delegate = self
         confirmationCode.delegate = self
     }

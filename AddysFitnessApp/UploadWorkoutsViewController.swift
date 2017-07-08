@@ -67,6 +67,10 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
         notificationCenter.addObserver(self, selector: #selector(UploadFoodViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        dismissKeyboard()
+    }
+    
     fileprivate func uploadLocalContent(_ localContent: AWSLocalContent) {
         localContent.uploadWithPin(onCompletion: false, progressBlock: {[weak self] (content: AWSLocalContent, progress: Progress) in
             guard let strongSelf = self else { return }

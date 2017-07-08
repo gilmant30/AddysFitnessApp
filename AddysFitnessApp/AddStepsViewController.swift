@@ -38,12 +38,12 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
         navigationItem.title = "Add Steps"
         let screenSize = UIScreen.main.bounds
         screenWidth = screenSize.width
+        print("Number of steps is \(steps.count)")
         
         stepFields.append(stepText)
         stepStackViewArr.append(stepStackView)
         
         loadSteps()
-        
         if (contentViewHeight.constant < screenSize.height) {
             contentViewHeight.constant = screenSize.height
         }
@@ -81,6 +81,7 @@ class AddStepsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func verifyStepsAdded() -> Bool {
+        steps.removeAll()
         for step in stepFields {
             if let stepText = step.text, stepText != "" {
                 steps.append(stepText)

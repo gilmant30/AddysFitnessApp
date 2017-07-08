@@ -26,6 +26,7 @@ class Recipe {
     var image: UIImage?
     var category: String = ""
     var url: URL?
+    var isVideo: Bool = false
     var content: AWSContent!
     {
         didSet {
@@ -36,12 +37,28 @@ class Recipe {
                     print("Error getting URL for file. \(String(describing: error))")
                     return
                 }
-                do {
-                    self.url = url
-                    //let imageData = NSData(contentsOf: url)
-                    //self.image = UIImage(data: imageData! as Data)
+                self.url = url
+                if self.content.key.contains(".mp4") {
+                    print("url contains mp4")
+                    self.isVideo = true
+                    let asset = AVURLAsset(url: url as URL)
+                    let generator = AVAssetImageGenerator(asset: asset)
+                    generator.appliesPreferredTrackTransform = true
+                
+                    let timestamp = CMTime(seconds: 1, preferredTimescale: 60)
+                
+                    do {
+                        let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+                    
+                        self.image = UIImage(cgImage: imageRef)
+                    }
+                    catch let error as NSError
+                    {
+                        print("Image generation failed with error \(error)")
+                        return
+                    }
                 }
-            return
+                return
             }
         }
     }

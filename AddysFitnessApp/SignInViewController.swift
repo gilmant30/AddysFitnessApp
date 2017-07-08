@@ -74,8 +74,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             print("result = \(String(describing: result)), error = \(String(describing: error))")
             // If no error reported by SignInProvider, discard the sign-in view controller.
             guard let _ = result else {
-                self.showErrorDialog(signInProvider.identityProviderName, withError: error! as NSError)
                 self.myActivityIndicator.stopAnimating()
+                self.showErrorDialog(signInProvider.identityProviderName, withError: error! as NSError)
                 return
             }
             self.myActivityIndicator.stopAnimating()
