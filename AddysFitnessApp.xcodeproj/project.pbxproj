@@ -22,6 +22,7 @@
 		B955CB941EAE995F007E84EE /* UploadFoodViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B955CB931EAE995F007E84EE /* UploadFoodViewControllerExtension.swift */; };
 		B955CB961EAEA784007E84EE /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B955CB951EAEA784007E84EE /* Recipe.swift */; };
 		B955CB9A1EB10DBF007E84EE /* AddIngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B955CB991EB10DBF007E84EE /* AddIngredientsController.swift */; };
+		B9604AF41F4B678D005A915E /* WorkoutLoadingScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604AF31F4B678D005A915E /* WorkoutLoadingScreenViewController.swift */; };
 		B96816841E6FA5290010FE0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */; };
 		B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */; };
 		B96E1F7B1E9D087A000AE4A1 /* Food.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96E1F7A1E9D087A000AE4A1 /* Food.storyboard */; };
@@ -118,6 +119,7 @@
 		B955CB931EAE995F007E84EE /* UploadFoodViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFoodViewControllerExtension.swift; sourceTree = "<group>"; };
 		B955CB951EAEA784007E84EE /* Recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		B955CB991EB10DBF007E84EE /* AddIngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddIngredientsController.swift; sourceTree = "<group>"; };
+		B9604AF31F4B678D005A915E /* WorkoutLoadingScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutLoadingScreenViewController.swift; path = AddysFitnessApp/WorkoutLoadingScreenViewController.swift; sourceTree = SOURCE_ROOT; };
 		B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AddysFitnessApp/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignInViewControllerExtension.swift; path = AddysFitnessApp/SignInViewControllerExtension.swift; sourceTree = SOURCE_ROOT; };
 		B96E1F7A1E9D087A000AE4A1 /* Food.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Food.storyboard; path = AddysFitnessApp/Food.storyboard; sourceTree = SOURCE_ROOT; };
@@ -245,6 +247,7 @@
 				B9F74B0C1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift */,
 				B9255B301E92FB0F000EF86D /* WorkoutVids.swift */,
 				B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */,
+				B9604AF31F4B678D005A915E /* WorkoutLoadingScreenViewController.swift */,
 			);
 			name = Workouts;
 			sourceTree = "<group>";
@@ -564,6 +567,7 @@
 				B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */,
 				B99BA0E71EB4EE72005135D7 /* Consumable.swift in Sources */,
 				B91ADF891E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift in Sources */,
+				B9604AF41F4B678D005A915E /* WorkoutLoadingScreenViewController.swift in Sources */,
 				B99BA0E81EB4EE72005135D7 /* Food.swift in Sources */,
 				B9F74B031EC133E90062F1E4 /* UploadWorkoutsViewControllerExtension.swift in Sources */,
 				B99BA0E51EB4EE72005135D7 /* AWSMobileClient.swift in Sources */,
@@ -709,6 +713,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = DSPE7V4VL7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -721,6 +726,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tharia.MVPFit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -730,6 +737,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = DSPE7V4VL7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -742,6 +750,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tharia.MVPFit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

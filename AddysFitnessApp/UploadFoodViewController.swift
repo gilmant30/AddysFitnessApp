@@ -25,6 +25,7 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
     var data:Data!
     var url:URL!
     var isVideo: Bool = false
+    var isEdit: Bool = false
     
     @IBOutlet weak var foodView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -67,7 +68,14 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         navigationItem.title = "Add Recipe"
         
-        recipeTitle.delegate = self
+        
+        if isEdit {
+            recipeTitle.isUserInteractionEnabled = false
+            recipeTitle.text = newRecipe.name
+            recipeDescription.text = newRecipe.description
+        } else {
+            recipeTitle.delegate = self
+        }
         recipeDescription.delegate = self
         
         ingredientsLabel.text = "Ingredients: \(newRecipe.ingredients.count)"
@@ -106,6 +114,7 @@ class UploadFoodViewController: UIViewController, UITextFieldDelegate, UITextVie
             previewRecipeViewController.recipe = newRecipe
             previewRecipeViewController.preview = true
             previewRecipeViewController.isVideo = self.isVideo
+            previewRecipeViewController.isEdit = self.isEdit
             if isVideo {
                 if let vidData = data {
                     previewRecipeViewController.data = vidData

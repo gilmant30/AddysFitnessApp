@@ -19,7 +19,9 @@ import os.log
 import ObjectiveC
 
 class WorkoutDetailViewController: UIViewController {
-    
+    var manager: AWSUserFileManager!
+    fileprivate var identityManager: AWSIdentityManager!
+
     @IBOutlet weak var videoPlayerView: UIView!
     @IBOutlet weak var workoutTitle: UILabel!
     let screenSize = UIScreen.main.bounds
@@ -33,6 +35,7 @@ class WorkoutDetailViewController: UIViewController {
     var avpController: AVPlayerViewController!
     
     override func viewDidLoad() {
+        identityManager = AWSIdentityManager.default()
         super.viewDidLoad()
         
         appDelegate.shouldRotate = true // or false to disable rotation
@@ -54,10 +57,32 @@ class WorkoutDetailViewController: UIViewController {
         
         workoutTitle.text = workout.name
         
+        addEditButton()
+        
         
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         appDelegate.shouldRotate = false
+    }
+    
+    func addEditButton() {
+        if let username = identityManager.identityProfile?.userName {
+            if admin.contains(username) {
+                os_log("add edit button", log: OSLog.default, type: .debug)
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(WorkoutDetailViewController.editWorkout(_:)))
+            }
+        } else {
+            os_log("not an admin", log: OSLog.default, type: .debug)
+            
+        }
+    }
+    
+    func editWorkout(_ sender: AnyObject) {
+        let storyboard = UIStoryboard(name: "Workouts", bundle: nil)
+        let uploadWorkoutViewController = storyboard.instantiateViewController(withIdentifier: "UploadWorkouts") as! UploadWorkoutsViewController
+        uploadWorkoutViewController.isEdit = true
+        uploadWorkoutViewController.editWorkout = workout
+        self.navigationController!.pushViewController(uploadWorkoutViewController, animated: true)
     }
 }

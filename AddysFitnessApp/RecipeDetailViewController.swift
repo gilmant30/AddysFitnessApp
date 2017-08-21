@@ -24,6 +24,7 @@ class RecipeDetailViewController: UIViewController {
     var recipe: Recipe!
     var preview: Bool = false
     var isVideo: Bool = false
+    var isEdit: Bool = false
     var data:Data!
     
     @IBOutlet weak var stepStackView: UIStackView!
@@ -48,8 +49,10 @@ class RecipeDetailViewController: UIViewController {
     var avpController: AVPlayerViewController!
     let screenSize = UIScreen.main.bounds
     let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+    fileprivate var identityManager: AWSIdentityManager!
     
     override func viewDidLoad() {
+        identityManager = AWSIdentityManager.default()
         uploadLabel.isHidden = true
         progressView.isHidden = true
         if !isVideo {
@@ -63,18 +66,35 @@ class RecipeDetailViewController: UIViewController {
             recipeDescription.numberOfLines = 0
             if preview {
                 manager = AWSUserFileManager.defaultUserFileManager()
-                navigationItem.title = "Preivew Recipe"
+                if isEdit {
+                    navigationItem.title = "Edit Recipe"
+                    uploadRecipe.setTitle("Update", for: .normal)
+                } else {
+                    navigationItem.title = "Preivew Recipe"
+                }
                 let uploadTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RecipeDetailViewController.uploadNewRecipe))
                 uploadTap.numberOfTapsRequired = 1
                 uploadRecipe.addGestureRecognizer(uploadTap)
 
-                
             } else {
                 navigationItem.title = "Recipe Detail"
+                addEditButton()
                 uploadRecipe.isHidden = true
             }
             ingredientStackViewHeight.constant = (CGFloat(recipe.ingredients.count * 30))
             viewRecipeDetails()
+        }
+    }
+    
+    func addEditButton() {
+        if let username = identityManager.identityProfile?.userName {
+            if admin.contains(username) {
+                os_log("add edit button", log: OSLog.default, type: .debug)
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(RecipeDetailViewController.editRecipe(_:)))
+            }
+        } else {
+            os_log("not an admin", log: OSLog.default, type: .debug)
+            
         }
     }
     
@@ -174,17 +194,26 @@ class RecipeDetailViewController: UIViewController {
     
     func uploadNewRecipe() {
         os_log("uploading new recipe", log: OSLog.default, type: .debug)
-        if isVideo {
-            let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).mp4"
-            let localContent = manager.localContent(with: data, key: key)
-            uploadLocalContent(localContent)
+        if isEdit {
+            updateRecipe()
         } else {
-            let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).jpg"
-            data = UIImageJPEGRepresentation(recipe.image!, 0.25)
-            let localContent = manager.localContent(with: data, key: key)
-            uploadLocalContent(localContent)
+            if isVideo {
+                let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).mp4"
+                let localContent = manager.localContent(with: data, key: key)
+                uploadLocalContent(localContent)
+            } else {
+                let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).jpg"
+                data = UIImageJPEGRepresentation(recipe.image!, 0.25)
+                let localContent = manager.localContent(with: data, key: key)
+                uploadLocalContent(localContent)
+            }
         }
         
+    }
+    
+    func updateRecipe() {
+        os_log("update recipe", log: OSLog.default, type: .debug)
+        updateLocalContent()
     }
 }
 

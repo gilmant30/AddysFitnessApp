@@ -87,6 +87,16 @@ extension RecipeDetailViewController {
         })
     }
     
+    func updateLocalContent() {
+        self.insertRecipeDetails({(errors: [NSError]?) -> Void in
+            os_log("Inserted into sql", log: OSLog.default, type: .debug)
+            if errors != nil {
+                self.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
+            }
+            self.performSegue(withIdentifier: "unwindFromDetailToUpload", sender: self)
+        })
+    }
+    
     func convertIngredientsToMap() -> [String:String] {
         var dictionary: [String: String] = [:]
         for value in recipe.ingredients {
@@ -95,19 +105,6 @@ extension RecipeDetailViewController {
         
         return dictionary
     }
-    
-    /*
-    func convertStepsToMap() -> [String:String] {
-        var dictionary: [String: String] = [:]
-        var stepNum = 0
-        for value in recipe.steps {
-            dictionary["\(stepNum)"] = value
-            stepNum += 1
-        }
-        
-        return dictionary
-    }
-    */
     
     func convertArrayToSet() -> Set<String> {
         var set: Set<String> = Set()
@@ -122,6 +119,17 @@ extension RecipeDetailViewController {
         let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
+    }
+    
+    func editRecipe(_ sender: AnyObject) {
+        let storyboard = UIStoryboard(name: "Food", bundle: nil)
+        let uploadFoodViewController = storyboard.instantiateViewController(withIdentifier: "UploadFood") as! UploadFoodViewController
+        uploadFoodViewController.image = recipe.image
+        uploadFoodViewController.isVideo = recipe.isVideo
+        uploadFoodViewController.manager = self.manager
+        uploadFoodViewController.newRecipe = recipe
+        uploadFoodViewController.isEdit = true
+        self.navigationController!.pushViewController(uploadFoodViewController, animated: true)
     }
     
     

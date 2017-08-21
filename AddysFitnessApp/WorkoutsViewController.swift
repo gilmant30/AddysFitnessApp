@@ -18,12 +18,6 @@ import os.log
 
 import ObjectiveC
 
-var workouts = [WorkoutVids]()
-var workoutsLoaded = false
-let WorkoutVideosDirectoryName = "public/workoutVideos/"
-private var cellAssociationKey: UInt8 = 0
-
-
 class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     var prefix: String!
     
@@ -362,6 +356,13 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         os_log("Clicked on a workout video", log: OSLog.default, type: .debug)
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            os_log("deleting workout", log: OSLog.default, type: .debug)
+            presentDeleteVerification((workoutsSearchResults?[indexPath.row])!, tableView, indexPath)
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if  segue.identifier == "workoutDetailShow",
             let destination = segue.destination as? WorkoutDetailViewController,
@@ -370,6 +371,87 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
             destination.workout = (workoutsSearchResults?[workoutIndex])!
         }
     }
+    
+    fileprivate func removeContent(_ content: AWSContent) {
+        content.removeRemoteContent {[weak self] (content: AWSContent?, error: Error?) in
+            guard let strongSelf = self else { return }
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Failed to delete an object from the remote server. \(error)")
+                    strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to delete an object from the remote server.", cancelButtonTitle: "OK")
+                } else {
+                    os_log("Deleted image/video for recipe", log: OSLog.default, type: .debug)
+                }
+            }
+        }
+    }
+    
+    func deleteWorkout(_ workout: WorkoutVids) {
+        removeContent(workout.content)
+        deleteWorkoutDetails(workout, {(errors: [NSError]?) -> Void in
+            os_log("deleting sql", log: OSLog.default, type: .debug)
+            if errors != nil {
+                self.showSimpleAlertWithTitle("Error", message: "Error deleting recipe", cancelButtonTitle: "OK")
+            }
+            self.updateUserInterface()
+        })
+    }
+    
+    func presentDeleteVerification(_ workout: WorkoutVids, _ tableView: UITableView, _ indexPath: IndexPath) {
+        let deleteAlert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this workout?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        deleteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            self.deleteWorkout(workout)
+            self.workoutsSearchResults?.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            
+            os_log("actually deleting workout", log: OSLog.default, type: .debug)
+        }))
+        
+        deleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            os_log("Cancelled request for delete", log: OSLog.default, type: .debug)
+        }))
+        
+        present(deleteAlert, animated: true, completion: nil)
+    }
+    
+    func deleteWorkoutDetails(_ workout: WorkoutVids, _ completionHandler: @escaping (_ errors: [NSError]?) -> Void) {
+        os_log("deleting workout sql", log: OSLog.default, type: .debug)
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        var errors: [NSError] = []
+        let group: DispatchGroup = DispatchGroup()
+        
+        let deleteWorkout: Workouts! = Workouts()
+        
+        deleteWorkout._videoLength = workout.length
+        deleteWorkout._workoutName = workout.name
+        deleteWorkout._workoutType = workout.workoutType
+        deleteWorkout._videoDescription = workout.description
+        deleteWorkout._workoutIndex = "workout"
+        
+        
+        group.enter()
+        
+        objectMapper.remove(deleteWorkout, completionHandler: {(error: Error?) -> Void in
+            if let error = error as NSError? {
+                DispatchQueue.main.async(execute: {
+                    errors.append(error)
+                })
+            }
+            group.leave()
+        })
+        
+        group.notify(queue: DispatchQueue.main, execute: {
+            if errors.count > 0 {
+                completionHandler(errors)
+            }
+            else {
+                completionHandler(nil)
+            }
+        })
+    }
+
+
 }
 
 // MARK:- UIImagePickerControllerDelegate

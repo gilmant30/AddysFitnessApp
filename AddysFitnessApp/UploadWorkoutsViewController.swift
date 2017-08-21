@@ -28,6 +28,8 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
     fileprivate var dateFormatter: DateFormatter!
     var activeField: UITextField?
     var workoutType: String?
+    var isEdit: Bool = false
+    var editWorkout: WorkoutVids!
     
     @IBOutlet weak var contentView: UIView!
 
@@ -43,13 +45,36 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
     @IBOutlet weak var legWorkout: UIImageView!
     @IBOutlet weak var totalBodyWorkout: UIImageView!
     @IBOutlet weak var fitTricks: UIImageView!
-    
-    
+    @IBOutlet weak var uploadWorkoutButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadFoodViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        if isEdit {
+            self.workoutTitle.isUserInteractionEnabled = false
+            uploadWorkoutButton.setTitle("Update", for: UIControlState.normal)
+            self.workoutType = editWorkout.workoutType
+            self.workoutTitle.text = editWorkout.name
+            self.workoutDescription.text = editWorkout.description
+            self.workoutLength.text = editWorkout.length
+            self.url = editWorkout.url
+            if let type = self.workoutType {
+                switch type {
+                case "upperBodyWorkout":
+                    upperBodySelected()
+                case "lowerBodyWorkout":
+                    lowerBodySelected()
+                case "totalBodyWorkout":
+                    totalBodySelected()
+                case "fitTricks":
+                    fitTricksSelected()
+                default:
+                    upperBodySelected()
+                }
+            }
+        }
         
         os_log("Entering Upload Workouts View", log: OSLog.default, type: .debug)
         navigationItem.title = "MVPFit"
@@ -116,9 +141,21 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
         if(workoutTitle.hasText) {
             if workoutType != nil {
                 if let title: String = workoutTitle.text {
-                    let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
-                    let localContent = manager.localContent(with: data, key: key)
-                    uploadLocalContent(localContent)
+                    if isEdit {
+                        self.insertNoSqlWorkout({(errors: [NSError]?) -> Void in
+                            os_log("Inserted into sql", log: OSLog.default, type: .debug)
+                            if errors != nil {
+                                self.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
+                            }
+                            self.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
+                            self.navigationController?.popViewController(animated: true)
+                        })
+
+                    } else {
+                        let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
+                        let localContent = manager.localContent(with: data, key: key)
+                        uploadLocalContent(localContent)
+                    }
                     //self.uploadWithData(data, forKey: key)
                 }
             } else {

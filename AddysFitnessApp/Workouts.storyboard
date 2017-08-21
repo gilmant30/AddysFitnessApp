@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,6 +10,46 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller-->
+        <scene sceneID="RD4-HM-vgX">
+            <objects>
+                <viewController id="KHM-qT-12N" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TiW-hl-Wvw"/>
+                        <viewControllerLayoutGuide type="bottom" id="eY9-xQ-xTn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QZ3-XS-rIU">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="workoutLoadingImage" translatesAutoresizingMaskIntoConstraints="NO" id="AqN-83-J3B">
+                                <rect key="frame" x="20" y="20" width="374" height="716"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workouts Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1w8-y8-ICy">
+                                <rect key="frame" x="65" y="655" width="284" height="51"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="1w8-y8-ICy" firstAttribute="top" secondItem="TiW-hl-Wvw" secondAttribute="bottom" constant="635" id="2gt-De-daT"/>
+                            <constraint firstItem="AqN-83-J3B" firstAttribute="leading" secondItem="QZ3-XS-rIU" secondAttribute="leadingMargin" id="JSV-3c-8Be"/>
+                            <constraint firstItem="eY9-xQ-xTn" firstAttribute="top" secondItem="AqN-83-J3B" secondAttribute="bottom" id="N1M-5I-T2R"/>
+                            <constraint firstItem="eY9-xQ-xTn" firstAttribute="top" secondItem="1w8-y8-ICy" secondAttribute="bottom" constant="30" id="dpu-iF-YyE"/>
+                            <constraint firstItem="1w8-y8-ICy" firstAttribute="leading" secondItem="QZ3-XS-rIU" secondAttribute="leadingMargin" constant="45" id="lFE-FV-bBW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="AqN-83-J3B" secondAttribute="trailing" id="pg3-yb-yCh"/>
+                            <constraint firstItem="eY9-xQ-xTn" firstAttribute="top" secondItem="1w8-y8-ICy" secondAttribute="bottom" constant="30" id="rZN-Ob-Cdq"/>
+                            <constraint firstItem="1w8-y8-ICy" firstAttribute="centerX" secondItem="AqN-83-J3B" secondAttribute="centerX" id="uoM-af-cT5"/>
+                            <constraint firstItem="AqN-83-J3B" firstAttribute="top" secondItem="TiW-hl-Wvw" secondAttribute="bottom" id="vw2-gA-Ocn"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GBW-Oa-TSE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-720.28985507246387" y="165.48913043478262"/>
+        </scene>
         <!--Workouts View-->
         <scene sceneID="Hac-i3-8QO">
             <objects>
@@ -20,7 +60,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="WorkoutVideoCell" rowHeight="110" id="Vhh-iN-m73" customClass="WorkoutVideoCell" customModule="AddysFitnessApp">
-                                <rect key="frame" x="0.0" y="55" width="414" height="110"/>
+                                <rect key="frame" x="0.0" y="56" width="414" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vhh-iN-m73" id="Uq3-Ls-nuu">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="109"/>
@@ -161,21 +201,21 @@
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="mWO-CC-HXB">
-                                                <rect key="frame" x="8" y="646.33333333333337" width="398" height="20.333333333333258"/>
+                                                <rect key="frame" x="8" y="647" width="398" height="21"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EpI-FN-Qef">
-                                                        <rect key="frame" x="0.0" y="0.0" width="184" height="20.333333333333258"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="184" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="t4f-Ou-0BL">
-                                                        <rect key="frame" x="214" y="9.3333333333332575" width="184" height="2"/>
+                                                        <rect key="frame" x="214" y="10" width="184" height="2"/>
                                                     </progressView>
                                                 </subviews>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1g-Jt-5Wl">
-                                                <rect key="frame" x="132" y="691.66666666666663" width="150" height="30"/>
+                                                <rect key="frame" x="132" y="693" width="150" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="150" id="Wz1-nV-2Sq"/>
                                                 </constraints>
@@ -190,16 +230,16 @@
                                                 </connections>
                                             </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="lWD-OY-AOY">
-                                                <rect key="frame" x="8" y="606" width="398" height="20.333333333333371"/>
+                                                <rect key="frame" x="8" y="606" width="398" height="21"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Video Length:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VAm-kk-GT1">
-                                                        <rect key="frame" x="0.0" y="0.0" width="199" height="20.333333333333371"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="199" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VoF-4q-pO5">
-                                                        <rect key="frame" x="199" y="0.0" width="199" height="20.333333333333371"/>
+                                                        <rect key="frame" x="199" y="0.0" width="199" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -210,16 +250,16 @@
                                                 <rect key="frame" x="8" y="536" width="398" height="50"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="upperBodyWorkout" translatesAutoresizingMaskIntoConstraints="NO" id="WZl-rn-dhD">
-                                                        <rect key="frame" x="0.0" y="0.0" width="99.666666666666671" height="50"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="50"/>
                                                     </imageView>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lowerBodyWorkout" translatesAutoresizingMaskIntoConstraints="NO" id="YtO-GZ-naA">
-                                                        <rect key="frame" x="99.666666666666686" y="0.0" width="99.333333333333314" height="50"/>
+                                                        <rect key="frame" x="100" y="0.0" width="99" height="50"/>
                                                     </imageView>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="totalBodyWorkout" translatesAutoresizingMaskIntoConstraints="NO" id="aoh-wo-zF4">
-                                                        <rect key="frame" x="199" y="0.0" width="99.666666666666686" height="50"/>
+                                                        <rect key="frame" x="199" y="0.0" width="100" height="50"/>
                                                     </imageView>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fitTricks" translatesAutoresizingMaskIntoConstraints="NO" id="2Ce-yE-Qsc">
-                                                        <rect key="frame" x="298.66666666666674" y="0.0" width="99.333333333333314" height="50"/>
+                                                        <rect key="frame" x="299" y="0.0" width="99" height="50"/>
                                                     </imageView>
                                                 </subviews>
                                                 <constraints>
@@ -285,6 +325,7 @@
                         <outlet property="progressView" destination="t4f-Ou-0BL" id="aaX-En-5qu"/>
                         <outlet property="scrollView" destination="90D-8G-MpK" id="ey9-yo-hcD"/>
                         <outlet property="totalBodyWorkout" destination="aoh-wo-zF4" id="cx0-st-YJ8"/>
+                        <outlet property="uploadWorkoutButton" destination="M1g-Jt-5Wl" id="EER-PU-5Lg"/>
                         <outlet property="uploadingLabel" destination="EpI-FN-Qef" id="8As-sr-xsF"/>
                         <outlet property="workoutDescription" destination="MMG-sx-RqB" id="vGl-W1-ao5"/>
                         <outlet property="workoutLength" destination="VoF-4q-pO5" id="WfM-23-4pA"/>
@@ -390,5 +431,6 @@
         <image name="lowerBodyWorkout" width="300" height="319"/>
         <image name="totalBodyWorkout" width="230" height="319"/>
         <image name="upperBodyWorkout" width="424" height="197"/>
+        <image name="workoutLoadingImage" width="375" height="432"/>
     </resources>
 </document>

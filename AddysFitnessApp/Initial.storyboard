@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pik-71-w6W">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pik-71-w6W">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeImage" translatesAutoresizingMaskIntoConstraints="NO" id="XQW-29-MeM">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeImageV2" translatesAutoresizingMaskIntoConstraints="NO" id="XQW-29-MeM">
                                 <rect key="frame" x="0.0" y="64" width="414" height="547"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nhp-bl-Ud1">
@@ -43,14 +43,14 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7vp-Pl-GmR">
-                                        <rect key="frame" x="171.66666666666666" y="0.0" width="71" height="125"/>
+                                        <rect key="frame" x="171.66666666666663" y="0.0" width="71.333333333333343" height="125"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bMz-We-Eui">
-                                        <rect key="frame" x="242.66666666666669" y="0.0" width="100.00000000000006" height="125"/>
+                                        <rect key="frame" x="243" y="0.0" width="100" height="125"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="workoutButton" translatesAutoresizingMaskIntoConstraints="NO" id="2kv-8Q-Hkf">
-                                                <rect key="frame" x="0.0" y="0.0" width="100.00000000000003" height="125"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="125"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="9dX-gy-Epc"/>
@@ -62,7 +62,7 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yzP-Za-gsw">
-                                        <rect key="frame" x="342.66666666666674" y="0.0" width="71.333333333333314" height="125"/>
+                                        <rect key="frame" x="343" y="0.0" width="71" height="125"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
@@ -122,7 +122,7 @@
     </scenes>
     <resources>
         <image name="SnackButton" width="64" height="64"/>
-        <image name="homeImage" width="374" height="386"/>
+        <image name="homeImageV2" width="324" height="500"/>
         <image name="workoutButton" width="64" height="64"/>
     </resources>
 </document>

@@ -125,6 +125,15 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         }
     }
     
+    func canDelete() -> Bool{
+        if let username = identityManager.identityProfile?.userName {
+            if admin.contains(username) {
+               return true
+            }
+        }
+        return false
+    }
+    
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             self.filteredRecipes = recipes.filter {
@@ -411,6 +420,100 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         os_log("Clicked on a recipe", log: OSLog.default, type: .debug)
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return canDelete()
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            os_log("deleting recipe", log: OSLog.default, type: .debug)
+            presentDeleteVerification((filteredRecipes?[indexPath.row])!, tableView, indexPath)
+        }
+    }
+    
+    func deleteRecipe(_ recipe: Recipe) {
+        removeContent(recipe.content)
+        deleteRecipeDetails(recipe, {(errors: [NSError]?) -> Void in
+            os_log("deleting sql", log: OSLog.default, type: .debug)
+            if errors != nil {
+                self.showSimpleAlertWithTitle("Error", message: "Error deleting recipe", cancelButtonTitle: "OK")
+            }
+            self.updateUserInterface()
+        })
+    }
+    
+    func presentDeleteVerification(_ recipe: Recipe, _ tableView: UITableView, _ indexPath: IndexPath) {
+        let deleteAlert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this recipe?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        deleteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            self.deleteRecipe(recipe)
+            self.filteredRecipes?.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            
+            os_log("actually deleting recipe", log: OSLog.default, type: .debug)
+        }))
+        
+        deleteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            os_log("Cancelled request for delete", log: OSLog.default, type: .debug)
+        }))
+        
+        present(deleteAlert, animated: true, completion: nil)
+    }
+    
+    func deleteRecipeDetails(_ recipe: Recipe, _ completionHandler: @escaping (_ errors: [NSError]?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        var errors: [NSError] = []
+        let group: DispatchGroup = DispatchGroup()
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        
+        
+        let deleteRecipe: Food! = Food()
+        
+        deleteRecipe._foodName = recipe.name
+        deleteRecipe._type = "recipe"
+        deleteRecipe._category = recipe.category
+        deleteRecipe._createdBy = AWSIdentityManager.default().identityId!
+        deleteRecipe._createdDate = result
+        deleteRecipe._description = recipe.description
+        
+        group.enter()
+        
+        objectMapper.remove(deleteRecipe, completionHandler: {(error: Error?) -> Void in
+            if let error = error as NSError? {
+                DispatchQueue.main.async(execute: {
+                    errors.append(error)
+                })
+            }
+            group.leave()
+        })
+        
+        group.notify(queue: DispatchQueue.main, execute: {
+            if errors.count > 0 {
+                completionHandler(errors)
+            }
+            else {
+                completionHandler(nil)
+            }
+        })
+    }
+    
+    fileprivate func removeContent(_ content: AWSContent) {
+        content.removeRemoteContent {[weak self] (content: AWSContent?, error: Error?) in
+            guard let strongSelf = self else { return }
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Failed to delete an object from the remote server. \(error)")
+                    strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to delete an object from the remote server.", cancelButtonTitle: "OK")
+                } else {
+                    os_log("Deleted image/video for recipe", log: OSLog.default, type: .debug)
+                }
+            }
+        }
     }
 
     // MARK: - Navigation

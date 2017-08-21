@@ -36,6 +36,7 @@ class WorkoutVids {
                     return
                 }
                 self.url = url
+                /*
                 let asset = AVURLAsset(url: url as URL)
                 let generator = AVAssetImageGenerator(asset: asset)
                 generator.appliesPreferredTrackTransform = true
@@ -52,6 +53,7 @@ class WorkoutVids {
                     print("Image generation failed with error \(error)")
                     return
                 }
+                 */
                 return
             }
 
