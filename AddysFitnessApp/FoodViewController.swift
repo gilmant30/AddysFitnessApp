@@ -18,20 +18,18 @@ import os.log
 
 import ObjectiveC
 var recipes = [Recipe]()
-var recipesLoaded = false
-
-let FoodImagesDirectoryName = "public/recipeImages/"
+var recipeAWSContent = [AWSContent]()
+let FoodS3DirectoryName = "public/recipeS3/"
+var foodS3Loaded: Bool = false
+let recipeObjectType = "recipe"
 
 class FoodViewController: UITableViewController, UISearchResultsUpdating {
-    var prefix: String!
+    var s3Prefix: String!
+    var marker: String?
+    
     var filteredRecipes: [Recipe]?
-    let consumableTypes: [String] = ["all", "bfast", "lunch", "dinner", "snacks"]
-    var selected: String = "snacks"
     var loadedDetails: Bool = false
     fileprivate var manager: AWSUserFileManager!
-    fileprivate var marker: String?
-    fileprivate var contents: [AWSContent]?
-    fileprivate var didLoadAllImages: Bool!
     var refresh = false
     fileprivate var identityManager: AWSIdentityManager!
     
@@ -44,19 +42,12 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         print("recipes count is - \(recipes.count)")
         self.tableView.delegate = self
-        self.tableView.estimatedSectionHeaderHeight = 80
         manager = AWSUserFileManager.defaultUserFileManager()
         identityManager = AWSIdentityManager.default()
         
         // Sets up the UIs.
         navigationItem.title = "MVPFit"
-        
-        if let prefix = prefix {
-            print("Prefix already initialized to \(prefix)")
-        } else {
-            self.prefix = "\(FoodImagesDirectoryName)"
-        }
-        
+
         checkIfAdmin()
         
         getRecipes()
@@ -89,9 +80,6 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         myActivityIndicator.hidesWhenStopped = true
         myActivityIndicator.activityIndicatorViewStyle = .gray
         self.view.addSubview(myActivityIndicator)
-        if (!recipesLoaded) {
-            myActivityIndicator.startAnimating()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -165,54 +153,10 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         imagePickerController.delegate = self
         present(imagePickerController, animated: true, completion: nil)
     }
-    
-    func addImages() {
-        os_log("Adding images to recipes", log: OSLog.default, type: .debug)
-        if recipes.count > 0 {
-            if let contents = self.contents, contents.count > 0 {
-                for recipe in recipes {
-                    let key = FoodImagesDirectoryName + recipe.name + ".jpg"
-                    let keyVid = FoodImagesDirectoryName + recipe.name + ".mp4"
-                    if let i = contents.index(where: { $0.key == key }) {
-                        recipe.content = contents[i]
-                    } else if let i = contents.index(where: { $0.key == keyVid }) {
-                        recipe.content = contents[i]
-                    }
-                }
-            }
-        }
-
-    }
-    
-    func loadImages() {
-        manager.listAvailableContents(withPrefix: prefix, marker: marker) {[weak self] (contents: [AWSContent]?, nextMarker: String?, error: Error?) in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to load the list of contents.", cancelButtonTitle: "OK")
-                print("Failed to load the list of contents. \(error)")
-            }
-            if let contents = contents, contents.count > 0 {
-                strongSelf.contents = contents
-                if let nextMarker = nextMarker, !nextMarker.isEmpty {
-                    strongSelf.didLoadAllImages = false
-                } else {
-                    strongSelf.didLoadAllImages = true
-                }
-                print("contents count - \(contents.count)")
-                strongSelf.marker = nextMarker
-                strongSelf.addImages()
-            }
-            
-            if strongSelf.loadedDetails {
-                strongSelf.updateUserInterface()
-            }
-            strongSelf.myActivityIndicator.stopAnimating()
-        }
-
-    }
-    
+   
     func getRecipes() {
         let completionHandler = {(response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void in
+            os_log("In completion handler", log: OSLog.default, type: .debug)
             if let error = error {
                 var errorMessage = "Failed to retrieve items. \(error.localizedDescription)"
                 print("\(errorMessage)")
@@ -220,139 +164,103 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
                     errorMessage = "Access denied. You are not allowed to perform this operation."
                 }
             }
-            else if response!.items.count == 0 {
-                self.showSimpleAlertWithTitle("We're Sorry!", message: "Our favorite recipes have not been added in yet.", cancelButtonTitle: "OK")
-                self.myActivityIndicator.stopAnimating()
-            }
             else {
-                DispatchQueue.main.async {
-                    self.loadImages()
-                    recipesLoaded = true
-                }
-                DispatchQueue.main.async {
-                   self.convertToRecipes(response)
+                os_log("partway through completionHandler", log: OSLog.default, type: .debug)
+                if mvpFitObjects.count > 0 || response != nil {
+                    if mvpFitObjects.count == 0 {
+                        let response = response?.items as! [MVPFitObjects]
+                        mvpFitObjects = response
+                        DynamoDbMVPFitObjects.shared.mapObjects()
+                    }
+                    
+                    os_log("recipe s3 content started", log: OSLog.default, type: .debug)
+                    self.loadS3Content{() -> () in
+                        os_log("recipe s3 content finished", log: OSLog.default, type: .debug)
+                        print("recipeAWSContent count - \(recipeAWSContent.count)")
+                        for aws in recipeAWSContent {
+                            print("key = \(aws.key)")
+                        }
+                        self.filteredRecipes = recipes
+                        DispatchQueue.main.async {
+                            LoadingOverlay.shared.removeOverlay()
+                        }
+                        os_log("recipe update user interface", log: OSLog.default, type: .debug)
+                        self.updateUserInterface()
+                    }
                 }
             }
             
             self.updateUserInterface()
         }
         
-        if(!recipesLoaded || refresh) {
-            os_log("loading recipes content", log: OSLog.default, type: .debug)
-            self.getRecipesWithCompletionHandler(completionHandler)
-            os_log("after loading recipes content", log: OSLog.default, type: .debug)
+        LoadingOverlay.shared.displayOverlay()
+        
+        if(recipes.count == 0 || refresh || !foodS3Loaded) {
+            os_log("loading S3 and dynamo recipe content", log: OSLog.default, type: .debug)
+            DynamoDbMVPFitObjects.shared.getMvpFitObjects(refresh, completionHandler)
         } else {
-            os_log("don't need to load recipes", log: OSLog.default, type: .debug)
-            myActivityIndicator.stopAnimating()
+            os_log("recipes already loaded", log: OSLog.default, type: .debug)
+            DispatchQueue.main.async {
+                LoadingOverlay.shared.removeOverlay()
+            }
             filteredRecipes = recipes
             updateUserInterface()
             
         }
     }
     
-    // MARK: - Databse Retrieve
-    
-    func getRecipesWithCompletionHandler(_ completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let queryExpression = AWSDynamoDBQueryExpression()
-        
-        
-        queryExpression.indexName = "typeIndex"
-        queryExpression.keyConditionExpression = "#type = :type"
-        queryExpression.expressionAttributeNames = ["#type": "type",]
-        queryExpression.expressionAttributeValues = [":type": "recipe",]
-        
-        objectMapper.query(Food.self, expression: queryExpression) { (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                completionHandler(response, error as NSError?)
-            })
-        }
-    }
-    
-    func convertToRecipes(_ response: AWSDynamoDBPaginatedOutput?) {
-        let foodArr = response?.items as! [Food]
-        var recipeArr: [Recipe] = []
-        for item in foodArr {
-            let tempRecipe: Recipe = Recipe()
-            tempRecipe.name = item._foodName!
-            tempRecipe.description = item._description!
-            tempRecipe.category = item._category!
-            if let steps = item._listSteps {
-                tempRecipe.steps = steps
-            } else if let steps2 = item._steps {
-                tempRecipe.steps = Array(steps2)
+    func loadS3Content(completion: @escaping () -> ()) {
+        if recipeAWSContent.count == 0 || refresh {
+            manager.listAvailableContents(withPrefix: FoodS3DirectoryName, marker: marker) {[weak self] (contents: [AWSContent]?, nextMarker: String?, error: Error?) in
+                guard let strongSelf = self else { return }
+                if let error = error {
+                    strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to load the list of contents.", cancelButtonTitle: "OK")
+                    print("Failed to load the list of contents. \(error)")
+                    completion()
+                }
+                if let contents = contents, contents.count > 0 {
+                    print("S3 size - \(contents.count)")
+                    if let nextMarker = nextMarker, !nextMarker.isEmpty {
+                    } else {
+                        recipeAWSContent = contents
+                        strongSelf.addS3Content{() -> () in
+                            completion()
+                        }
+                    }
+                    strongSelf.marker = nextMarker
+                }
             }
-            
-            tempRecipe.ingredients = formatIngredients(item._ingredients!)
-            recipeArr.append(tempRecipe)
+        } else {
+            addS3Content{() -> () in
+                completion()
+            }
         }
-        
-        recipes = recipeArr
-        filteredRecipes = recipeArr
-        self.loadedDetails = true
-        self.updateUserInterface()
     }
     
-    func formatSteps(_ steps: Set<String>) -> [String] {
-        var arr: [String] = []
-        for step in steps {
-            arr.append(step)
+    func addS3Content(completion: @escaping () -> ()) {
+        if !foodS3Loaded {
+            os_log("RECIPES - adding S3 content", log: OSLog.default, type: .debug)
+            if recipes.count > 0 {
+                if recipeAWSContent.count > 0 {
+                    for recipe in recipes {
+                        let vidKey = FoodS3DirectoryName + recipe.name + ".mp4"
+                        let imageKey = FoodS3DirectoryName + recipe.name + ".jpg"
+                        if let i = recipeAWSContent.index(where: { $0.key == vidKey }) {
+                            recipe.videoContent = recipeAWSContent[i]
+                        }
+                        if let i = recipeAWSContent.index(where: { $0.key == imageKey }) {
+                            recipe.imageContent = recipeAWSContent[i]
+                        }
+                    }
+                }
+            }
+            foodS3Loaded = true
         }
-        return arr
-    }
-    
-    func formatIngredients(_ ingredients: [String: String]) -> [Ingredients] {
-        var listIngredients: [Ingredients] = []
-        for (name, amount) in ingredients {
-            let ingredient: Ingredients = Ingredients()
-            ingredient.ingredientName = name
-            ingredient.amount = amount
-            listIngredients.append(ingredient)
-        }
-        
-        return listIngredients
+        completion()
     }
 
     
-    func valueChanged(segmentedControl: UISegmentedControl) {
-        if(segmentedControl.selectedSegmentIndex == 0){
-            self.filteredRecipes = recipes
-        } else if(segmentedControl.selectedSegmentIndex == 1){
-            self.filteredRecipes = recipes.filter {
-                $0.category == "bfast"
-            }
-        } else if(segmentedControl.selectedSegmentIndex == 2){
-            self.filteredRecipes = recipes.filter {
-                $0.category == "lunch"
-            }
-        } else if(segmentedControl.selectedSegmentIndex == 3){
-            self.filteredRecipes = recipes.filter {
-                $0.category == "dinner"
-            }
-        } else if(segmentedControl.selectedSegmentIndex == 4){
-            self.filteredRecipes = recipes.filter {
-                $0.category == "snack"
-            }
-        } else {
-            self.filteredRecipes = recipes
-        }
-        self.updateUserInterface()
-    }
-    
     // MARK: - Table view data source
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let control = UISegmentedControl(items: self.consumableTypes)
-        control.addTarget(self, action: #selector(self.valueChanged), for: UIControlEvents.valueChanged)
-        if(section == 0){
-            return control;
-        }
-        return nil;
-    }
-    
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 80.0
-    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -371,36 +279,11 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         
         if let recipeArray = filteredRecipes {
             let recipe = recipeArray[indexPath.row]
-            cell.cellDescription.lineBreakMode = .byWordWrapping
-            cell.cellDescription.numberOfLines = 0
-            cell.cellName.text = recipe.name
-            cell.cellDescription.text = recipe.description
             cell.playButtonOverlay.isHidden = true
-            
-            if let url = recipe.url {
-                cell.playButtonOverlay.isHidden = !recipe.isVideo
-                if let image = recipe.image {
-                    cell.cellImage.image = image
-                } else {
-                    DispatchQueue.global(qos: .default).async {
-                        //os_log("recipe url is set", log: OSLog.default, type: .debug)
-                        let imageData = NSData(contentsOf: url)
-                        if let imageDat = imageData {
-                            let image = UIImage(data: imageDat as Data)
-                            recipe.image = image
-                            DispatchQueue.main.async(execute: {() -> Void in
-                                // Main thread stuff.
-                                cell.cellImage.image = image
-                            })
-                        }
-
-                    }
-                }
-                
-                // cell.cellImage.image(url, recipe)
+            cell.content = recipe
+            if(recipe.isVideo) {
+                cell.playButtonOverlay.isHidden = false
             }
-            
-            
         }
         
         return cell
@@ -434,7 +317,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     func deleteRecipe(_ recipe: Recipe) {
-        removeContent(recipe.content)
+        removeContent(recipe.imageContent)
         deleteRecipeDetails(recipe, {(errors: [NSError]?) -> Void in
             os_log("deleting sql", log: OSLog.default, type: .debug)
             if errors != nil {
@@ -445,13 +328,13 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     func presentDeleteVerification(_ recipe: Recipe, _ tableView: UITableView, _ indexPath: IndexPath) {
+        
         let deleteAlert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this recipe?", preferredStyle: UIAlertControllerStyle.alert)
         
         deleteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             self.deleteRecipe(recipe)
             self.filteredRecipes?.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            
             os_log("actually deleting recipe", log: OSLog.default, type: .debug)
         }))
         
@@ -460,26 +343,20 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         }))
         
         present(deleteAlert, animated: true, completion: nil)
+        
     }
     
     func deleteRecipeDetails(_ recipe: Recipe, _ completionHandler: @escaping (_ errors: [NSError]?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         var errors: [NSError] = []
         let group: DispatchGroup = DispatchGroup()
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
-        let result = formatter.string(from: date)
         
         
-        let deleteRecipe: Food! = Food()
+        let deleteRecipe: MVPFitObjects! = MVPFitObjects()
         
-        deleteRecipe._foodName = recipe.name
-        deleteRecipe._type = "recipe"
-        deleteRecipe._category = recipe.category
-        deleteRecipe._createdBy = AWSIdentityManager.default().identityId!
-        deleteRecipe._createdDate = result
-        deleteRecipe._description = recipe.description
+        deleteRecipe._objectApp = mvpApp
+        deleteRecipe._objectType = recipeObjectType
+        deleteRecipe._objectName = recipe.name
         
         group.enter()
         
@@ -524,7 +401,7 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
         {
             let clickedRecipe: Recipe = (filteredRecipes?[recipeIndex])!
             destination.recipe = clickedRecipe
-            if clickedRecipe.content.key.contains(".mp4") {
+            if clickedRecipe.videoContent != nil {
                 destination.isVideo = true
             }
         }
@@ -532,16 +409,12 @@ class FoodViewController: UITableViewController, UISearchResultsUpdating {
     
     @IBAction func unwindFromUploadToMain(segue: UIStoryboardSegue) {
         os_log("Unwinding from upload to main", log: OSLog.default, type: .debug)
-        recipesLoaded = false
         getRecipes()
     }
-}
-
-class FoodCell: UITableViewCell {
-    @IBOutlet weak var cellName: UILabel!
-    @IBOutlet weak var cellDescription: UILabel!
-    @IBOutlet weak var cellImage: UIImageView!
-    @IBOutlet weak var playButtonOverlay: UIImageView!
+    
+    deinit {
+        self.searchController.view.removeFromSuperview()
+    }
 }
 
 // MARK: - Utility

@@ -53,13 +53,14 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
         view.addGestureRecognizer(tap)
         
         if isEdit {
+            manager = AWSUserFileManager.defaultUserFileManager()
             self.workoutTitle.isUserInteractionEnabled = false
             uploadWorkoutButton.setTitle("Update", for: UIControlState.normal)
             self.workoutType = editWorkout.workoutType
             self.workoutTitle.text = editWorkout.name
             self.workoutDescription.text = editWorkout.description
             self.workoutLength.text = editWorkout.length
-            self.url = editWorkout.url
+            self.url = editWorkout.imageUrl
             if let type = self.workoutType {
                 switch type {
                 case "upperBodyWorkout":
@@ -112,9 +113,9 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
                     os_log(error as! StaticString, log: OSLog.default, type: .debug)
                     strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to upload an object.", cancelButtonTitle: "OK")
                 } else {
-                    strongSelf.insertNoSqlWorkout({(errors: [NSError]?) -> Void in
+                    strongSelf.saveSqlWorkout({(error: NSError?) -> Void in
                         os_log("Inserted into sql", log: OSLog.default, type: .debug)
-                        if errors != nil {
+                        if error != nil {
                             strongSelf.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
                         }
                         strongSelf.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
@@ -123,11 +124,6 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
                 }
             })
     }
-    
-    /*fileprivate func uploadWithData(_ data: Data, forKey key: String) {
-        let localContent = manager.localContent(with: data, key: key)
-        uploadLocalContent(localContent)
-    }*/
 
     fileprivate func showSimpleAlertWithTitle(_ title: String, message: String, cancelButtonTitle cancelTitle: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -136,25 +132,92 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
         present(alertController, animated: true, completion: nil)
     }
     
+    func uploadWorkoutImage(_ localContent: AWSLocalContent) {
+        localContent.uploadWithPin(onCompletion: false, progressBlock: {[weak self] (content: AWSLocalContent, progress: Progress) in
+            guard let strongSelf = self else { return }
+            DispatchQueue.main.async {
+                // Update the upload UI if it is a new upload and the table is not yet updated
+                strongSelf.progressView.isHidden = false
+                strongSelf.uploadingLabel.isHidden = false
+                strongSelf.progressView.progress = Float(content.progress.fractionCompleted)
+            }
+            }, completionHandler: {[weak self](content: AWSLocalContent?, error: Error?) -> Void in
+                guard let strongSelf = self else { return }
+                os_log("Downloading to S3 complete", log: OSLog.default, type: .debug)
+                if let error = error {
+                    os_log(error as! StaticString, log: OSLog.default, type: .debug)
+                    strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to upload an object.", cancelButtonTitle: "OK")
+                } else {
+                    print("uploaded image complete")
+                }
+        })
+    }
+
+    
+    func saveSqlWorkout(_ completionHandler: @escaping (_ error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        
+        let mvpFitObject: MVPFitObjects = MVPFitObjects()
+        
+        mvpFitObject._createdBy = AWSIdentityManager.default().identityId!
+        mvpFitObject._createdDate = result
+        mvpFitObject._objectApp = mvpApp
+        mvpFitObject._objectName = workoutTitle.text
+        mvpFitObject._objectType = workoutObjectType
+        mvpFitObject._objectInfo = createWorkoutMap()
+        
+        objectMapper.save(mvpFitObject, completionHandler: {(error: Error?) -> Void in
+            if error != nil {
+                completionHandler(error! as NSError)
+            } else {
+                completionHandler(nil)
+            }
+        })
+        
+    }
+    
+    func createWorkoutMap() -> [String: String] {
+        var workoutMap = [String: String]()
+        
+        workoutMap["workoutName"] = workoutTitle.text
+        workoutMap["workoutDescription"] = workoutDescription.text
+        workoutMap["videoLength"] = workoutLength.text
+        workoutMap["workoutType"] = workoutType
+        
+        return workoutMap
+    }
+
     
     @IBAction func uploadWorkout(_ sender: Any) {
         if(workoutTitle.hasText) {
             if workoutType != nil {
                 if let title: String = workoutTitle.text {
                     if isEdit {
-                        self.insertNoSqlWorkout({(errors: [NSError]?) -> Void in
+                        self.saveSqlWorkout({(error: NSError?) -> Void in
                             os_log("Inserted into sql", log: OSLog.default, type: .debug)
-                            if errors != nil {
+                            if error != nil {
                                 self.showSimpleAlertWithTitle("Error", message: "Error saving sql data", cancelButtonTitle: "OK")
                             }
+                            self.editWorkout.description = self.workoutDescription.text
                             self.showSimpleAlertWithTitle("Complete!", message: "Upload Completed Succesfully", cancelButtonTitle: "OK")
                             self.navigationController?.popViewController(animated: true)
                         })
-
                     } else {
-                        let key: String = "\(WorkoutVideosDirectoryName)\(title).mp4"
+                        let key: String = "\(WorkoutS3DirectoryName)\(title).mp4"
                         let localContent = manager.localContent(with: data, key: key)
                         uploadLocalContent(localContent)
+                        
+                        if let image = self.previewImage.image {
+                            let imageKey: String = "\(WorkoutS3DirectoryName)\(title).jpg"
+                            let imageData: Data = UIImageJPEGRepresentation(image, 0.25)!
+                            let imageContent = manager.localContent(with: imageData, key: imageKey)
+                            uploadWorkoutImage(imageContent)
+                        }
                     }
                     //self.uploadWithData(data, forKey: key)
                 }
@@ -191,48 +254,6 @@ class UploadWorkoutsViewController: UIViewController, UITextFieldDelegate, UITex
                 print("Image generation failed with error \(error)")
                 return
             }
-    }
-    
-    func insertNoSqlWorkout(_ completionHandler: @escaping (_ errors: [NSError]?) -> Void) {
-        os_log("Inserting into sql", log: OSLog.default, type: .debug)
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        var errors: [NSError] = []
-        let group: DispatchGroup = DispatchGroup()
-        
-        let dbWorkout: Workouts! = Workouts()
-        
-        dbWorkout._createdBy = AWSIdentityManager.default().identityId!
-        dbWorkout._videoLength = workoutLength.text
-        dbWorkout._workoutName = workoutTitle.text
-        dbWorkout._workoutType = "\(workoutType ?? "totalBodyWorkout")"
-        dbWorkout._videoDescription = workoutDescription.text
-        dbWorkout._workoutIndex = "workout"
-        
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd.yyyy"
-        let result = formatter.string(from: date)
-        dbWorkout._createdDate = result
-    
-        group.enter()
-        
-        objectMapper.save(dbWorkout, completionHandler: {(error: Error?) -> Void in
-            if let error = error as NSError? {
-                DispatchQueue.main.async(execute: {
-                    errors.append(error)
-                })
-            }
-            group.leave()
-        })
-        
-        group.notify(queue: DispatchQueue.main, execute: {
-            if errors.count > 0 {
-                completionHandler(errors)
-            }
-            else {
-                completionHandler(nil)
-            }
-        })
     }
     
     //Calls this function when the tap is recognized.

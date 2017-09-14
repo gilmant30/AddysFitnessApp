@@ -26,6 +26,7 @@ class RecipeDetailViewController: UIViewController {
     var isVideo: Bool = false
     var isEdit: Bool = false
     var data:Data!
+    var image:UIImage?
     
     @IBOutlet weak var stepStackView: UIStackView!
     @IBOutlet weak var ingredientStackView: UIStackView!
@@ -51,6 +52,22 @@ class RecipeDetailViewController: UIViewController {
     let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
     fileprivate var identityManager: AWSIdentityManager!
     
+    var stepsBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red:0.96, green:0.96, blue:0.96, alpha:1.0)
+        view.layer.cornerRadius = 10.0
+        return view
+    }()
+    
+    var ingredientsBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red:0.96, green:0.96, blue:0.96, alpha:1.0)
+        view.layer.cornerRadius = 10.0
+        return view
+    }()
+    
+    @IBOutlet weak var likeButton: UIImageView!
+    @IBOutlet weak var likeView: UIView!
     override func viewDidLoad() {
         identityManager = AWSIdentityManager.default()
         uploadLabel.isHidden = true
@@ -72,17 +89,26 @@ class RecipeDetailViewController: UIViewController {
                 } else {
                     navigationItem.title = "Preivew Recipe"
                 }
-                let uploadTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RecipeDetailViewController.uploadNewRecipe))
-                uploadTap.numberOfTapsRequired = 1
-                uploadRecipe.addGestureRecognizer(uploadTap)
+                likeView.isHidden = true
+                uploadRecipe.addTarget(self, action: #selector(RecipeDetailViewController.uploadNewRecipe(_:)), for: .touchUpInside)
+                uploadRecipe.addTarget(self, action: #selector(RecipeDetailViewController.holdDown(_:)), for: .touchDown)
+                uploadRecipe.layer.cornerRadius = 10
+                uploadRecipe.layer.borderColor = UIColor.red.cgColor
+                uploadRecipe.layer.borderWidth = 0.5
 
             } else {
                 navigationItem.title = "Recipe Detail"
                 addEditButton()
+                setupLikeButton()
                 uploadRecipe.isHidden = true
             }
             ingredientStackViewHeight.constant = (CGFloat(recipe.ingredients.count * 30))
             viewRecipeDetails()
+            recipeDescription.layer.cornerRadius = 10.0
+            pinBackground(ingredientsBackgroundView, to: ingredientStackView)
+            pinBackground(stepsBackgroundView, to: stepStackView)
+            recipeDescription.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
+            
         }
     }
     
@@ -126,7 +152,7 @@ class RecipeDetailViewController: UIViewController {
             
             recipeVideo.frame = CGRect(x: 1, y: -20, width: screenSize.width - 2, height: screenSize.height/3 * 2)
             
-            if let url = recipe.url {
+            if let url = recipe.videoUrl {
                 player = AVPlayer(url: url)
                 avpController = AVPlayerViewController()
                 avpController.player = player
@@ -143,16 +169,27 @@ class RecipeDetailViewController: UIViewController {
         print("Ingredient count - \(recipe.ingredients.count)")
         for ingredient in recipe.ingredients {
             let ingredientLabel = UILabel()
-            ingredientLabel.frame = CGRect(x: 0, y: 0, width: stepStackView.frame.width, height: 30)
+            //ingredientLabel.frame = CGRect(x: 0, y: 0, width: stepStackView.frame.width, height: 30)
             let formattedString = NSMutableAttributedString()
             formattedString
                 .bold(ingredient.amount!)
                 .normal(" " + ingredient.ingredientName!)
             ingredientLabel.attributedText = formattedString
+            ingredientLabel.numberOfLines = 0
+            ingredientLabel.lineBreakMode = .byWordWrapping
+            ingredientLabel.sizeToFit()
+            ingredientLabel.attributedText = formattedString
             
-            
-            contentViewHeight.constant += 30
+            let labelSize = rectForText(text: ingredient.amount! + ingredient.ingredientName!, font: ingredientLabel.font, maxSize: CGSize(width: ingredientStackView.frame.width, height: 999))
+            let labelHeight = labelSize.height + 10
+            ingredientLabel.frame = CGRect(x: 0, y: 0, width: ingredientStackView.frame.width, height: labelHeight)
+            contentViewHeight.constant += labelHeight + 15
             ingredientStackView.addArrangedSubview(ingredientLabel)
+
+            
+            
+            //contentViewHeight.constant += 30
+            //ingredientStackView.addArrangedSubview(ingredientLabel)
             
         }
     }
@@ -177,7 +214,7 @@ class RecipeDetailViewController: UIViewController {
             let labelSize = rectForText(text: recipe.steps[i], font: stepsLabel.font, maxSize: CGSize(width: ingredientStackView.frame.width, height: 999))
             let labelHeight = labelSize.height + 10
             stepsLabel.frame = CGRect(x: 0, y: 0, width: ingredientStackView.frame.width, height: labelHeight)
-            contentViewHeight.constant += labelHeight + 10
+            contentViewHeight.constant += labelHeight + 15
             stepStackView.addArrangedSubview(stepsLabel)
             stepStackViewHeight.constant += labelHeight + 10
 
@@ -192,17 +229,24 @@ class RecipeDetailViewController: UIViewController {
         return size
     }
     
-    func uploadNewRecipe() {
+    func uploadNewRecipe(_ button: UIButton) {
+        uploadRecipe.setTitleColor(.black, for: .normal)
+        uploadRecipe.layer.backgroundColor = UIColor.clear.cgColor
         os_log("uploading new recipe", log: OSLog.default, type: .debug)
         if isEdit {
             updateRecipe()
         } else {
             if isVideo {
-                let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).mp4"
+                let key: String = "\(FoodS3DirectoryName)\(recipe.name).mp4"
                 let localContent = manager.localContent(with: data, key: key)
                 uploadLocalContent(localContent)
+
+                let imageKey: String = "\(FoodS3DirectoryName)\(recipe.name).jpg"
+                let imgData = UIImageJPEGRepresentation(recipe.image!, 0.25)
+                let imageContent = manager.localContent(with: imgData, key: imageKey)
+                uploadImageContent(imageContent)
             } else {
-                let key: String = "\(RecipeImagesDirectoryName)\(recipe.name).jpg"
+                let key: String = "\(FoodS3DirectoryName)\(recipe.name).jpg"
                 data = UIImageJPEGRepresentation(recipe.image!, 0.25)
                 let localContent = manager.localContent(with: data, key: key)
                 uploadLocalContent(localContent)
@@ -214,6 +258,32 @@ class RecipeDetailViewController: UIViewController {
     func updateRecipe() {
         os_log("update recipe", log: OSLog.default, type: .debug)
         updateLocalContent()
+    }
+    
+    @IBAction func likeButton(_ sender: Any) {
+        let myLike: MyLikes! = MyLikes()
+        myLike._userId = AWSIdentityManager.default().identityId!
+        myLike._name = recipe.name
+        if let imgUrl = recipe.imageUrl {
+            myLike._imageUrl = "\(imgUrl)"
+        }
+        myLike._type = "recipe"
+        
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        let result = formatter.string(from: date)
+        myLike._createdDate = result
+        
+        DynamoDbMyLikes.shared.insertMyLike(myLike){(errors: [NSError]?) -> Void in
+            os_log("Inserted into sql", log: OSLog.default, type: .debug)
+            if errors != nil {
+                print("Error")
+            }
+            
+            print("MyLikes saved succesfully")
+            
+        }
     }
 }
 

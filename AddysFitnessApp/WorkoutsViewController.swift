@@ -18,26 +18,33 @@ import os.log
 
 import ObjectiveC
 
+var workouts = [WorkoutVids]()
+var workoutAWSContent: [AWSContent] = [AWSContent]()
+var workoutS3Loaded = false
+let WorkoutS3DirectoryName = "public/workoutS3/"
+let workoutObjectType = "workout"
+
 class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
-    var prefix: String!
+    var s3Prefix: String!
     
-    var vidContent: [AWSContent]?
-    var vidDetails: [Workouts] = [Workouts]()
+    //var vidDetails: [Workouts] = [Workouts]()
     var workoutsSearchResults: [WorkoutVids]?
     var selected: String!
     var loadedDetails: Bool = false
     var searchController: UISearchController!
     var workoutTypes: [UIImage] = []
     var refresh = false
+    var overlay: UIImageView?
 
     
     fileprivate var manager: AWSUserFileManager!
     fileprivate var identityManager: AWSIdentityManager!
     fileprivate var user: AWSCognitoCredentialsProvider!
-    fileprivate var contents: [AWSContent]?
+    fileprivate var videoContents: [AWSContent]?
     fileprivate var dateFormatter: DateFormatter!
     fileprivate var marker: String?
     fileprivate var didLoadAllVideos: Bool!
+    fileprivate var didLoadAllImages: Bool!
     let screenSize = UIScreen.main.bounds
     let upper = UIImageView()
     let lower = UIImageView()
@@ -60,7 +67,6 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         self.tableView.estimatedSectionHeaderHeight = 75
         self.tableView.sectionHeaderHeight = 75
         
-        
         // Sets up the UIs.
         checkIfAdmin()
         navigationItem.title = "MVPFit Workouts"
@@ -71,16 +77,12 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         dateFormatter.locale = Locale.current
         
         didLoadAllVideos = false
+        didLoadAllImages = false
         refresh = false
         
-        if let prefix = prefix {
-            print("Prefix already initialized to \(prefix)")
-        } else {
-            self.prefix = "\(WorkoutVideosDirectoryName)"
-        }
+        self.loadWorkouts()
     
         selected = "workoutVideo"
-        loadVideoDetails()
         
         self.refreshControl?.addTarget(self, action: #selector(WorkoutsViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
     }
@@ -91,15 +93,6 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         
          // no lines where there aren't cells
         tableView.tableFooterView = UIView(frame: CGRect.zero)
-        
-        myActivityIndicator.center = self.view.center
-        myActivityIndicator.hidesWhenStopped = true
-        myActivityIndicator.activityIndicatorViewStyle = .gray
-        self.view.addSubview(myActivityIndicator)
-        
-        if(!workoutsLoaded) {
-            myActivityIndicator.startAnimating()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -151,7 +144,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
 
         os_log("handleRefresh", log: OSLog.default, type: .debug)
         
-        self.loadVideoDetails()
+        self.loadWorkouts()
         
         refreshControl.endRefreshing()
     }
@@ -168,131 +161,110 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         self.showImagePicker()
     }
     
-    fileprivate func refreshContents() {
-        marker = nil
-        loadMoreContents()
-    }
-    
-    fileprivate func addVideos() {
-        if workouts.count > 0 {
-            if let contents = self.contents, contents.count > 0 {
-                for workout in workouts {
-                    let key = self.prefix + workout.name! + ".mp4"
-                    if let i = contents.index(where: { $0.key == key }) {
-                        workout.content = contents[i]
-                    }
-                }
-            }
-        }
-    }
-    
-    fileprivate func loadMoreContents() {
-        manager.listAvailableContents(withPrefix: prefix, marker: marker) {[weak self] (contents: [AWSContent]?, nextMarker: String?, error: Error?) in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to load the list of contents.", cancelButtonTitle: "OK")
-                print("Failed to load the list of contents. \(error)")
-            }
-            if let contents = contents, contents.count > 0 {
-                strongSelf.contents = contents
-                if let nextMarker = nextMarker, !nextMarker.isEmpty {
-                    strongSelf.didLoadAllVideos = false
-                } else {
-                    strongSelf.didLoadAllVideos = true
-                }
-                strongSelf.marker = nextMarker
-                strongSelf.addVideos()
-                strongSelf.myActivityIndicator.stopAnimating()
-            }
-            
-            if strongSelf.loadedDetails {
-                strongSelf.updateUserInterface()
-            }
-        }
-    }
-    
-    func loadVideoDetails() {
+    func loadWorkouts() {
         let completionHandler = {(response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void in
             if let error = error {
                 var errorMessage = "Failed to retrieve items. \(error.localizedDescription)"
                 if (error.domain == AWSServiceErrorDomain && error.code == AWSServiceErrorType.accessDeniedException.rawValue) {
                     errorMessage = "Access denied. You are not allowed to perform this operation."
                 }
-            }
-            else if response!.items.count == 0 {
-                self.showSimpleAlertWithTitle("We're Sorry!", message: "Videos are being created for this category still.", cancelButtonTitle: "OK")
-                self.myActivityIndicator.stopAnimating()
-            }
-            else {
-                print("items count - \(response!.items.count)")
-                DispatchQueue.main.async {
-                    self.loadMoreContents()
-                    self.refresh = false
-                    workoutsLoaded = true
+            } else {
+                if mvpFitObjects.count > 0 || response != nil {
+                    if mvpFitObjects.count == 0 {
+                        let response = response?.items as! [MVPFitObjects]
+                        mvpFitObjects = response
+                        DynamoDbMVPFitObjects.shared.mapObjects()
+                    }
+                    
+                    os_log("workout s3 content started", log: OSLog.default, type: .debug)
+                    self.loadS3Content{() -> () in
+                        os_log("workout s3 content finished", log: OSLog.default, type: .debug)
+                        
+                        print("WorkoutAWSContent count - \(workoutAWSContent.count)")
+                        for aws in workoutAWSContent {
+                            print("key = \(aws.key)")
+                        }
+                        self.workoutsSearchResults = workouts
+                        DispatchQueue.main.async {
+                            LoadingOverlay.shared.removeOverlay()
+                        }
+                        self.updateUserInterface()
+                    }
                 }
-                DispatchQueue.main.async {
-                    self.formatVideoDetails(response)
-                }
             }
-            
+            self.refresh = false
             self.updateUserInterface()
         }
         
-        if(!workoutsLoaded || refresh) {
-            os_log("loading videoDetails content", log: OSLog.default, type: .debug)
-            self.getVideoDetailsByType(completionHandler)
-            os_log("after loading videoDetails content", log: OSLog.default, type: .debug)
+        if !refresh {
+            LoadingOverlay.shared.displayOverlay()
+        }
+        
+
+        if workouts.count == 0 || workoutAWSContent.count == 0 || refresh || !workoutS3Loaded {
+            os_log("loading S3 and dynamo content", log: OSLog.default, type: .debug)
+            DynamoDbMVPFitObjects.shared.getMvpFitObjects(refresh, completionHandler)
         } else {
             os_log("workouts already loaded", log: OSLog.default, type: .debug)
-            self.myActivityIndicator.stopAnimating()
+            DispatchQueue.main.async {
+                LoadingOverlay.shared.removeOverlay()
+            }
             self.workoutsSearchResults = workouts
             updateUserInterface()
         }
     }
     
-    func formatVideoDetails(_ response: AWSDynamoDBPaginatedOutput?) {
-        // put data into correct spot
-        let response = response?.items as! [Workouts]
-        var vidArray = [WorkoutVids]()
-        var key: String?
-        for item in response {
-            key = self.prefix + item._workoutName! + ".mp4"
-            let workoutVid = WorkoutVids()
-            workoutVid.name = item._workoutName
-            workoutVid.description = item._videoDescription
-            workoutVid.length = item._videoLength
-            workoutVid.workoutType = item._workoutType
-            if let awsContents = self.contents {
-                if let i = awsContents.index(where: { $0.key == key }) {
-                    workoutVid.content = awsContents[i]
+    func loadS3Content(completion: @escaping () -> ()) {
+        if workoutAWSContent.count == 0 || refresh {
+            manager.listAvailableContents(withPrefix: WorkoutS3DirectoryName, marker: marker) {[weak self] (contents: [AWSContent]?, nextMarker: String?, error: Error?) in
+                guard let strongSelf = self else { return }
+                if let error = error {
+                    strongSelf.showSimpleAlertWithTitle("Error", message: "Failed to load the list of contents.", cancelButtonTitle: "OK")
+                    print("Failed to load the list of contents. \(error)")
+                    completion()
+                }
+                if let contents = contents, contents.count > 0 {
+                    print("S3 size - \(contents.count)")
+                    if let nextMarker = nextMarker, !nextMarker.isEmpty {
+                    } else {
+                        workoutAWSContent = contents
+                        strongSelf.addS3Content{() -> () in
+                            completion()
+                        }
+                    }
+                    strongSelf.marker = nextMarker
                 }
             }
-            vidArray.append(workoutVid)
-        }
-        workouts = vidArray
-        self.workoutsSearchResults = vidArray
-        self.loadedDetails = true
-        self.updateUserInterface()
-    }
-    
-    
-    
-    func getVideoDetailsByType(_ completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let queryExpression = AWSDynamoDBQueryExpression()
-        
-        queryExpression.indexName = "workoutIndex"
-        queryExpression.keyConditionExpression = "#workoutIndex = :workoutIndex"
-        queryExpression.expressionAttributeNames = ["#workoutIndex": "workoutIndex",]
-        queryExpression.expressionAttributeValues = [":workoutIndex": "workout",]
-        
-        objectMapper.query(Workouts.self, expression: queryExpression) { (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                completionHandler(response, error as NSError?)
-            })
+        } else {
+            addS3Content{() -> () in
+                completion()
+            }
         }
     }
     
+    func addS3Content(completion: @escaping () -> ()) {
+        os_log("WORKOUT - adding S3 content", log: OSLog.default, type: .debug)
+        if !workoutS3Loaded {
+            if workouts.count > 0 {
+                if workoutAWSContent.count > 0 {
+                    for workout in workouts {
+                        if let name = workout.name {
+                            let vidKey = WorkoutS3DirectoryName + name + ".mp4"
+                            let imageKey = WorkoutS3DirectoryName + name + ".jpg"
+                            if let i = workoutAWSContent.index(where: { $0.key == vidKey }) {
+                                workout.vidContent = workoutAWSContent[i]
+                            }
+                            if let i = workoutAWSContent.index(where: { $0.key == imageKey }) {
+                                workout.imageContent = workoutAWSContent[i]
+                            }
+                        }
+                    }
+                }
+            }
+            workoutS3Loaded = true
+        }
+        completion()
+    }
     
     // MARK:- Content uploads
     
@@ -333,7 +305,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         
         if let workoutsArray = workoutsSearchResults {
             let workout = workoutsArray[indexPath.row]
-            cell.prefix = prefix
+            cell.prefix = s3Prefix
             cell.content = workout
         }
         
@@ -372,7 +344,7 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         }
     }
     
-    fileprivate func removeContent(_ content: AWSContent) {
+    func removeContent(_ content: AWSContent) {
         content.removeRemoteContent {[weak self] (content: AWSContent?, error: Error?) in
             guard let strongSelf = self else { return }
             DispatchQueue.main.async {
@@ -387,7 +359,8 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     func deleteWorkout(_ workout: WorkoutVids) {
-        removeContent(workout.content)
+        removeContent(workout.imageContent)
+        removeContent(workout.vidContent)
         deleteWorkoutDetails(workout, {(errors: [NSError]?) -> Void in
             os_log("deleting sql", log: OSLog.default, type: .debug)
             if errors != nil {
@@ -421,14 +394,11 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         var errors: [NSError] = []
         let group: DispatchGroup = DispatchGroup()
         
-        let deleteWorkout: Workouts! = Workouts()
+        let deleteWorkout: MVPFitObjects! = MVPFitObjects()
         
-        deleteWorkout._videoLength = workout.length
-        deleteWorkout._workoutName = workout.name
-        deleteWorkout._workoutType = workout.workoutType
-        deleteWorkout._videoDescription = workout.description
-        deleteWorkout._workoutIndex = "workout"
-        
+        deleteWorkout._objectApp = mvpApp
+        deleteWorkout._objectName = workout.name
+        deleteWorkout._objectType = workoutObjectType
         
         group.enter()
         
@@ -451,6 +421,9 @@ class WorkoutsViewController: UITableViewController, UISearchResultsUpdating {
         })
     }
 
+    deinit {
+        self.searchController.view.removeFromSuperview()
+    }
 
 }
 
@@ -477,25 +450,6 @@ extension WorkoutsViewController: UIImagePickerControllerDelegate, UINavigationC
             
             //askForFilename(try! Data(contentsOf: videoURL))
             
-        }
-    }
-}
-
-class WorkoutVideoCell: UITableViewCell {
-    
-    @IBOutlet weak var fileNameLabel: UILabel!
-    @IBOutlet weak var detailLabel: UILabel!
-    @IBOutlet weak var previewImage: UIImageView!
-    @IBOutlet weak var videoLength: UILabel!
-    
-    var prefix: String?
-    
-    var content: WorkoutVids! {
-        didSet {
-            fileNameLabel.text = content.name
-            detailLabel.text = content.description
-            previewImage.image = content.previewImage
-            videoLength.text = content.length
         }
     }
 }

@@ -22,9 +22,42 @@
 		B955CB941EAE995F007E84EE /* UploadFoodViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B955CB931EAE995F007E84EE /* UploadFoodViewControllerExtension.swift */; };
 		B955CB961EAEA784007E84EE /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B955CB951EAEA784007E84EE /* Recipe.swift */; };
 		B955CB9A1EB10DBF007E84EE /* AddIngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B955CB991EB10DBF007E84EE /* AddIngredientsController.swift */; };
-		B9604AF41F4B678D005A915E /* WorkoutLoadingScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604AF31F4B678D005A915E /* WorkoutLoadingScreenViewController.swift */; };
+		B9604AF71F4CBC69005A915E /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9604AF61F4CBC69005A915E /* Profile.storyboard */; };
+		B9604AF91F4CBC7B005A915E /* HomeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604AF81F4CBC7B005A915E /* HomeProfileViewController.swift */; };
+		B9604AFD1F509F53005A915E /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604AFC1F509F53005A915E /* LoadingOverlay.swift */; };
+		B9604AFF1F50AE96005A915E /* MyLikes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604AFE1F50AE96005A915E /* MyLikes.swift */; };
+		B9604B021F50AF70005A915E /* MyLikes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9604B011F50AF70005A915E /* MyLikes.storyboard */; };
+		B9604B041F50AF96005A915E /* MyLikesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B031F50AF96005A915E /* MyLikesViewController.swift */; };
+		B9604B081F50CE80005A915E /* DynamoDbMyLikes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B071F50CE80005A915E /* DynamoDbMyLikes.swift */; };
+		B9604B0A1F51EAB0005A915E /* DynamoDbWorkouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B091F51EAB0005A915E /* DynamoDbWorkouts.swift */; };
+		B9604B0C1F51F23A005A915E /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B0B1F51F23A005A915E /* Like.swift */; };
+		B9604B0E1F52057E005A915E /* S3Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B0D1F52057D005A915E /* S3Workouts.swift */; };
+		B9604B101F585F63005A915E /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B0F1F585F63005A915E /* Profile.swift */; };
+		B9604B131F58DA75005A915E /* NewsFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9604B121F58DA75005A915E /* NewsFeed.storyboard */; };
+		B9604B151F58DAA2005A915E /* HomeNewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B141F58DAA2005A915E /* HomeNewsFeedViewController.swift */; };
+		B9604B191F58DAF4005A915E /* DynamoDbNewsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B181F58DAF4005A915E /* DynamoDbNewsFeed.swift */; };
+		B9604B1B1F59F2B5005A915E /* HomeProfileViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9604B1A1F59F2B5005A915E /* HomeProfileViewControllerExtension.swift */; };
 		B96816841E6FA5290010FE0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */; };
 		B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */; };
+		B96A48721F5C46AB0096DFFE /* S3Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48711F5C46AB0096DFFE /* S3Profile.swift */; };
+		B96A48741F5F04B80096DFFE /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48731F5F04B80096DFFE /* UIViewExtensions.swift */; };
+		B96A487C1F5F41570096DFFE /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48761F5F41570096DFFE /* Cache.swift */; };
+		B96A487D1F5F41570096DFFE /* NSURLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48771F5F41570096DFFE /* NSURLSessionExtension.swift */; };
+		B96A487E1F5F41570096DFFE /* PreviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48781F5F41570096DFFE /* PreviewError.swift */; };
+		B96A487F1F5F41570096DFFE /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48791F5F41570096DFFE /* Regex.swift */; };
+		B96A48801F5F41570096DFFE /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A487A1F5F41570096DFFE /* StringExtension.swift */; };
+		B96A48811F5F41570096DFFE /* SwiftLinkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A487B1F5F41570096DFFE /* SwiftLinkPreview.swift */; };
+		B96A48831F5F48C40096DFFE /* NewsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48821F5F48C40096DFFE /* NewsFeed.swift */; };
+		B96A48851F5F56070096DFFE /* UploadNewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48841F5F56070096DFFE /* UploadNewsFeedViewController.swift */; };
+		B96A48891F62D1290096DFFE /* HomeNewsFeedViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48881F62D1290096DFFE /* HomeNewsFeedViewControllerExtension.swift */; };
+		B96A488D1F62D4450096DFFE /* ArticleFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A488C1F62D4450096DFFE /* ArticleFeed.swift */; };
+		B96A488F1F62FA5B0096DFFE /* NewsFeedWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A488E1F62FA5B0096DFFE /* NewsFeedWebViewController.swift */; };
+		B96A48911F6314850096DFFE /* MVPFitObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48901F6314850096DFFE /* MVPFitObjects.swift */; };
+		B96A48931F6319460096DFFE /* NewsFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48921F6319460096DFFE /* NewsFeedCell.swift */; };
+		B96A48951F631B350096DFFE /* DynamoDbMVPFitObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48941F631B350096DFFE /* DynamoDbMVPFitObjects.swift */; };
+		B96A48971F6427CC0096DFFE /* DynamoDbFoods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48961F6427CC0096DFFE /* DynamoDbFoods.swift */; };
+		B96A48991F65F8C70096DFFE /* WorkoutVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A48981F65F8C70096DFFE /* WorkoutVideoCell.swift */; };
+		B96A489B1F65FA1F0096DFFE /* FoodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96A489A1F65FA1F0096DFFE /* FoodCell.swift */; };
 		B96E1F7B1E9D087A000AE4A1 /* Food.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96E1F7A1E9D087A000AE4A1 /* Food.storyboard */; };
 		B96E1F7D1E9D08D1000AE4A1 /* FoodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96E1F7C1E9D08D1000AE4A1 /* FoodViewController.swift */; };
 		B96E1F7F1E9D095B000AE4A1 /* UploadFoodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96E1F7E1E9D095B000AE4A1 /* UploadFoodViewController.swift */; };
@@ -110,31 +143,64 @@
 		B93D987F1EB50A1800B9A388 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B93D98801EB50A1800B9A388 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		B93D98831EB50A1D00B9A388 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutDetailViewController.swift; sourceTree = "<group>"; };
+		B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutDetailViewController.swift; path = AddysFitnessApp/WorkoutDetailViewController.swift; sourceTree = SOURCE_ROOT; };
 		B94330EF1E70C579008EF137 /* UserPools.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = UserPools.storyboard; path = AddysFitnessApp/UserPools.storyboard; sourceTree = SOURCE_ROOT; };
 		B94330F11E70CE16008EF137 /* UserPoolsSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolsSignUpViewController.swift; sourceTree = "<group>"; };
-		B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolSignUpConfirmationViewController.swift; sourceTree = "<group>"; };
+		B94330F31E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserPoolSignUpConfirmationViewController.swift; path = AddysFitnessApp/UserPoolSignUpConfirmationViewController.swift; sourceTree = SOURCE_ROOT; };
 		B94330F51E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		B94330F71E70F15F008EF137 /* UserPoolNewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolNewPasswordViewController.swift; sourceTree = "<group>"; };
 		B955CB931EAE995F007E84EE /* UploadFoodViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFoodViewControllerExtension.swift; sourceTree = "<group>"; };
-		B955CB951EAEA784007E84EE /* Recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		B955CB951EAEA784007E84EE /* Recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Recipe.swift; path = AddysFitnessApp/Recipe.swift; sourceTree = SOURCE_ROOT; };
 		B955CB991EB10DBF007E84EE /* AddIngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddIngredientsController.swift; sourceTree = "<group>"; };
-		B9604AF31F4B678D005A915E /* WorkoutLoadingScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutLoadingScreenViewController.swift; path = AddysFitnessApp/WorkoutLoadingScreenViewController.swift; sourceTree = SOURCE_ROOT; };
+		B9604AF61F4CBC69005A915E /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Profile.storyboard; path = AddysFitnessApp/Profile.storyboard; sourceTree = SOURCE_ROOT; };
+		B9604AF81F4CBC7B005A915E /* HomeProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeProfileViewController.swift; path = AddysFitnessApp/HomeProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		B9604AFC1F509F53005A915E /* LoadingOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingOverlay.swift; path = AddysFitnessApp/LoadingOverlay.swift; sourceTree = SOURCE_ROOT; };
+		B9604AFE1F50AE96005A915E /* MyLikes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyLikes.swift; path = ../MyLikes.swift; sourceTree = SOURCE_ROOT; };
+		B9604B011F50AF70005A915E /* MyLikes.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MyLikes.storyboard; path = AddysFitnessApp/MyLikes.storyboard; sourceTree = SOURCE_ROOT; };
+		B9604B031F50AF96005A915E /* MyLikesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyLikesViewController.swift; path = AddysFitnessApp/MyLikesViewController.swift; sourceTree = SOURCE_ROOT; };
+		B9604B071F50CE80005A915E /* DynamoDbMyLikes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DynamoDbMyLikes.swift; path = AddysFitnessApp/DynamoDbMyLikes.swift; sourceTree = SOURCE_ROOT; };
+		B9604B091F51EAB0005A915E /* DynamoDbWorkouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDbWorkouts.swift; sourceTree = "<group>"; };
+		B9604B0B1F51F23A005A915E /* Like.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
+		B9604B0D1F52057D005A915E /* S3Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = S3Workouts.swift; path = AddysFitnessApp/S3Workouts.swift; sourceTree = SOURCE_ROOT; };
+		B9604B0F1F585F63005A915E /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		B9604B121F58DA75005A915E /* NewsFeed.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = NewsFeed.storyboard; path = AddysFitnessApp/NewsFeed.storyboard; sourceTree = SOURCE_ROOT; };
+		B9604B141F58DAA2005A915E /* HomeNewsFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeNewsFeedViewController.swift; path = AddysFitnessApp/HomeNewsFeedViewController.swift; sourceTree = SOURCE_ROOT; };
+		B9604B181F58DAF4005A915E /* DynamoDbNewsFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDbNewsFeed.swift; sourceTree = "<group>"; };
+		B9604B1A1F59F2B5005A915E /* HomeProfileViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeProfileViewControllerExtension.swift; path = AddysFitnessApp/HomeProfileViewControllerExtension.swift; sourceTree = SOURCE_ROOT; };
 		B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AddysFitnessApp/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 		B96816861E6FAC9E0010FE0F /* SignInViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignInViewControllerExtension.swift; path = AddysFitnessApp/SignInViewControllerExtension.swift; sourceTree = SOURCE_ROOT; };
+		B96A48711F5C46AB0096DFFE /* S3Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = S3Profile.swift; sourceTree = "<group>"; };
+		B96A48731F5F04B80096DFFE /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		B96A48761F5F41570096DFFE /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cache.swift; path = AddysFitnessApp/Cache.swift; sourceTree = SOURCE_ROOT; };
+		B96A48771F5F41570096DFFE /* NSURLSessionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSURLSessionExtension.swift; path = AddysFitnessApp/NSURLSessionExtension.swift; sourceTree = SOURCE_ROOT; };
+		B96A48781F5F41570096DFFE /* PreviewError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreviewError.swift; path = AddysFitnessApp/PreviewError.swift; sourceTree = SOURCE_ROOT; };
+		B96A48791F5F41570096DFFE /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Regex.swift; path = AddysFitnessApp/Regex.swift; sourceTree = SOURCE_ROOT; };
+		B96A487A1F5F41570096DFFE /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = AddysFitnessApp/StringExtension.swift; sourceTree = SOURCE_ROOT; };
+		B96A487B1F5F41570096DFFE /* SwiftLinkPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftLinkPreview.swift; path = AddysFitnessApp/SwiftLinkPreview.swift; sourceTree = SOURCE_ROOT; };
+		B96A48821F5F48C40096DFFE /* NewsFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFeed.swift; sourceTree = "<group>"; };
+		B96A48841F5F56070096DFFE /* UploadNewsFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadNewsFeedViewController.swift; sourceTree = "<group>"; };
+		B96A48881F62D1290096DFFE /* HomeNewsFeedViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeNewsFeedViewControllerExtension.swift; sourceTree = "<group>"; };
+		B96A488C1F62D4450096DFFE /* ArticleFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleFeed.swift; sourceTree = "<group>"; };
+		B96A488E1F62FA5B0096DFFE /* NewsFeedWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFeedWebViewController.swift; sourceTree = "<group>"; };
+		B96A48901F6314850096DFFE /* MVPFitObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVPFitObjects.swift; sourceTree = "<group>"; };
+		B96A48921F6319460096DFFE /* NewsFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFeedCell.swift; sourceTree = "<group>"; };
+		B96A48941F631B350096DFFE /* DynamoDbMVPFitObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDbMVPFitObjects.swift; sourceTree = "<group>"; };
+		B96A48961F6427CC0096DFFE /* DynamoDbFoods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDbFoods.swift; sourceTree = "<group>"; };
+		B96A48981F65F8C70096DFFE /* WorkoutVideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutVideoCell.swift; path = AddysFitnessApp/WorkoutVideoCell.swift; sourceTree = SOURCE_ROOT; };
+		B96A489A1F65FA1F0096DFFE /* FoodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FoodCell.swift; path = AddysFitnessApp/FoodCell.swift; sourceTree = SOURCE_ROOT; };
 		B96E1F7A1E9D087A000AE4A1 /* Food.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Food.storyboard; path = AddysFitnessApp/Food.storyboard; sourceTree = SOURCE_ROOT; };
 		B96E1F7C1E9D08D1000AE4A1 /* FoodViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FoodViewController.swift; path = AddysFitnessApp/FoodViewController.swift; sourceTree = SOURCE_ROOT; };
 		B96E1F7E1E9D095B000AE4A1 /* UploadFoodViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadFoodViewController.swift; path = AddysFitnessApp/UploadFoodViewController.swift; sourceTree = SOURCE_ROOT; };
 		B9725CDB1E89A97C006F51BD /* Workouts.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Workouts.storyboard; path = AddysFitnessApp/Workouts.storyboard; sourceTree = SOURCE_ROOT; };
 		B99BA0D41EB15E57005135D7 /* AddStepsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStepsViewController.swift; sourceTree = "<group>"; };
-		B99BA0D61EB3AA4F005135D7 /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeDetailViewController.swift; sourceTree = "<group>"; };
+		B99BA0D61EB3AA4F005135D7 /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecipeDetailViewController.swift; path = AddysFitnessApp/RecipeDetailViewController.swift; sourceTree = SOURCE_ROOT; };
 		B99BA0D91EB4EE72005135D7 /* AWSCognitoUserPoolsSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCognitoUserPoolsSignIn.framework; sourceTree = "<group>"; };
 		B99BA0DA1EB4EE72005135D7 /* AWSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConfiguration.swift; sourceTree = "<group>"; };
 		B99BA0DB1EB4EE72005135D7 /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
 		B99BA0DC1EB4EE72005135D7 /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSMobileHubHelper.framework; sourceTree = "<group>"; };
-		B99BA0DF1EB4EE72005135D7 /* Consumable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consumable.swift; sourceTree = "<group>"; };
-		B99BA0E01EB4EE72005135D7 /* Food.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Food.swift; sourceTree = "<group>"; };
-		B99BA0E11EB4EE72005135D7 /* UserAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAccess.swift; sourceTree = "<group>"; };
+		B99BA0DF1EB4EE72005135D7 /* Consumable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Consumable.swift; path = AddysFitnessApp/AmazonAws/Models/NoSQL/Consumable.swift; sourceTree = SOURCE_ROOT; };
+		B99BA0E01EB4EE72005135D7 /* Food.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Food.swift; path = AddysFitnessApp/AmazonAws/Models/NoSQL/Food.swift; sourceTree = SOURCE_ROOT; };
+		B99BA0E11EB4EE72005135D7 /* UserAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserAccess.swift; path = AddysFitnessApp/AmazonAws/Models/NoSQL/UserAccess.swift; sourceTree = SOURCE_ROOT; };
 		B99BA0EB1EB4F02C005135D7 /* RecipeDetailViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeDetailViewControllerExtension.swift; sourceTree = "<group>"; };
 		B99BA0ED1EB4FDBF005135D7 /* UserPoolsIdentityProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolsIdentityProfile.swift; sourceTree = "<group>"; };
 		B9E3AE1D1E6E455100943A08 /* AddysFitnessApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AddysFitnessApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,7 +216,7 @@
 		B9E3AE421E6E455100943A08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B9F74AFE1EBF63560062F1E4 /* TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextField.swift; path = AddysFitnessApp/TextField.swift; sourceTree = SOURCE_ROOT; };
 		B9F74B021EC133E90062F1E4 /* UploadWorkoutsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadWorkoutsViewControllerExtension.swift; sourceTree = "<group>"; };
-		B9F74B041EC13C280062F1E4 /* Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Workouts.swift; path = "../../../../../../../Downloads/AddysFitnessApp-integration-lib-aws-my-sample-app-ios-swift (2)/AmazonAws/Models/NoSQL/Workouts.swift"; sourceTree = "<group>"; };
+		B9F74B041EC13C280062F1E4 /* Workouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Workouts.swift; path = "../../../Downloads/AddysFitnessApp-integration-lib-aws-my-sample-app-ios-swift (2)/AmazonAws/Models/NoSQL/Workouts.swift"; sourceTree = SOURCE_ROOT; };
 		B9F74B0C1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutsViewControllerExtension.swift; sourceTree = "<group>"; };
 		B9FB4F981E6E5F2F006095DF /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
 		B9FB4F991E6E5F2F006095DF /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
@@ -206,6 +272,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B9604AF51F4CBC4F005A915E /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				B9604AF61F4CBC69005A915E /* Profile.storyboard */,
+				B9604AF81F4CBC7B005A915E /* HomeProfileViewController.swift */,
+				B9604B1A1F59F2B5005A915E /* HomeProfileViewControllerExtension.swift */,
+				B9604B0F1F585F63005A915E /* Profile.swift */,
+				B96A48711F5C46AB0096DFFE /* S3Profile.swift */,
+			);
+			name = Profile;
+			path = AddysFitnessApp;
+			sourceTree = SOURCE_ROOT;
+		};
+		B9604B001F50AF49005A915E /* MyLikes */ = {
+			isa = PBXGroup;
+			children = (
+				B9604B011F50AF70005A915E /* MyLikes.storyboard */,
+				B9604B031F50AF96005A915E /* MyLikesViewController.swift */,
+				B9604B071F50CE80005A915E /* DynamoDbMyLikes.swift */,
+				B9604B0B1F51F23A005A915E /* Like.swift */,
+			);
+			name = MyLikes;
+			path = AddysFitnessApp;
+			sourceTree = SOURCE_ROOT;
+		};
+		B9604B111F58DA5E005A915E /* NewsFeed */ = {
+			isa = PBXGroup;
+			children = (
+				B9604B121F58DA75005A915E /* NewsFeed.storyboard */,
+				B9604B141F58DAA2005A915E /* HomeNewsFeedViewController.swift */,
+				B96A48881F62D1290096DFFE /* HomeNewsFeedViewControllerExtension.swift */,
+				B9604B181F58DAF4005A915E /* DynamoDbNewsFeed.swift */,
+				B96A48821F5F48C40096DFFE /* NewsFeed.swift */,
+				B96A48841F5F56070096DFFE /* UploadNewsFeedViewController.swift */,
+				B96A488E1F62FA5B0096DFFE /* NewsFeedWebViewController.swift */,
+				B96A48921F6319460096DFFE /* NewsFeedCell.swift */,
+			);
+			name = NewsFeed;
+			sourceTree = "<group>";
+		};
 		B96816851E6FAC6D0010FE0F /* UserPools */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +326,20 @@
 			name = UserPools;
 			sourceTree = "<group>";
 		};
+		B96A48751F5F413A0096DFFE /* SwiftLinkPreview */ = {
+			isa = PBXGroup;
+			children = (
+				B96A48761F5F41570096DFFE /* Cache.swift */,
+				B96A48771F5F41570096DFFE /* NSURLSessionExtension.swift */,
+				B96A48781F5F41570096DFFE /* PreviewError.swift */,
+				B96A48791F5F41570096DFFE /* Regex.swift */,
+				B96A487A1F5F41570096DFFE /* StringExtension.swift */,
+				B96A487B1F5F41570096DFFE /* SwiftLinkPreview.swift */,
+			);
+			name = SwiftLinkPreview;
+			path = AddysFitnessApp;
+			sourceTree = SOURCE_ROOT;
+		};
 		B96E1F791E9D082F000AE4A1 /* Food */ = {
 			isa = PBXGroup;
 			children = (
@@ -233,6 +353,8 @@
 				B955CB991EB10DBF007E84EE /* AddIngredientsController.swift */,
 				B99BA0D41EB15E57005135D7 /* AddStepsViewController.swift */,
 				B9F74AFE1EBF63560062F1E4 /* TextField.swift */,
+				B96A48961F6427CC0096DFFE /* DynamoDbFoods.swift */,
+				B96A489A1F65FA1F0096DFFE /* FoodCell.swift */,
 			);
 			name = Food;
 			sourceTree = "<group>";
@@ -247,7 +369,9 @@
 				B9F74B0C1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift */,
 				B9255B301E92FB0F000EF86D /* WorkoutVids.swift */,
 				B93D98851EB7EE0F00B9A388 /* WorkoutDetailViewController.swift */,
-				B9604AF31F4B678D005A915E /* WorkoutLoadingScreenViewController.swift */,
+				B9604B091F51EAB0005A915E /* DynamoDbWorkouts.swift */,
+				B9604B0D1F52057D005A915E /* S3Workouts.swift */,
+				B96A48981F65F8C70096DFFE /* WorkoutVideoCell.swift */,
 			);
 			name = Workouts;
 			sourceTree = "<group>";
@@ -275,6 +399,9 @@
 		B99BA0DE1EB4EE72005135D7 /* NoSQL */ = {
 			isa = PBXGroup;
 			children = (
+				B96A48901F6314850096DFFE /* MVPFitObjects.swift */,
+				B96A488C1F62D4450096DFFE /* ArticleFeed.swift */,
+				B9604AFE1F50AE96005A915E /* MyLikes.swift */,
 				B99BA0DF1EB4EE72005135D7 /* Consumable.swift */,
 				B99BA0E01EB4EE72005135D7 /* Food.swift */,
 				B99BA0E11EB4EE72005135D7 /* UserAccess.swift */,
@@ -312,12 +439,19 @@
 				B9E3AE201E6E455100943A08 /* AppDelegate.swift */,
 				B9E3AE221E6E455100943A08 /* InitialViewController.swift */,
 				B9FB4FCE1E6F9BB1006095DF /* Initial.storyboard */,
+				B9604AF51F4CBC4F005A915E /* Profile */,
 				B9FB4FC91E6E60A1006095DF /* SignIn */,
 				B97CA1411E75DA9800B47AAE /* Workouts */,
 				B96E1F791E9D082F000AE4A1 /* Food */,
+				B9604B001F50AF49005A915E /* MyLikes */,
+				B9604B111F58DA5E005A915E /* NewsFeed */,
+				B96A48751F5F413A0096DFFE /* SwiftLinkPreview */,
 				B9E3AE271E6E455100943A08 /* Assets.xcassets */,
 				B9E3AE2C1E6E455100943A08 /* Info.plist */,
 				B96816831E6FA5290010FE0F /* LaunchScreen.storyboard */,
+				B9604AFC1F509F53005A915E /* LoadingOverlay.swift */,
+				B96A48731F5F04B80096DFFE /* UIViewExtensions.swift */,
+				B96A48941F631B350096DFFE /* DynamoDbMVPFitObjects.swift */,
 			);
 			path = AddysFitnessApp;
 			sourceTree = SOURCE_ROOT;
@@ -504,9 +638,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9E3AE281E6E455100943A08 /* Assets.xcassets in Resources */,
+				B9604B131F58DA75005A915E /* NewsFeed.storyboard in Resources */,
 				B96E1F7B1E9D087A000AE4A1 /* Food.storyboard in Resources */,
+				B9604AF71F4CBC69005A915E /* Profile.storyboard in Resources */,
 				B9FB4FCF1E6F9BB1006095DF /* Initial.storyboard in Resources */,
 				B96816841E6FA5290010FE0F /* LaunchScreen.storyboard in Resources */,
+				B9604B021F50AF70005A915E /* MyLikes.storyboard in Resources */,
 				B9FB4FCB1E6E60D1006095DF /* SignIn.storyboard in Resources */,
 				B94330F01E70C579008EF137 /* UserPools.storyboard in Resources */,
 				B9725CDC1E89A97C006F51BD /* Workouts.storyboard in Resources */,
@@ -550,36 +687,66 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B96A487C1F5F41570096DFFE /* Cache.swift in Sources */,
+				B9604B151F58DAA2005A915E /* HomeNewsFeedViewController.swift in Sources */,
 				B9E3AE231E6E455100943A08 /* InitialViewController.swift in Sources */,
 				B955CB9A1EB10DBF007E84EE /* AddIngredientsController.swift in Sources */,
 				B93D98861EB7EE0F00B9A388 /* WorkoutDetailViewController.swift in Sources */,
+				B96A488F1F62FA5B0096DFFE /* NewsFeedWebViewController.swift in Sources */,
+				B96A48951F631B350096DFFE /* DynamoDbMVPFitObjects.swift in Sources */,
+				B9604B191F58DAF4005A915E /* DynamoDbNewsFeed.swift in Sources */,
 				B9F74AFF1EBF63560062F1E4 /* TextField.swift in Sources */,
+				B96A48931F6319460096DFFE /* NewsFeedCell.swift in Sources */,
 				B99BA0EE1EB4FDBF005135D7 /* UserPoolsIdentityProfile.swift in Sources */,
+				B96A48991F65F8C70096DFFE /* WorkoutVideoCell.swift in Sources */,
+				B96A48971F6427CC0096DFFE /* DynamoDbFoods.swift in Sources */,
 				B99BA0E91EB4EE72005135D7 /* UserAccess.swift in Sources */,
 				B99BA0D71EB3AA4F005135D7 /* RecipeDetailViewController.swift in Sources */,
+				B96A487F1F5F41570096DFFE /* Regex.swift in Sources */,
+				B96A48811F5F41570096DFFE /* SwiftLinkPreview.swift in Sources */,
+				B96A48891F62D1290096DFFE /* HomeNewsFeedViewControllerExtension.swift in Sources */,
 				B96E1F7D1E9D08D1000AE4A1 /* FoodViewController.swift in Sources */,
 				B96E1F7F1E9D095B000AE4A1 /* UploadFoodViewController.swift in Sources */,
+				B9604B0E1F52057E005A915E /* S3Workouts.swift in Sources */,
 				B94330F21E70CE16008EF137 /* UserPoolsSignUpViewController.swift in Sources */,
 				B9F74B0D1EC3CF000062F1E4 /* WorkoutsViewControllerExtension.swift in Sources */,
+				B9604B1B1F59F2B5005A915E /* HomeProfileViewControllerExtension.swift in Sources */,
+				B96A48741F5F04B80096DFFE /* UIViewExtensions.swift in Sources */,
+				B96A488D1F62D4450096DFFE /* ArticleFeed.swift in Sources */,
 				B94330F61E70F04B008EF137 /* UserPoolForgotPasswordViewController.swift in Sources */,
+				B9604AFF1F50AE96005A915E /* MyLikes.swift in Sources */,
 				B9F74B051EC13C280062F1E4 /* Workouts.swift in Sources */,
+				B96A487D1F5F41570096DFFE /* NSURLSessionExtension.swift in Sources */,
 				B9FB4FCD1E6E613E006095DF /* SignInViewController.swift in Sources */,
+				B9604B101F585F63005A915E /* Profile.swift in Sources */,
+				B96A48831F5F48C40096DFFE /* NewsFeed.swift in Sources */,
+				B9604AFD1F509F53005A915E /* LoadingOverlay.swift in Sources */,
 				B9E3AE211E6E455100943A08 /* AppDelegate.swift in Sources */,
 				B99BA0E71EB4EE72005135D7 /* Consumable.swift in Sources */,
 				B91ADF891E79FEB7006D3CD3 /* UploadWorkoutsViewController.swift in Sources */,
-				B9604AF41F4B678D005A915E /* WorkoutLoadingScreenViewController.swift in Sources */,
 				B99BA0E81EB4EE72005135D7 /* Food.swift in Sources */,
+				B9604AF91F4CBC7B005A915E /* HomeProfileViewController.swift in Sources */,
 				B9F74B031EC133E90062F1E4 /* UploadWorkoutsViewControllerExtension.swift in Sources */,
+				B96A48801F5F41570096DFFE /* StringExtension.swift in Sources */,
+				B9604B0C1F51F23A005A915E /* Like.swift in Sources */,
 				B99BA0E51EB4EE72005135D7 /* AWSMobileClient.swift in Sources */,
+				B9604B081F50CE80005A915E /* DynamoDbMyLikes.swift in Sources */,
 				B903FF021E82150E002FA684 /* WorkoutsViewController.swift in Sources */,
+				B9604B0A1F51EAB0005A915E /* DynamoDbWorkouts.swift in Sources */,
 				B99BA0E41EB4EE72005135D7 /* AWSConfiguration.swift in Sources */,
 				B94330F81E70F15F008EF137 /* UserPoolNewPasswordViewController.swift in Sources */,
 				B99BA0D51EB15E57005135D7 /* AddStepsViewController.swift in Sources */,
 				B94330F41E70CFE2008EF137 /* UserPoolSignUpConfirmationViewController.swift in Sources */,
+				B9604B041F50AF96005A915E /* MyLikesViewController.swift in Sources */,
+				B96A487E1F5F41570096DFFE /* PreviewError.swift in Sources */,
 				B9255B311E92FB0F000EF86D /* WorkoutVids.swift in Sources */,
+				B96A48851F5F56070096DFFE /* UploadNewsFeedViewController.swift in Sources */,
 				B96816871E6FAC9E0010FE0F /* SignInViewControllerExtension.swift in Sources */,
 				B955CB941EAE995F007E84EE /* UploadFoodViewControllerExtension.swift in Sources */,
+				B96A48721F5C46AB0096DFFE /* S3Profile.swift in Sources */,
 				B955CB961EAEA784007E84EE /* Recipe.swift in Sources */,
+				B96A48911F6314850096DFFE /* MVPFitObjects.swift in Sources */,
+				B96A489B1F65FA1F0096DFFE /* FoodCell.swift in Sources */,
 				B99BA0EC1EB4F02C005135D7 /* RecipeDetailViewControllerExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

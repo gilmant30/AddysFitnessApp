@@ -25,44 +25,42 @@ class Recipe {
     var steps: [String] = []
     var image: UIImage?
     var category: String = ""
-    var url: URL?
+    var imageUrl: URL?
+    var videoUrl: URL?
     var isVideo: Bool = false
-    var content: AWSContent!
+    var liked: Bool = false
+    var imageContent: AWSContent!
     {
         didSet {
-            print("setting aws content")
-            self.content.getRemoteFileURL {
+            print("setting recipe image content")
+            self.imageContent.getRemoteFileURL {
                 (url: URL?, error: Error?) in
                 guard let url = url else {
                     print("Error getting URL for file. \(String(describing: error))")
                     return
                 }
-                self.url = url
-                if self.content.key.contains(".mp4") {
-                    print("url contains mp4")
-                    self.isVideo = true
-                    let asset = AVURLAsset(url: url as URL)
-                    let generator = AVAssetImageGenerator(asset: asset)
-                    generator.appliesPreferredTrackTransform = true
+                self.imageUrl = url
                 
-                    let timestamp = CMTime(seconds: 1, preferredTimescale: 60)
-                
-                    do {
-                        let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
-                    
-                        self.image = UIImage(cgImage: imageRef)
-                    }
-                    catch let error as NSError
-                    {
-                        print("Image generation failed with error \(error)")
-                        return
-                    }
-                }
                 return
             }
         }
     }
     
+    var videoContent: AWSContent! {
+        didSet {
+            self.isVideo = true
+            print("setting recipe video content")
+            self.videoContent.getRemoteFileURL {
+                (url: URL?, error: Error?) in
+                guard let url = url else {
+                    print("Error getting URL for file. \(String(describing: error))")
+                    return
+                }
+                self.videoUrl = url
+                return
+            }
+        }
+    }
 }
 
 

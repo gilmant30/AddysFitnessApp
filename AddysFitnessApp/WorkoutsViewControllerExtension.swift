@@ -133,5 +133,4 @@ extension WorkoutsViewController {
         fit.backgroundColor = UIColor.clear
     }
 
-    
 }

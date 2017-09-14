@@ -21,18 +21,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MvpFitLogo" translatesAutoresizingMaskIntoConstraints="NO" id="QZg-Cg-klm">
-                                <rect key="frame" x="62" y="208" width="250" height="250"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="250" id="7Hl-7o-LDP"/>
-                                    <constraint firstAttribute="width" constant="250" id="mUI-as-wo5"/>
-                                </constraints>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeImageV2" translatesAutoresizingMaskIntoConstraints="NO" id="QZg-Cg-klm">
+                                <rect key="frame" x="0.0" y="8" width="375" height="659"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="QZg-Cg-klm" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="GMP-QI-MKq"/>
+                            <constraint firstItem="QZg-Cg-klm" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="83g-Dt-Q2G"/>
+                            <constraint firstAttribute="trailing" secondItem="QZg-Cg-klm" secondAttribute="trailing" id="94C-0E-Upr"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="QZg-Cg-klm" secondAttribute="bottom" id="SuB-0O-8Mq"/>
                             <constraint firstItem="QZg-Cg-klm" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Vvx-wF-l4a"/>
+                            <constraint firstItem="QZg-Cg-klm" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="8" id="auI-3t-SCg"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -42,6 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="MvpFitLogo" width="512" height="512"/>
+        <image name="homeImageV2" width="324" height="500"/>
     </resources>
 </document>

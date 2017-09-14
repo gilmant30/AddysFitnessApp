@@ -23,40 +23,41 @@ class WorkoutVids {
     var description: String?
     var length: String?
     var previewImage: UIImage?
-    var url: URL?
-    var prefix: String?
+    var imageUrl: URL?
+    var vidUrl: URL?
+    var vidPrefix: String?
+    var imgPrefix: String?
     var workoutType: String?
+    var liked: Bool = false
     
-    var content: AWSContent! {
+    var imageContent: AWSContent! {
         didSet {
-            self.content.getRemoteFileURL {
+            os_log("workouts setting image content", log: OSLog.default, type: .debug)
+            self.imageContent.getRemoteFileURL {
                 (url: URL?, error: Error?) in
                 guard let url = url else {
                     print("Error getting URL for file. \(String(describing: error))")
                     return
                 }
-                self.url = url
-                /*
-                let asset = AVURLAsset(url: url as URL)
-                let generator = AVAssetImageGenerator(asset: asset)
-                generator.appliesPreferredTrackTransform = true
-                
-                let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
-                
-                do {
-                    let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
-                    
-                    self.previewImage = UIImage(cgImage: imageRef)
-                }
-                catch let error as NSError
-                {
-                    print("Image generation failed with error \(error)")
-                    return
-                }
-                 */
+                self.imageUrl = url
                 return
             }
 
+        }
+    }
+    
+    var vidContent: AWSContent! {
+        didSet {
+            os_log("workouts setting video content", log: OSLog.default, type: .debug)
+            self.vidContent.getRemoteFileURL {
+                (url: URL?, error: Error?) in
+                guard let url = url else {
+                    print("Error getting URL for file. \(String(describing: error))")
+                    return
+                }
+                self.vidUrl = url
+                return
+            }
         }
     }
     
