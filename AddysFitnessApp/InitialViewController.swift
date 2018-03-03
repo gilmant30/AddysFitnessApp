@@ -111,7 +111,7 @@ class InitialViewController: UIViewController {
     }
     
     func handleEquipmentIconTapped() {
-        self.showSimpleAlertWithTitle("Equipment!", message: "Equipment Info Coming Soon", cancelButtonTitle: "OK")
+        self.showSimpleAlertWithTitle("Equipment!", message: "Elements of {War}kout coming soon!", cancelButtonTitle: "OK")
     }
     
     func handleNewsFeedIconTapped() {
@@ -129,7 +129,7 @@ class InitialViewController: UIViewController {
     }
     
     func handleShoppingIconTapped() {
-        self.showSimpleAlertWithTitle("Shopping!", message: "Shopping Info Coming Soon", cancelButtonTitle: "OK")
+        self.showSimpleAlertWithTitle("Shopping!", message: "MVPFit apparel coming soon!", cancelButtonTitle: "OK")
     }
     
     func setupProfileBarButtonItem() {
@@ -137,17 +137,12 @@ class InitialViewController: UIViewController {
         navigationItem.leftBarButtonItem!.target = self
         
         if (AWSSignInManager.sharedInstance().isLoggedIn) {
-            let image = UIImage(named: "profile")
+            let image = UIImage(named: "profileSmall")
             let imageView = UIImageView(image: image!)
-            let bannerWidth = (navigationController?.navigationBar.frame.size.width)! / 6
-            let bannerHeight = navigationController?.navigationBar.frame.size.height
-            let bannerx = bannerWidth / 2 - image!.size.width / 2
-            let bannery = bannerHeight! / 2 - image!.size.height / 2
-            imageView.frame = CGRect(x: bannerx, y: bannery, width: bannerWidth, height: bannerHeight!)
             imageView.contentMode = UIViewContentMode.scaleAspectFit
             let leftBarButton = UIBarButtonItem(customView: imageView)
             leftBarButton.customView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(InitialViewController.sendtoProfile)))
-            navigationItem.leftBarButtonItem = leftBarButton
+            navigationItem.setLeftBarButton(leftBarButton, animated: true)
         }
     }
     

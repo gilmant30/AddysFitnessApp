@@ -140,8 +140,10 @@ class MyLikesViewController: UIViewController, UITableViewDataSource, UITableVie
                 group.wait()
                 likesLoaded = true
                 if self.selectedLike == nil {
-                    self.selectedLike = myLikes[0]
-                    self.displayMainView()
+                    if myLikes.count > 0 {
+                        self.selectedLike = myLikes[0]
+                        self.displayMainView()
+                    }
                 }
             }
             
